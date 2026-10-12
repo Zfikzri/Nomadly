@@ -1,56 +1,75 @@
-# Welcome to your Expo app 👋
+# Nomadly Mobile App (Expo React Native)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi mobile Nomadly dibangun dengan **Expo SDK 57**, **React Native 0.86**, dan **Expo Router**.
 
-## Get started
+---
 
-1. Install dependencies
+## 📁 Struktur Folder Project
 
-   ```bash
-   npm install
-   ```
+Project ini menggunakan arsitektur **Feature-Driven** agar tim tidak bingung saat membuat halaman atau komponen baru:
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+src/
+├── app/                        # KHUSUS Route & Navigasi Expo Router (File-based Routing)
+│   ├── (tabs)/                 # Route Group untuk Bottom Tab Navigation
+│   │   ├── _layout.tsx         # Konfigurasi Bottom Tabs (Home, Explore)
+│   │   ├── index.tsx           # Route Home -> render <HomeScreen /> dari features/home
+│   │   └── explore.tsx         # Route Explore
+│   ├── _layout.tsx             # Root Layout (Theme, SafeArea, Global Providers, Stack)
+│   └── +not-found.tsx          # 404 Fallback screen
+│
+├── features/                   # Modul per fitur/domain bisnis
+│   └── home/                   # Modul Home
+│       ├── components/         # Komponen khusus Home (Header, Banner, Card, dll.)
+│       ├── hooks/              # Hook khusus Home
+│       ├── services/           # Fetch API / Mock data Home
+│       ├── types/              # Type definition khusus Home
+│       └── screens/            # HomeScreen.tsx (halaman utama yang di-import oleh route)
+│
+├── components/                 # Komponen umum / Shared UI
+│   ├── ui/                     # Primitive design system (ThemedText, ThemedView, Button, Collapsible)
+│   └── layout/                 # ScreenContainer, Header, ScreenWrapper
+│
+├── constants/                  # Design tokens & konfigurasi global
+│   └── theme.ts                # Colors (Light/Dark), Spacing, Fonts
+│
+├── hooks/                      # Custom hooks global (useTheme, useColorScheme)
+├── services/                   # Networking & client HTTP global
+│   └── api.ts                  # Fetch client dasar
+├── types/                      # TypeScript definitions global
+│   └── index.ts                # Shared types
+└── utils/                      # Helper functions (formatters, validation)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-### Other setup steps
+## 🧭 Panduan untuk Tim (Rule of Thumb)
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Mau buat apa? | Di mana lokasinya? | Contoh |
+| :--- | :--- | :--- |
+| **Page / Screen Route baru** | `src/app/` (tipis saja, import dari feature) | `src/app/detail/[id].tsx` |
+| **Tampilan Halaman Utama** | `src/features/<feature>/screens/` | `src/features/home/screens/HomeScreen.tsx` |
+| **Komponen khusus 1 Fitur** | `src/features/<feature>/components/` | `src/features/home/components/HomeHeroBanner.tsx` |
+| **Komponen Reusable (UI Primitive)** | `src/components/ui/` | `src/components/ui/Button.tsx`, `ThemedText.tsx` |
+| **Layout / Wrapper Layar** | `src/components/layout/` | `src/components/layout/ScreenContainer.tsx` |
+| **API / Mock Data per Fitur** | `src/features/<feature>/services/` | `src/features/home/services/mockData.ts` |
+| **Type Definition per Fitur** | `src/features/<feature>/types/` | `src/features/home/types/index.ts` |
+| **Helper / Formatter global** | `src/utils/` | `src/utils/index.ts` |
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🚀 Menjalankan Project
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+# Install dependencies
+npm install
 
-## Join the community
+# Start development server
+npx expo start
 
-Join our community of developers creating universal apps.
+# Jalankan Typecheck
+npx tsc --noEmit
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Jalankan Linter
+npx expo lint
+```
