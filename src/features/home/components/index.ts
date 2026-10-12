@@ -1,2 +1,5 @@
-// Export feature-specific home components here as they are sliced
-// Example: export * from './HeroBanner';
+export * from './HomeHeroHeader';
+export * from './ProfileCard';
+export * from './CommunityPlansSection';
+export * from './DiscountPromosSection';
+export * from './LocalNewsSection';

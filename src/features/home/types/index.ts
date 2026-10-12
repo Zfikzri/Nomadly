@@ -1,22 +1,43 @@
-export type DestinationCategory = {
-  id: string;
+export type UserProfile = {
   name: string;
-  icon?: string;
+  country: string;
+  role: string;
+  avatarUrl: string;
+  isVip: boolean;
+  isOnline: boolean;
 };
 
-export type DestinationItem = {
+export type CommunityPlan = {
   id: string;
   title: string;
-  location: string;
-  price: number;
-  rating: number;
-  imageUrl?: string;
-  category: string;
+  dateRange: string;
+  duration: string;
+  countryPill: string;
+  repliesCount: number;
+  originFlag: string;
 };
 
-export type HomeHeroBanner = {
+export type PromoBadge = {
+  text: string;
+  variant: 'solid' | 'translucent';
+  icon?: 'clock' | 'lightning';
+};
+
+export type DiscountPromo = {
   id: string;
-  title: string;
+  badge: PromoBadge;
+  secondaryBadge?: PromoBadge;
   subtitle: string;
-  imageUrl?: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+};
+
+export type NewsSnippet = {
+  id: string;
+  code: string;
+  badgeText: string;
+  timeAgo: string;
+  title: string;
+  aiActionText: string;
 };
