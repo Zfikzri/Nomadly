@@ -68,7 +68,7 @@ export function HomeScreen() {
             {/* Fancy a Discount? Promos */}
             <DiscountPromosSection
               promos={MOCK_DISCOUNT_PROMOS}
-              onSeeAll={() => console.log('See all promos clicked')}
+              onSeeAll={() => router.push('/discount-promos')}
               onSelectPromo={(promo) => console.log('Selected promo:', promo.id)}
             />
 
