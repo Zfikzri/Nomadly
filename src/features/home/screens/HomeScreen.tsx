@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -60,7 +61,7 @@ export function HomeScreen() {
             {/* Carousel Community & Travel Plans */}
             <CommunityPlansSection
               plans={MOCK_COMMUNITY_PLANS}
-              onSeeAll={() => console.log('See all plans clicked')}
+              onSeeAll={() => router.push('/community-plans')}
               onSelectPlan={(plan) => console.log('Selected plan:', plan.id)}
             />
 
