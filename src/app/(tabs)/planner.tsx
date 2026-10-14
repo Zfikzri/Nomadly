@@ -1,23 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { PlannerScreen } from '@/features/planner/screens/PlannerScreen';
 
 export default function PlannerRoute() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Planner</Text>
-    </View>
-  );
+  return <PlannerScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F8FAFC',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-});
