@@ -75,6 +75,7 @@ export function HomeScreen() {
             {/* Local News Snippet List */}
             <LocalNewsSection
               newsList={MOCK_LOCAL_NEWS}
+              onSeeAll={() => router.push('/local-news')}
               onSelectNews={(news) => console.log('Selected news:', news.id)}
               onAiAdvicePress={(news) => console.log('AI Advice clicked for:', news.id)}
             />

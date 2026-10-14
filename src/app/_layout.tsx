@@ -20,6 +20,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="community-plans" options={{ headerShown: false }} />
         <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
+        <Stack.Screen name="local-news" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
       </Stack>
       <StatusBar style="auto" />
