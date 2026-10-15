@@ -52,31 +52,14 @@ export function ProfileScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}>
 
-          {/* ── 1. Profile Completion Card ── */}
+          {/* ── 1. Profile Completion Card with integrated compact CTA ── */}
           <ProfileCompletionCard
             percent={profile.completionPercent}
             hint={profile.completionHint}
+            onComplete={handleCompleteProfile}
           />
 
-          {/* ── 2. "Lengkapi Profil" CTA Button ── */}
-          <View style={styles.ctaWrapper}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.ctaButton,
-                pressed && styles.ctaButtonPressed,
-              ]}
-              onPress={handleCompleteProfile}
-              accessibilityLabel="Lengkapi profil saya">
-              <SymbolView
-                name={{ ios: 'sparkles', android: 'auto_awesome', web: 'auto_awesome' } as any}
-                size={18}
-                tintColor="#FFFFFF"
-              />
-              <Text style={styles.ctaButtonText}>Lengkapi Profil</Text>
-            </Pressable>
-          </View>
-
-          {/* ── 3. Avatar + Name + VIP + Edit Button ── */}
+          {/* ── 2. Avatar + Name + VIP + Edit Button ── */}
           <ProfileAvatarSection
             name={profile.name}
             avatarUrl={profile.avatarUrl}
@@ -139,36 +122,6 @@ const styles = StyleSheet.create({
   // Scroll
   scrollContent: {
     paddingBottom: 20,
-  },
-
-  // "Lengkapi Profil" CTA
-  ctaWrapper: {
-    paddingHorizontal: 20,
-    marginTop: 14,
-  },
-  ctaButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: '#2563EB',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 14,
-    elevation: 6,
-  },
-  ctaButtonPressed: {
-    opacity: 0.88,
-    transform: [{ scale: 0.99 }],
-  },
-  ctaButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    letterSpacing: 0.1,
   },
 
   // White surface sheet for Informasi Pribadi
