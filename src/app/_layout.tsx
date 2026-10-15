@@ -22,6 +22,9 @@ export default function RootLayout() {
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="register" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="profile" options={{ headerShown: false }} />
+        <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
+        <Stack.Screen name="complete-profile" options={{ headerShown: false }} />
         <Stack.Screen name="community-plans" options={{ headerShown: false }} />
         <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
         <Stack.Screen name="local-news" options={{ headerShown: false }} />

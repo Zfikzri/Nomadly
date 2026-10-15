@@ -50,7 +50,7 @@ export function HomeScreen() {
           <View style={styles.profileSection} className="z-20 mt-2 -mb-11">
             <ProfileCard
               profile={MOCK_USER_PROFILE}
-              onOpen={() => router.push('/login')}
+              onOpen={() => router.push('/profile' as any)}
             />
           </View>
 
