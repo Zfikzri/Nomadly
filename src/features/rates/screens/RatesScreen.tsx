@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -7,9 +7,20 @@ import {
   RatesHeader,
   RatesTabSegment,
   RatesWatchlistSection,
+  RemittanceBankCard,
+  RemittanceFilterChips,
+  RemittanceSearchBar,
+  RemittanceSecurityBanner,
 } from '../components';
-import { MOCK_WATCHLIST } from '../services/mockData';
-import type { RateTabType, WatchlistCardItem } from '../types';
+import {
+  filterRemittanceBanks,
+  MOCK_WATCHLIST,
+} from '../services/mockData';
+import type {
+  RateTabType,
+  RemittanceRegionFilter,
+  WatchlistCardItem,
+} from '../types';
 
 // Sky gradient background slices (#DDF0FF ke #BAE2FD)
 const SKY_SLICE_COUNT = 24;
@@ -24,6 +35,14 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 export function RatesScreen() {
   const [activeTab, setActiveTab] = useState<RateTabType>('exchange');
   const [watchlist, setWatchlist] = useState<WatchlistCardItem[]>(MOCK_WATCHLIST);
+
+  // Remittance state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState<RemittanceRegionFilter>('all');
+
+  const filteredBanks = useMemo(() => {
+    return filterRemittanceBanks(searchQuery, selectedRegion);
+  }, [searchQuery, selectedRegion]);
 
   const handleAddWatchlist = () => {
     // Add additional mock currency pair if not exists
@@ -66,23 +85,61 @@ export function RatesScreen() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}>
-          {/* 1. Header (Title & Subtitle) */}
+          {/* 1. Header (Title & Subtitle) - shared across tabs */}
           <RatesHeader />
 
-          {/* 2. Top Tab Segment (Exchange Kurs Rate vs Remittence) */}
+          {/* 2. Top Tab Segment (Exchange Kurs Rate vs Remittence) - shared across tabs */}
           <RatesTabSegment
             activeTab={activeTab}
             onTabChange={setActiveTab}
           />
 
-          {/* 3. Watchlist Section (+ Tambah Watchlist, Live status, Horizontal Cards) */}
-          <RatesWatchlistSection
-            items={watchlist}
-            onAddPress={handleAddWatchlist}
-          />
+          {/* 3. Conditional Content based on activeTab */}
+          {activeTab === 'exchange' ? (
+            <>
+              {/* Watchlist Section (+ Tambah Watchlist, Live status, Horizontal Cards) */}
+              <RatesWatchlistSection
+                items={watchlist}
+                onAddPress={handleAddWatchlist}
+              />
 
-          {/* 4. Converter Card (Kurs Konverter, Date, Inputs, Swap, Rate, Konversi CTA) */}
-          <RatesConverterCard />
+              {/* Converter Card (Kurs Konverter, Date, Inputs, Swap, Rate, Konversi CTA) */}
+              <RatesConverterCard />
+            </>
+          ) : (
+            <>
+              {/* Remittance Security Banner */}
+              <RemittanceSecurityBanner />
+
+              {/* Remittance Search Bar */}
+              <RemittanceSearchBar
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onClear={() => setSearchQuery('')}
+              />
+
+              {/* Remittance Region Filter Chips */}
+              <RemittanceFilterChips
+                selectedRegion={selectedRegion}
+                onSelectRegion={setSelectedRegion}
+              />
+
+              {/* Remittance Bank Partner Cards */}
+              {filteredBanks.length > 0 ? (
+                filteredBanks.map((bank) => (
+                  <RemittanceBankCard key={bank.id} item={bank} />
+                ))
+              ) : (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyIcon}>🔍</Text>
+                  <Text style={styles.emptyTitle}>Mitra Tidak Ditemukan</Text>
+                  <Text style={styles.emptySubtitle}>
+                    Tidak ada bank mitra yang cocok dengan "{searchQuery}".
+                  </Text>
+                </View>
+              )}
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -104,4 +161,29 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 110, // Bottom padding to avoid FloatingTabBar overlap
   },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 24,
+    marginHorizontal: 20,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+  },
+  emptyIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#0F172A',
+    marginBottom: 4,
+  },
+  emptySubtitle: {
+    fontSize: 13,
+    color: '#64748B',
+    textAlign: 'center',
+  },
 });
+

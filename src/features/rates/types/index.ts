@@ -24,3 +24,23 @@ export type ConverterState = {
   fromAmount: string;
   toAmount: string;
 };
+
+export type RemittanceRegionFilter = 'all' | 'asia' | 'eropa' | 'amerika' | 'digital';
+
+export type RemittanceBankItem = {
+  id: string;
+  name: string;
+  country: string;
+  countryFlag: string;
+  categoryType: string;
+  region: 'asia' | 'eropa' | 'amerika' | 'digital';
+  statusBadgeText: string;
+  statusBadgeType: 'green' | 'blue' | 'purple' | 'cyan';
+  description: string;
+  featureTags: string[];
+  complianceText: string;
+  complianceIcon: string;
+  avatarBgColor: string;
+  avatarTextColor: string;
+  avatarText: string;
+};
