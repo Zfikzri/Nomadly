@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -102,7 +103,17 @@ export function ChatScreen() {
           {/* 6. Chat Cards List */}
           <View style={styles.chatListContainer}>
             {filteredChatItems.map((item) => (
-              <ChatItemCard key={item.id} item={item} />
+              <ChatItemCard
+                key={item.id}
+                item={item}
+                onPress={() => {
+                  if (item.type === 'community') {
+                    router.push('/chat-group');
+                  } else {
+                    router.push('/chat-personal');
+                  }
+                }}
+              />
             ))}
           </View>
         </ScrollView>
