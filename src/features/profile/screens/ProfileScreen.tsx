@@ -15,15 +15,11 @@ export function ProfileScreen() {
   const profile = MOCK_PROFILE_DATA;
 
   const handleCompleteProfile = () => {
-    Alert.alert(
-      'Lengkapi Profil',
-      'Anda akan diarahkan ke form pengisian profil lengkap untuk mendapatkan rekomendasi finansial yang akurat.',
-      [{ text: 'Mulai Sekarang', style: 'default' }, { text: 'Nanti', style: 'cancel' }]
-    );
+    router.push('/complete-profile' as any);
   };
 
   const handleEditProfile = () => {
-    Alert.alert('Edit Profil', 'Fitur edit profil akan segera hadir. (Coming soon)');
+    router.push('/edit-profile' as any);
   };
 
   const handleCameraPress = () => {
