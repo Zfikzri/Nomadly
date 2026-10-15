@@ -1,3 +1,5 @@
+export * from './detail';
+
 export type ChatTabType = 'personal' | 'community';
 
 export type ChatFilterType = 'all' | 'unread' | 'favorite';
