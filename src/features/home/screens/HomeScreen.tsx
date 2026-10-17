@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -49,7 +50,7 @@ export function HomeScreen() {
           <View style={styles.profileSection} className="z-20 mt-2 -mb-11">
             <ProfileCard
               profile={MOCK_USER_PROFILE}
-              onOpen={() => console.log('Open profile clicked')}
+              onOpen={() => router.push('/profile' as any)}
             />
           </View>
 
@@ -60,20 +61,21 @@ export function HomeScreen() {
             {/* Carousel Community & Travel Plans */}
             <CommunityPlansSection
               plans={MOCK_COMMUNITY_PLANS}
-              onSeeAll={() => console.log('See all plans clicked')}
+              onSeeAll={() => router.push('/community-plans')}
               onSelectPlan={(plan) => console.log('Selected plan:', plan.id)}
             />
 
             {/* Fancy a Discount? Promos */}
             <DiscountPromosSection
               promos={MOCK_DISCOUNT_PROMOS}
-              onSeeAll={() => console.log('See all promos clicked')}
+              onSeeAll={() => router.push('/discount-promos')}
               onSelectPromo={(promo) => console.log('Selected promo:', promo.id)}
             />
 
             {/* Local News Snippet List */}
             <LocalNewsSection
               newsList={MOCK_LOCAL_NEWS}
+              onSeeAll={() => router.push('/local-news')}
               onSelectNews={(news) => console.log('Selected news:', news.id)}
               onAiAdvicePress={(news) => console.log('AI Advice clicked for:', news.id)}
             />
