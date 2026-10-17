@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -21,6 +22,7 @@ import {
 import type { PromoCategoryId } from '../types';
 
 export function DiscountPromosScreen() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<PromoCategoryId>('all');
 
@@ -109,7 +111,12 @@ export function DiscountPromosScreen() {
         {showHighlight && (
           <HighlightPromoCard
             promo={MOCK_HIGHLIGHT_PROMO}
-            onClaim={() => console.log('Claim Barcelona promo clicked')}
+            onClaim={() =>
+              router.push({
+                pathname: '/promo/[id]',
+                params: { id: 'promo-1' },
+              } as any)
+            }
           />
         )}
 
@@ -133,64 +140,6 @@ export function DiscountPromosScreen() {
                 key={pass.id}
                 item={pass}
                 onPress={() => console.log('Selected transit pass:', pass.id)}
-              />
-            ))}
-          </View>
-        )}
-
-        {/* 7. Section 3: Penerbangan Pilihan */}
-        {filteredFlights.length > 0 && (
-          <View style={styles.sectionWrapper}>
-            <View style={styles.sectionHeaderRow}>
-              <View style={styles.sectionHeaderLeft}>
-                <SymbolView
-                  name={{
-                    ios: 'airplane.departure',
-                    android: 'flight_takeoff',
-                    web: 'flight_takeoff',
-                  }}
-                  size={16}
-                  tintColor="#0050D6"
-                />
-                <Text style={styles.sectionHeading}>Penerbangan Pilihan</Text>
-              </View>
-              <Text style={styles.sectionLink}>Semua Rute</Text>
-            </View>
-
-            {filteredFlights.map((flight) => (
-              <FlightPromoCard
-                key={flight.id}
-                item={flight}
-                onPress={() => console.log('Selected flight promo:', flight.id)}
-              />
-            ))}
-          </View>
-        )}
-
-        {/* 8. Section 4: Koneksi & Atraksi Wisata */}
-        {filteredAttractions.length > 0 && (
-          <View style={styles.sectionWrapper}>
-            <View style={styles.sectionHeaderRow}>
-              <View style={styles.sectionHeaderLeft}>
-                <SymbolView
-                  name={{
-                    ios: 'sparkles',
-                    android: 'auto_awesome',
-                    web: 'auto_awesome',
-                  }}
-                  size={16}
-                  tintColor="#16A34A"
-                />
-                <Text style={styles.sectionHeading}>Koneksi &amp; Atraksi Wisata</Text>
-              </View>
-              <Text style={styles.sectionSubLink}>Bundling Hemat</Text>
-            </View>
-
-            {filteredAttractions.map((attr) => (
-              <AttractionPromoCard
-                key={attr.id}
-                item={attr}
-                onPress={() => console.log('Selected attraction:', attr.id)}
               />
             ))}
           </View>

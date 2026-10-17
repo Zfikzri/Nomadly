@@ -62,14 +62,24 @@ export function HomeScreen() {
             <CommunityPlansSection
               plans={MOCK_COMMUNITY_PLANS}
               onSeeAll={() => router.push('/community-plans')}
-              onSelectPlan={(plan) => router.push(`/community/${plan.id}`)}
+              onSelectPlan={(plan) =>
+                router.push({
+                  pathname: '/community/[id]',
+                  params: { id: plan.id },
+                } as any)
+              }
             />
 
             {/* Fancy a Discount? Promos */}
             <DiscountPromosSection
               promos={MOCK_DISCOUNT_PROMOS}
               onSeeAll={() => router.push('/discount-promos')}
-              onSelectPromo={(promo) => console.log('Selected promo:', promo.id)}
+              onSelectPromo={(promo) =>
+                router.push({
+                  pathname: '/promo/[id]',
+                  params: { id: promo.id },
+                } as any)
+              }
             />
 
             {/* Local News Snippet List */}
