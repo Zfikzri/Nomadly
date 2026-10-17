@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.99 }],
   },
   gradientContainer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     flexDirection: 'row',
   },
   content: {
