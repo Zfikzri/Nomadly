@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -14,6 +15,7 @@ import {
 import type { FilterCategoryId } from '../types';
 
 export function CommunityPlansScreen() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<FilterCategoryId>('all');
 
@@ -70,7 +72,7 @@ export function CommunityPlansScreen() {
             <CommunityGroupCard
               key={group.id}
               group={group}
-              onPress={() => console.log('Tapped group:', group.id)}
+              onPress={() => router.push(`/community/${group.id}`)}
             />
           ))
         ) : (

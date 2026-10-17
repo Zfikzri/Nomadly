@@ -62,7 +62,7 @@ export function HomeScreen() {
             <CommunityPlansSection
               plans={MOCK_COMMUNITY_PLANS}
               onSeeAll={() => router.push('/community-plans')}
-              onSelectPlan={(plan) => console.log('Selected plan:', plan.id)}
+              onSelectPlan={(plan) => router.push(`/community/${plan.id}`)}
             />
 
             {/* Fancy a Discount? Promos */}
