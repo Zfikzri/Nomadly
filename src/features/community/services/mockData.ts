@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import type { CommunityGroupDetail } from '../types';
 
 export const MOCK_COMMUNITY_DETAILS: Record<string, CommunityGroupDetail> = {
@@ -174,6 +175,8 @@ export function getCommunityGroupDetail(id: string): CommunityGroupDetail {
   return MOCK_COMMUNITY_DETAILS[id] ?? MOCK_COMMUNITY_DETAILS['plan-1'];
 }
 =======
+=======
+>>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
 import type { CategoryFilter, CommunityGroup } from '../types';
 
 export const MOCK_CATEGORY_FILTERS: CategoryFilter[] = [
@@ -344,4 +347,7 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     isRead: true,
   },
 ];
+<<<<<<< HEAD
 >>>>>>> 13f50b222c70bc9ebaa9c2e0e69c2e6dc57a7b8a
+=======
+>>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
