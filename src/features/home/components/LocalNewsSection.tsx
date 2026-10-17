@@ -6,12 +6,14 @@ import type { NewsSnippet } from '../types';
 
 type LocalNewsSectionProps = {
   newsList: NewsSnippet[];
+  onSeeAll?: () => void;
   onSelectNews?: (news: NewsSnippet) => void;
   onAiAdvicePress?: (news: NewsSnippet) => void;
 };
 
 export function LocalNewsSection({
   newsList,
+  onSeeAll,
   onSelectNews,
   onAiAdvicePress,
 }: LocalNewsSectionProps) {
@@ -27,7 +29,14 @@ export function LocalNewsSection({
           />
           <Text style={styles.sectionTitle}>Local News Snippet</Text>
         </View>
-        <Text style={styles.autoTranslatedText}>Auto-translated</Text>
+        <View style={styles.headerRight}>
+          <Text style={styles.autoTranslatedText}>Auto-translated</Text>
+          {onSeeAll && (
+            <Pressable hitSlop={8} onPress={onSeeAll}>
+              <Text style={styles.seeAllText}>See all &gt;</Text>
+            </Pressable>
+          )}
+        </View>
       </View>
 
       {/* Cards List */}
@@ -118,10 +127,20 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#151C27',
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   autoTranslatedText: {
     fontSize: 12,
     color: '#64748B',
     fontWeight: '500',
+  },
+  seeAllText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0050D6',
   },
   newsListWrapper: {
     gap: Spacing.three,
