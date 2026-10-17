@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 export type MemberAvatar = {
   id: string;
   avatarUrl: string;
@@ -22,9 +20,8 @@ export type CommunityGroupDetail = {
     description: string;
   };
   actionButtonText: string;
-=======
-=======
->>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
+};
+
 export type FilterCategoryId = 'all' | 'asia' | 'europe' | 'workation';
 
 export type CategoryFilter = {
@@ -68,8 +65,4 @@ export type CommunityGroup = {
   featureTag: FeatureTag;
   unreadCount?: number;
   isRead?: boolean;
-<<<<<<< HEAD
->>>>>>> 13f50b222c70bc9ebaa9c2e0e69c2e6dc57a7b8a
-=======
->>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
 };

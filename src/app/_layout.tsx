@@ -26,6 +26,7 @@ export default function RootLayout() {
         <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
         <Stack.Screen name="complete-profile" options={{ headerShown: false }} />
         <Stack.Screen name="community-plans" options={{ headerShown: false }} />
+        <Stack.Screen name="community/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
         <Stack.Screen name="local-news" options={{ headerShown: false }} />
         <Stack.Screen name="chat-personal" options={{ headerShown: false }} />

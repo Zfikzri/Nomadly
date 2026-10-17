@@ -1,10 +1,57 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import type { CommunityGroupDetail } from '../types';
+import type { CategoryFilter, CommunityGroup, CommunityGroupDetail } from '../types';
 
 export const MOCK_COMMUNITY_DETAILS: Record<string, CommunityGroupDetail> = {
   'plan-1': {
     id: 'plan-1',
+    title: 'Solo Travelers Japan',
+    heroImageUrl:
+      'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80',
+    stayingCard: {
+      title: "See who's staying here",
+      subtitle: 'Connect, split tapas, and cowork together',
+      members: [
+        {
+          id: 'm-1',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+          flagCode: 'ID',
+        },
+        {
+          id: 'm-2',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+          flagCode: 'ID',
+        },
+        {
+          id: 'm-3',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+          flagCode: 'ID',
+        },
+        {
+          id: 'm-4',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
+          flagCode: 'ID',
+        },
+        {
+          id: 'm-5',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+          flagCode: 'ID',
+        },
+      ],
+      remainingCountText: '+13',
+    },
+    about: {
+      title: 'About the Hub',
+      description:
+        'Fabrizzios is an authentic boutique hub with a genuine family atmosphere nestled in the heart of Barcelona. Our lush garden terrace invites you to work productively during the morning breeze, join homemade paella dinners, and easily coordinate excursions with fellow global nomads.',
+    },
+    actionButtonText: 'Choose Room',
+  },
+  'comm-1': {
+    id: 'comm-1',
     title: 'Solo Travelers Japan',
     heroImageUrl:
       'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80',
@@ -174,10 +221,6 @@ export const MOCK_COMMUNITY_DETAILS: Record<string, CommunityGroupDetail> = {
 export function getCommunityGroupDetail(id: string): CommunityGroupDetail {
   return MOCK_COMMUNITY_DETAILS[id] ?? MOCK_COMMUNITY_DETAILS['plan-1'];
 }
-=======
-=======
->>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
-import type { CategoryFilter, CommunityGroup } from '../types';
 
 export const MOCK_CATEGORY_FILTERS: CategoryFilter[] = [
   {
@@ -347,7 +390,3 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     isRead: true,
   },
 ];
-<<<<<<< HEAD
->>>>>>> 13f50b222c70bc9ebaa9c2e0e69c2e6dc57a7b8a
-=======
->>>>>>> 026480f950fdc9aeda6ed9048682df8da4bab761
