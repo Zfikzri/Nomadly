@@ -30,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
         <Stack.Screen name="promo/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="local-news" options={{ headerShown: false }} />
+        <Stack.Screen name="news/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="chat-personal" options={{ headerShown: false }} />
         <Stack.Screen name="chat-group" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />

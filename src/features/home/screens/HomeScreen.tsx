@@ -86,8 +86,18 @@ export function HomeScreen() {
             <LocalNewsSection
               newsList={MOCK_LOCAL_NEWS}
               onSeeAll={() => router.push('/local-news')}
-              onSelectNews={(news) => console.log('Selected news:', news.id)}
-              onAiAdvicePress={(news) => console.log('AI Advice clicked for:', news.id)}
+              onSelectNews={(news) =>
+                router.push({
+                  pathname: '/news/[id]',
+                  params: { id: news.id },
+                } as any)
+              }
+              onAiAdvicePress={(news) =>
+                router.push({
+                  pathname: '/news/[id]',
+                  params: { id: news.id },
+                } as any)
+              }
             />
           </View>
         </ScrollView>

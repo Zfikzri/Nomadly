@@ -101,6 +101,7 @@ export const MOCK_LOCAL_NEWS: NewsSnippet[] = [
   {
     id: 'news-1',
     code: 'JP',
+    flagEmoji: '🇯🇵',
     badgeText: 'JPY Drop Alert',
     timeAgo: '12m ago',
     title: 'Kebijakan Bebas Visa Baru & Tren Melemahnya Yen',
@@ -109,6 +110,7 @@ export const MOCK_LOCAL_NEWS: NewsSnippet[] = [
   {
     id: 'news-2',
     code: 'EU',
+    flagEmoji: '🇪🇺',
     badgeText: 'EUR Rate Peak',
     timeAgo: '35m ago',
     title: 'Suku Bunga ECB Turun: Peluang Kunci Kurs EUR untuk Liburan Musim Panas',
@@ -117,6 +119,7 @@ export const MOCK_LOCAL_NEWS: NewsSnippet[] = [
   {
     id: 'news-3',
     code: 'TH',
+    flagEmoji: '🇹🇭',
     badgeText: 'DTV Visa Update',
     timeAgo: '2h ago',
     title: 'Thailand Resmi Rilis Visa DTV 5 Tahun untuk Digital Nomad',
@@ -125,6 +128,7 @@ export const MOCK_LOCAL_NEWS: NewsSnippet[] = [
   {
     id: 'news-4',
     code: 'SG',
+    flagEmoji: '🇸🇬',
     badgeText: 'Cashless Borderless',
     timeAgo: '4h ago',
     title: 'Integrasi QRIS Lintas Negara Siap Dipakai Penuh di Singapura & Malaysia',
