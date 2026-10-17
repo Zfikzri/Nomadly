@@ -47,12 +47,12 @@ export function LocalNewsSection({
             style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
             className="bg-white rounded-3xl p-6 flex-row items-center gap-4 border border-slate-100 shadow-sm"
             onPress={() => onSelectNews?.(news)}>
-            {/* Country Square Badge with Dotted Border */}
+            {/* Country Flag Badge */}
             <View
-              style={styles.countryCodeBadge}
-              className="w-11 h-11 rounded-2xl border-[1.5px] border-dashed border-cyan-500 bg-cyan-50 items-center justify-center">
-              <Text style={styles.countryCodeText} className="text-[15px] font-extrabold text-cyan-600 tracking-wider">
-                {news.code}
+              style={styles.countryFlagBadge}
+              className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 items-center justify-center">
+              <Text style={styles.countryFlagText}>
+                {news.flagEmoji || (news.code === 'JP' ? '🇯🇵' : news.code === 'EU' ? '🇪🇺' : news.code === 'TH' ? '🇹🇭' : news.code === 'SG' ? '🇸🇬' : '🌐')}
               </Text>
             </View>
 
@@ -164,22 +164,18 @@ const styles = StyleSheet.create({
     opacity: 0.95,
     transform: [{ scale: 0.99 }],
   },
-  countryCodeBadge: {
-    width: 44,
-    height: 44,
+  countryFlagBadge: {
+    width: 46,
+    height: 46,
     borderRadius: 14,
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderColor: '#06B6D4',
-    backgroundColor: '#ECFEFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#F8FAFC',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  countryCodeText: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0891B2',
-    letterSpacing: 1,
+  countryFlagText: {
+    fontSize: 24,
   },
   contentWrapper: {
     flex: 1,

@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -22,6 +23,7 @@ import {
 import type { NewsCategoryId } from '../types';
 
 export function LocalNewsScreen() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<NewsCategoryId>('all');
 
@@ -124,37 +126,72 @@ export function LocalNewsScreen() {
         {showFxAlert && (
           <NewsFxCard
             item={MOCK_FX_ALERT_NEWS}
-            onPress={() => console.log('FX alert news pressed')}
-            onLockRate={() => console.log('Lock rate pressed')}
+            onPress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-1' },
+              } as any)
+            }
+            onLockRate={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-1' },
+              } as any)
+            }
           />
         )}
 
         {showPreClearance && (
           <NewsPhotoCard
             item={MOCK_PRE_CLEARANCE_NEWS}
-            onPress={() => console.log('Pre-clearance news pressed')}
+            onPress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-1' },
+              } as any)
+            }
           />
         )}
 
         {showEtias && (
           <NewsEtiasCard
             item={MOCK_ETIAS_NEWS}
-            onPress={() => console.log('ETIAS news pressed')}
-            onGuidePress={() => console.log('ETIAS guide link pressed')}
+            onPress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-2' },
+              } as any)
+            }
+            onGuidePress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-2' },
+              } as any)
+            }
           />
         )}
 
         {showCustomsCash && (
           <NewsCustomsCard
             item={MOCK_CUSTOMS_CASH_NEWS}
-            onPress={() => console.log('Customs cash news pressed')}
+            onPress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-4' },
+              } as any)
+            }
           />
         )}
 
         {showTouristFee && (
           <NewsTouristTaxCard
             item={MOCK_TOURIST_FEE_NEWS}
-            onPress={() => console.log('Tourist fee news pressed')}
+            onPress={() =>
+              router.push({
+                pathname: '/news/[id]',
+                params: { id: 'news-3' },
+              } as any)
+            }
           />
         )}
 

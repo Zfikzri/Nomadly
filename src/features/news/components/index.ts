@@ -6,3 +6,5 @@ export * from './NewsHeader';
 export * from './NewsPhotoCard';
 export * from './NewsSearchBar';
 export * from './NewsTouristTaxCard';
+export * from './detail';
+

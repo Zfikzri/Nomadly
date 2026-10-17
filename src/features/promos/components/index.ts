@@ -5,3 +5,4 @@ export * from './PromoFilterChips';
 export * from './PromoHeader';
 export * from './PromoSearchBar';
 export * from './TransitPassCard';
+export * from './detail';

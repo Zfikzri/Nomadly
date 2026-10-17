@@ -36,6 +36,7 @@ export type DiscountPromo = {
 export type NewsSnippet = {
   id: string;
   code: string;
+  flagEmoji?: string;
   badgeText: string;
   timeAgo: string;
   title: string;
