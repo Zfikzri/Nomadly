@@ -3,6 +3,7 @@ import { SymbolView } from 'expo-symbols';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   AttractionPromoCard,
   FlightPromoCard,
@@ -12,19 +13,22 @@ import {
   PromoSearchBar,
   TransitPassCard,
 } from '../components';
-import {
-  MOCK_ATTRACTION_PROMOS,
-  MOCK_FLIGHT_PROMOS,
-  MOCK_HIGHLIGHT_PROMO,
-  MOCK_PROMO_CATEGORIES,
-  MOCK_TRANSIT_PASSES,
-} from '../services/mockData';
+import { getLocalizedPromoCatalog } from '../services/mockData';
 import type { PromoCategoryId } from '../types';
 
 export function DiscountPromosScreen() {
   const router = useRouter();
+  const { isZh } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<PromoCategoryId>('all');
+
+  const {
+    categories,
+    highlightPromo,
+    transitPasses,
+    flightPromos,
+    attractionPromos,
+  } = getLocalizedPromoCatalog(isZh);
 
   // ponytail: client-side filter mockup for promos. Ceiling: static in-memory catalog. Upgrade path: connect to live promotional API with personalized sorting.
   const q = searchQuery.toLowerCase().trim();
@@ -33,42 +37,42 @@ export function DiscountPromosScreen() {
     if (activeCategory !== 'all' && activeCategory !== 'flights') return false;
     if (!q) return true;
     return (
-      MOCK_HIGHLIGHT_PROMO.title.toLowerCase().includes(q) ||
-      MOCK_HIGHLIGHT_PROMO.subtitle.toLowerCase().includes(q) ||
-      MOCK_HIGHLIGHT_PROMO.couponCode.toLowerCase().includes(q)
+      highlightPromo.title.toLowerCase().includes(q) ||
+      highlightPromo.subtitle.toLowerCase().includes(q) ||
+      highlightPromo.couponCode.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, highlightPromo]);
 
   const filteredTransitPasses = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'trains') return [];
-    if (!q) return MOCK_TRANSIT_PASSES;
-    return MOCK_TRANSIT_PASSES.filter(
+    if (!q) return transitPasses;
+    return transitPasses.filter(
       (item) =>
         item.title.toLowerCase().includes(q) ||
         item.subtitle.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, transitPasses]);
 
   const filteredFlights = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'flights') return [];
-    if (!q) return MOCK_FLIGHT_PROMOS;
-    return MOCK_FLIGHT_PROMOS.filter(
+    if (!q) return flightPromos;
+    return flightPromos.filter(
       (item) =>
         item.airline.toLowerCase().includes(q) ||
         item.route.toLowerCase().includes(q) ||
         item.boxDetail.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, flightPromos]);
 
   const filteredAttractions = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'attractions') return [];
-    if (!q) return MOCK_ATTRACTION_PROMOS;
-    return MOCK_ATTRACTION_PROMOS.filter(
+    if (!q) return attractionPromos;
+    return attractionPromos.filter(
       (item) =>
         item.title.toLowerCase().includes(q) ||
         item.subtitle.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, attractionPromos]);
 
   const hasAnyResults =
     showHighlight ||
@@ -87,9 +91,13 @@ export function DiscountPromosScreen() {
         keyboardShouldPersistTaps="handled">
         {/* 2. Screen Title & Subtitle Banner */}
         <View style={styles.titleSection}>
-          <Text style={styles.mainTitle}>Promo &amp; Diskon Tiket</Text>
+          <Text style={styles.mainTitle}>
+            {isZh ? '特惠与折扣门票' : 'Promotions & Discounts'}
+          </Text>
           <Text style={styles.mainSubtitle}>
-            Katalog promo penerbangan, kereta cepat &amp; voucher wisata terverifikasi
+            {isZh
+              ? '精选认证机票折扣、高速铁路通票及旅行优惠券'
+              : 'Verified flight discounts, high-speed rail passes & travel vouchers'}
           </Text>
         </View>
 
@@ -102,15 +110,15 @@ export function DiscountPromosScreen() {
 
         {/* 4. Horizontal Category Filter Chips */}
         <PromoFilterChips
-          categories={MOCK_PROMO_CATEGORIES}
+          categories={categories}
           activeCategoryId={activeCategory}
           onSelectCategory={setActiveCategory}
         />
 
-        {/* 5. Highlight Pekan Ini */}
+        {/* 5. Highlight of the Week */}
         {showHighlight && (
           <HighlightPromoCard
-            promo={MOCK_HIGHLIGHT_PROMO}
+            promo={highlightPromo}
             onClaim={() =>
               router.push({
                 pathname: '/promo/[id]',
@@ -132,7 +140,9 @@ export function DiscountPromosScreen() {
                 />
                 <Text style={styles.sectionHeading}>Rail &amp; Transit Passes</Text>
               </View>
-              <Text style={styles.sectionLink}>E-Ticket Instan</Text>
+              <Text style={styles.sectionLink}>
+                {isZh ? '即时电子票' : 'Instant E-Ticket'}
+              </Text>
             </View>
 
             {filteredTransitPasses.map((pass) => (
@@ -145,12 +155,75 @@ export function DiscountPromosScreen() {
           </View>
         )}
 
+        {/* 7. Section 3: Flights Promos */}
+        {filteredFlights.length > 0 && (
+          <View style={styles.sectionWrapper}>
+            <View style={styles.sectionHeaderRow}>
+              <View style={styles.sectionHeaderLeft}>
+                <SymbolView
+                  name={{ ios: 'airplane', android: 'flight', web: 'flight' }}
+                  size={16}
+                  tintColor="#0284C7"
+                />
+                <Text style={styles.sectionHeading}>Flight Specials</Text>
+              </View>
+              <Text style={styles.sectionSubLink}>
+                {isZh ? '精选往返' : 'Featured Return'}
+              </Text>
+            </View>
+
+            {filteredFlights.map((flight) => (
+              <FlightPromoCard
+                key={flight.id}
+                item={flight}
+                onPress={() =>
+                  router.push({
+                    pathname: '/promo/[id]',
+                    params: { id: 'promo-1' },
+                  } as any)
+                }
+              />
+            ))}
+          </View>
+        )}
+
+        {/* 8. Section 4: Attractions & eSIM */}
+        {filteredAttractions.length > 0 && (
+          <View style={styles.sectionWrapper}>
+            <View style={styles.sectionHeaderRow}>
+              <View style={styles.sectionHeaderLeft}>
+                <SymbolView
+                  name={{ ios: 'ticket.fill', android: 'confirmation_number', web: 'confirmation_number' }}
+                  size={16}
+                  tintColor="#16A34A"
+                />
+                <Text style={styles.sectionHeading}>Passes &amp; eSIM</Text>
+              </View>
+              <Text style={styles.sectionLink}>
+                {isZh ? '查看全部' : 'View All'}
+              </Text>
+            </View>
+
+            {filteredAttractions.map((attr) => (
+              <AttractionPromoCard
+                key={attr.id}
+                item={attr}
+                onPress={() => console.log('Selected attraction:', attr.id)}
+              />
+            ))}
+          </View>
+        )}
+
         {/* Empty State */}
         {!hasAnyResults && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>Tidak ada promo ditemukan</Text>
+            <Text style={styles.emptyTitle}>
+              {isZh ? '未找到相关优惠' : 'No promotions found'}
+            </Text>
             <Text style={styles.emptySubtitle}>
-              Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.
+              {isZh
+                ? '请尝试更换搜索关键词或选择“全部”分类。'
+                : 'Try searching with different keywords or select the "All" category.'}
             </Text>
           </View>
         )}
@@ -230,7 +303,7 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 13,
-    color: '#475569',
+    color: '#64748B',
     textAlign: 'center',
     lineHeight: 18,
   },

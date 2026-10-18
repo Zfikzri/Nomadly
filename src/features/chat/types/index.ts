@@ -18,6 +18,7 @@ export type ChatItemMetaIcon = 'location' | 'flight' | 'backpack';
 
 export type ChatMessageItem = {
   id: string;
+  userId?: string;
   type: ChatTabType;
   name: string;
   countryCode?: string;

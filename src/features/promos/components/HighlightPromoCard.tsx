@@ -3,6 +3,7 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { HighlightPromo } from '../types';
 
 type HighlightPromoCardProps = {
@@ -11,6 +12,7 @@ type HighlightPromoCardProps = {
 };
 
 export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) {
+  const { isZh } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -28,7 +30,9 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
             size={16}
             tintColor="#EF4444"
           />
-          <Text style={styles.sectionTitle}>HIGHLIGHT PEKAN INI</Text>
+          <Text style={styles.sectionTitle}>
+            {isZh ? '本周特惠精选' : 'DEAL OF THE WEEK'}
+          </Text>
         </View>
 
         <View style={styles.timerBadge}>
@@ -37,7 +41,9 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
             size={11}
             tintColor="#E11D48"
           />
-          <Text style={styles.timerText}>Sisa 3 Hari</Text>
+          <Text style={styles.timerText}>
+            {isZh ? '仅剩 3 天' : '3 Days Left'}
+          </Text>
         </View>
       </View>
 
@@ -89,7 +95,9 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
                 />
               </View>
               <View>
-                <Text style={styles.couponLabel}>Kode Kupon Promo</Text>
+                <Text style={styles.couponLabel}>
+                  {isZh ? '优惠兑换代码' : 'Promo Coupon Code'}
+                </Text>
                 <Text style={styles.couponCode}>{promo.couponCode}</Text>
               </View>
             </View>
@@ -116,7 +124,13 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
                   styles.copyButtonText,
                   copied && styles.copyButtonTextActive,
                 ]}>
-                {copied ? 'Tersalin' : 'Salin'}
+                {copied
+                  ? isZh
+                    ? '已复制'
+                    : 'Copied'
+                  : isZh
+                  ? '复制'
+                  : 'Copy'}
               </Text>
             </Pressable>
           </View>
@@ -138,7 +152,9 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
           <Pressable
             onPress={onClaim}
             style={({ pressed }) => [styles.claimButton, pressed && styles.claimButtonPressed]}>
-            <Text style={styles.claimButtonText}>Klaim Promo Tiket</Text>
+            <Text style={styles.claimButtonText}>
+              {isZh ? '立即领取特惠' : 'Claim Promo Deal'}
+            </Text>
             <SymbolView
               name={{ ios: 'arrow.right', android: 'arrow_forward', web: 'arrow_forward' }}
               size={14}
@@ -155,7 +171,7 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
 const styles = StyleSheet.create({
   sectionContainer: {
     paddingHorizontal: 16,
-    marginBottom: 24,
+    marginBottom: 20,
   },
   headerRow: {
     flexDirection: 'row',
@@ -169,7 +185,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   sectionTitle: {
-    fontSize: 12.5,
+    fontSize: 12,
     fontWeight: '800',
     color: '#0F172A',
     letterSpacing: 0.5,
@@ -179,9 +195,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#FFE4E6',
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 3.5,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
   },
   timerText: {
     fontSize: 11,
@@ -190,99 +206,100 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 26,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 10,
     elevation: 3,
   },
   imageContainer: {
-    height: 165,
+    height: 160,
     position: 'relative',
     justifyContent: 'space-between',
-    padding: 14,
+    padding: 12,
   },
   image: {
-    position: 'absolute',
-    inset: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   imageOverlay: {
-    position: 'absolute',
-    inset: 0,
-    backgroundColor: 'rgba(15, 23, 42, 0.38)',
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
   },
   topBadgesRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    zIndex: 2,
+    gap: 8,
   },
   discountPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#0050D6',
-    borderRadius: 999,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
+    borderRadius: 8,
   },
   discountPillText: {
-    fontSize: 10.5,
+    fontSize: 11,
     fontWeight: '700',
     color: '#FFFFFF',
   },
   savePill: {
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
-    borderRadius: 999,
-    paddingHorizontal: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingHorizontal: 8,
     paddingVertical: 4,
+    borderRadius: 8,
   },
   savePillText: {
-    fontSize: 10.5,
+    fontSize: 11,
     fontWeight: '700',
     color: '#0F172A',
   },
   imageBottomContent: {
-    zIndex: 2,
+    gap: 2,
   },
   cardTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
     color: '#FFFFFF',
-    marginBottom: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   cardSubtitle: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.92)',
-    fontWeight: '500',
+    color: '#E2E8F0',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   bodyContainer: {
-    padding: 16,
+    padding: 14,
+    gap: 12,
   },
   couponBox: {
-    backgroundColor: '#F0F5FF',
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
-    borderColor: '#E0EAFF',
+    borderColor: '#E2E8F0',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   couponLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   couponIconCircle: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#EFF6FF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -294,7 +311,7 @@ const styles = StyleSheet.create({
   couponCode: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#0050D6',
     letterSpacing: 0.5,
   },
   copyButton: {
@@ -302,23 +319,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
   },
   copyButtonActive: {
-    backgroundColor: '#DCFCE7',
+    borderColor: '#86EFAC',
+    backgroundColor: '#F0FDF4',
   },
   copyButtonPressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
   copyButtonText: {
-    fontSize: 11.5,
+    fontSize: 11,
     fontWeight: '700',
     color: '#0F172A',
   },
@@ -329,33 +344,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 14,
   },
   policyLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 4,
   },
   metaText: {
-    fontSize: 11.5,
-    color: '#475569',
+    fontSize: 11,
+    color: '#64748B',
     fontWeight: '500',
   },
   claimButton: {
-    height: 46,
-    backgroundColor: '#0050D6',
-    borderRadius: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
+    backgroundColor: '#0050D6',
+    paddingVertical: 11,
+    borderRadius: 12,
   },
   claimButtonPressed: {
     opacity: 0.9,
-    transform: [{ scale: 0.99 }],
   },
   claimButtonText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: '#FFFFFF',
   },

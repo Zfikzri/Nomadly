@@ -2,6 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { SocialAction } from '../../types/detail';
 
 type NewsSocialShareCardProps = {
@@ -15,6 +16,7 @@ export function NewsSocialShareCard({
   joinCountText,
   actions,
 }: NewsSocialShareCardProps) {
+  const { isZh } = useLanguage();
   const [saved, setSaved] = useState(false);
 
   const handleActionPress = (action: SocialAction) => {
@@ -35,7 +37,8 @@ export function NewsSocialShareCard({
       <View style={styles.actionsRow}>
         {actions.map((act) => {
           const isSavedAction = act.id === 'act-1';
-          const label = isSavedAction && saved ? 'Tersimpan' : act.label;
+          const savedLabel = isZh ? '已收藏' : 'Saved';
+          const label = isSavedAction && saved ? savedLabel : act.label;
 
           return (
             <Pressable

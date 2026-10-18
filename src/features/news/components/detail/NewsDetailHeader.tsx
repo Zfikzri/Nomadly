@@ -3,9 +3,12 @@ import { SymbolView } from 'expo-symbols';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+
 export function NewsDetailHeader() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { isZh } = useLanguage();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + (Platform.OS === 'ios' ? 4 : 8) }]}>
@@ -21,7 +24,7 @@ export function NewsDetailHeader() {
           />
         </Pressable>
 
-        <Text style={styles.title}>Berita</Text>
+        <Text style={styles.title}>{isZh ? '新闻资讯' : 'News'}</Text>
 
         <View style={styles.placeholderRight} />
       </View>

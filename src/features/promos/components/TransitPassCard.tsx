@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { TransitPass } from '../types';
 
 type TransitPassCardProps = {
@@ -10,6 +11,8 @@ type TransitPassCardProps = {
 };
 
 export function TransitPassCard({ item, onPress }: TransitPassCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <Pressable
       onPress={onPress}
@@ -79,7 +82,9 @@ export function TransitPassCard({ item, onPress }: TransitPassCardProps) {
         </View>
 
         <View style={styles.buyButton}>
-          <Text style={styles.buyButtonText}>Beli Pass &gt;</Text>
+          <Text style={styles.buyButtonText}>
+            {isZh ? '购买通票 >' : 'Buy Pass >'}
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -141,7 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginBottom: 3,
+    marginBottom: 4,
   },
   featureText: {
     fontSize: 11,
@@ -149,9 +154,9 @@ const styles = StyleSheet.create({
   },
   passTitle: {
     fontSize: 14.5,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#0F172A',
-    marginBottom: 2,
+    marginBottom: 3,
   },
   passSubtitle: {
     fontSize: 11.5,
@@ -161,15 +166,15 @@ const styles = StyleSheet.create({
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 8,
+    gap: 6,
   },
   priceText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
     color: '#0050D6',
   },
   originalPriceText: {
-    fontSize: 11.5,
+    fontSize: 11,
     color: '#94A3B8',
     textDecorationLine: 'line-through',
   },
@@ -189,17 +194,16 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 11,
     color: '#64748B',
-    fontWeight: '500',
   },
   buyButton: {
-    backgroundColor: '#0050D6',
-    borderRadius: 999,
-    paddingHorizontal: 14,
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: 12,
     paddingVertical: 6,
+    borderRadius: 999,
   },
   buyButtonText: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#0050D6',
   },
 });

@@ -1,19 +1,28 @@
 import { Image } from 'expo-image';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { TravelerOnline } from '../types';
 
 type OnlineTravelersSectionProps = {
   travelers: TravelerOnline[];
+  onTravelerPress?: (traveler: TravelerOnline) => void;
 };
 
-export function OnlineTravelersSection({ travelers }: OnlineTravelersSectionProps) {
+export function OnlineTravelersSection({
+  travelers,
+  onTravelerPress,
+}: OnlineTravelersSectionProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.headerRow}>
         <View style={styles.onlineDot} />
-        <Text style={styles.headerTitle}>Traveler Online Sekitarmu</Text>
+        <Text style={styles.headerTitle}>
+          {isZh ? '附近在线旅行者' : 'Online Travelers Near You'}
+        </Text>
       </View>
 
       {/* Horizontal Avatar List */}
@@ -22,7 +31,13 @@ export function OnlineTravelersSection({ travelers }: OnlineTravelersSectionProp
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}>
         {travelers.map((traveler) => (
-          <View key={traveler.id} style={styles.travelerItem}>
+          <Pressable
+            key={traveler.id}
+            style={({ pressed }) => [
+              styles.travelerItem,
+              pressed && styles.travelerItemPressed,
+            ]}
+            onPress={() => onTravelerPress?.(traveler)}>
             {/* Avatar Container with Badges */}
             <View style={styles.avatarWrapper}>
               <Image
@@ -46,7 +61,7 @@ export function OnlineTravelersSection({ travelers }: OnlineTravelersSectionProp
             <Text style={styles.travelerLocation} numberOfLines={1}>
               {traveler.location}
             </Text>
-          </View>
+          </Pressable>
         ))}
       </ScrollView>
     </View>
@@ -82,6 +97,10 @@ const styles = StyleSheet.create({
   travelerItem: {
     alignItems: 'center',
     width: 60,
+  },
+  travelerItemPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.96 }],
   },
   avatarWrapper: {
     position: 'relative',

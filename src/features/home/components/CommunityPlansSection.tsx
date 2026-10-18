@@ -2,6 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 import type { CommunityPlan } from '../types';
 
 type CommunityPlansSectionProps = {
@@ -15,6 +16,8 @@ export function CommunityPlansSection({
   onSeeAll,
   onSelectPlan,
 }: CommunityPlansSectionProps) {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container} className="mt-6 mb-4">
       {/* Header */}
@@ -26,12 +29,12 @@ export function CommunityPlansSection({
             tintColor="#0050D6"
           />
           <Text style={styles.sectionTitle} className="text-lg font-bold text-slate-900">
-            Community & Travel Plans
+            {strings.home.communityTravelPlans}
           </Text>
         </View>
         <Pressable hitSlop={8} onPress={onSeeAll}>
           <Text style={styles.seeAllText} className="text-[13px] font-semibold text-[#0050D6]">
-            See all &gt;
+            {strings.home.seeAll}
           </Text>
         </Pressable>
       </View>
@@ -81,7 +84,7 @@ export function CommunityPlansSection({
                   tintColor="#0050D6"
                 />
                 <Text style={styles.repliesText} className="text-xs text-slate-500 font-medium">
-                  {plan.repliesCount} replies
+                  {plan.repliesCount} {strings.home.replies}
                 </Text>
               </View>
 

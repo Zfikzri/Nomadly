@@ -3,7 +3,11 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+
 export function CommunityHeader() {
+  const { isZh } = useLanguage();
+
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
       <View style={styles.headerBar}>
@@ -18,7 +22,7 @@ export function CommunityHeader() {
             weight="semibold"
           />
         </Pressable>
-        <Text style={styles.titleText}>Home</Text>
+        <Text style={styles.titleText}>{isZh ? '社群计划' : 'Community'}</Text>
       </View>
     </SafeAreaView>
   );

@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { CategoryFilter, FilterCategoryId } from '../types';
 
 type CommunityFilterChipsProps = {
@@ -14,6 +15,23 @@ export function CommunityFilterChips({
   activeCategoryId,
   onSelectCategory,
 }: CommunityFilterChipsProps) {
+  const { isZh } = useLanguage();
+
+  const getCategoryLabel = (id: FilterCategoryId, defaultLabel: string) => {
+    switch (id) {
+      case 'all':
+        return isZh ? '全部社群' : 'All Groups';
+      case 'asia':
+        return isZh ? '亚洲目的地' : 'Asia Destinations';
+      case 'europe':
+        return isZh ? '欧洲与申根' : 'Europe & Schengen';
+      case 'workation':
+        return isZh ? '游民旅居' : 'Nomad & Workation';
+      default:
+        return defaultLabel;
+    }
+  };
+
   return (
     <View style={styles.wrapper}>
       <ScrollView
@@ -43,7 +61,7 @@ export function CommunityFilterChips({
                   styles.chipLabel,
                   isActive ? styles.activeLabel : styles.inactiveLabel,
                 ]}>
-                {category.label}
+                {getCategoryLabel(category.id, category.label)}
               </Text>
             </Pressable>
           );

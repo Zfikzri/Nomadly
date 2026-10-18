@@ -1,12 +1,16 @@
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Switch, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type MaxBudgetToggleProps = {
   isEnabled: boolean;
   onToggle: (val: boolean) => void;
 };
 
 export function MaxBudgetToggle({ isEnabled, onToggle }: MaxBudgetToggleProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.card} className="bg-[#EEF2FF] rounded-2xl p-3.5 flex-row items-center justify-between mt-2.5">
       {/* Left: Green lightning icon + texts */}
@@ -20,10 +24,12 @@ export function MaxBudgetToggle({ isEnabled, onToggle }: MaxBudgetToggleProps) {
         </View>
         <View style={styles.textCol} className="flex-1">
           <Text style={styles.title} className="text-[13px] font-bold text-slate-800">
-            Maksimalkan Budget
+            {isZh ? '最大化预算' : 'Maximize Budget'}
           </Text>
           <Text style={styles.subtitle} className="text-[11px] text-slate-400 mt-0.5 leading-4">
-            Otomatis bagi alokasi hingga habis tanpa sisa tabungan.
+            {isZh
+              ? '自动分配全部预算，不保留应急储蓄。'
+              : 'Auto-allocate 100% budget with zero savings reserve.'}
           </Text>
         </View>
       </View>

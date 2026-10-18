@@ -2,6 +2,8 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type PromoVoucherCardProps = {
   sectionTitle: string;
   badgeText: string;
@@ -15,13 +17,14 @@ export function PromoVoucherCard({
   label,
   code,
 }: PromoVoucherCardProps) {
+  const { isZh } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+      setCopied(false), 2000;
+    });
   };
 
   return (
@@ -61,7 +64,15 @@ export function PromoVoucherCard({
           ]}
           onPress={handleCopy}
           accessibilityRole="button"
-          accessibilityLabel={copied ? 'Kode tersalin' : 'Salin kode promo'}>
+          accessibilityLabel={
+            copied
+              ? isZh
+                ? '已复制兑换码'
+                : 'Voucher code copied'
+              : isZh
+              ? '复制优惠码'
+              : 'Copy promo code'
+          }>
           <SymbolView
             name={
               copied
@@ -72,7 +83,15 @@ export function PromoVoucherCard({
             tintColor="#FFFFFF"
             weight="bold"
           />
-          <Text style={styles.copyButtonText}>{copied ? 'Tersalin!' : 'Salin'}</Text>
+          <Text style={styles.copyButtonText}>
+            {copied
+              ? isZh
+                ? '已复制!'
+                : 'Copied!'
+              : isZh
+              ? '复制'
+              : 'Copy'}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -108,65 +127,58 @@ const styles = StyleSheet.create({
   },
   usagePill: {
     backgroundColor: '#F3E8FF',
-    borderRadius: 999,
     paddingHorizontal: 10,
-    paddingVertical: 3.5,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
   usagePillText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#7E22CE',
+    color: '#9333EA',
   },
   codeBox: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    borderStyle: 'dashed',
+    borderRadius: 18,
+    padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
   },
   codeColumn: {
-    gap: 3,
+    gap: 2,
   },
   codeLabel: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
     color: '#64748B',
-    letterSpacing: 0.4,
+    letterSpacing: 0.5,
   },
   codeText: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
     color: '#0F172A',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#2563EB',
-    borderRadius: 999,
-    paddingHorizontal: 16,
-    paddingVertical: 9,
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: '#0050D6',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 12,
   },
   copyButtonActive: {
-    backgroundColor: '#059669',
-    shadowColor: '#059669',
+    backgroundColor: '#16A34A',
   },
   copyButtonPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.8,
   },
   copyButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',
   },

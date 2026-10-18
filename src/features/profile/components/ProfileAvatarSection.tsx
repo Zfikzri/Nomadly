@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SymbolView } from 'expo-symbols';
+import { useLanguage } from '@/i18n';
 
 type ProfileAvatarSectionProps = {
   name: string;
@@ -19,10 +20,12 @@ export function ProfileAvatarSection({
   onEditPress,
   onCameraPress,
 }: ProfileAvatarSectionProps) {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Section title */}
-      <Text style={styles.sectionTitle}>Profile</Text>
+      <Text style={styles.sectionTitle}>{strings.profile.headerTitle}</Text>
 
       {/* Avatar with glow ring + camera button */}
       <View style={styles.avatarArea}>
@@ -39,7 +42,7 @@ export function ProfileAvatarSection({
         <Pressable
           style={({ pressed }) => [styles.cameraButton, pressed && { opacity: 0.8 }]}
           onPress={onCameraPress}
-          accessibilityLabel="Ganti foto profil">
+          accessibilityLabel={strings.profile.editProfile}>
           <SymbolView
             name={{ ios: 'camera.fill', android: 'photo_camera', web: 'photo_camera' } as any}
             size={16}
@@ -67,13 +70,13 @@ export function ProfileAvatarSection({
         <Pressable
           style={({ pressed }) => [styles.editButton, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}
           onPress={onEditPress}
-          accessibilityLabel="Edit profil">
+          accessibilityLabel={strings.profile.editProfile}>
           <SymbolView
             name={{ ios: 'pencil', android: 'edit', web: 'edit' } as any}
             size={14}
             tintColor="#FFFFFF"
           />
-          <Text style={styles.editButtonText}>Edit Profil</Text>
+          <Text style={styles.editButtonText}>{strings.profile.editProfile}</Text>
         </Pressable>
       </View>
     </View>

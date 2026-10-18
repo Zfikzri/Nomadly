@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { ChatFilterType } from '../types';
 
 type ChatFilterChipsProps = {
@@ -11,9 +12,11 @@ export function ChatFilterChips({
   activeFilter,
   onFilterChange,
 }: ChatFilterChipsProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
-      {/* 1. Semua */}
+      {/* 1. All */}
       <Pressable
         onPress={() => onFilterChange('all')}
         style={[
@@ -25,11 +28,11 @@ export function ChatFilterChips({
             styles.chipText,
             activeFilter === 'all' ? styles.activeChipText : styles.inactiveChipText,
           ]}>
-          Semua
+          {isZh ? '全部' : 'All'}
         </Text>
       </Pressable>
 
-      {/* 2. Belum Dibaca */}
+      {/* 2. Unread */}
       <Pressable
         onPress={() => onFilterChange('unread')}
         style={[
@@ -42,11 +45,11 @@ export function ChatFilterChips({
             styles.chipText,
             activeFilter === 'unread' ? styles.activeChipText : styles.inactiveChipText,
           ]}>
-          Belum Dibaca
+          {isZh ? '未读' : 'Unread'}
         </Text>
       </Pressable>
 
-      {/* 3. Favorit */}
+      {/* 3. Favorite */}
       <Pressable
         onPress={() => onFilterChange('favorite')}
         style={[
@@ -59,7 +62,7 @@ export function ChatFilterChips({
             styles.chipText,
             activeFilter === 'favorite' ? styles.activeChipText : styles.inactiveChipText,
           ]}>
-          Favorit
+          {isZh ? '收藏' : 'Favorites'}
         </Text>
       </Pressable>
     </View>

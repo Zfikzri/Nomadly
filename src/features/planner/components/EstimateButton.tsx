@@ -1,5 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type EstimateButtonProps = {
   isLoading: boolean;
   onPress: () => void;
@@ -16,6 +18,8 @@ const BUTTON_GRADIENT_SLICES = Array.from({ length: GRADIENT_SLICES_COUNT }, (_,
 });
 
 export function EstimateButton({ isLoading, onPress }: EstimateButtonProps) {
+  const { isZh } = useLanguage();
+
   return (
     <Pressable
       style={({ pressed }) => [styles.buttonWrapper, pressed && styles.buttonPressed]}
@@ -35,7 +39,7 @@ export function EstimateButton({ isLoading, onPress }: EstimateButtonProps) {
           <ActivityIndicator color="#FFFFFF" size="small" />
         ) : (
           <Text style={styles.text} className="text-white text-[15px] font-bold tracking-wide">
-            Estimate With AI
+            {isZh ? 'AI 智能预估预算' : 'Estimate With AI'}
           </Text>
         )}
       </View>

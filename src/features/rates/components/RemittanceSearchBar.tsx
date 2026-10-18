@@ -1,6 +1,8 @@
 import { Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 
+import { useLanguage } from '@/i18n';
+
 type RemittanceSearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
@@ -12,6 +14,8 @@ export function RemittanceSearchBar({
   onChangeText,
   onClear,
 }: RemittanceSearchBarProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Search Icon */}
@@ -31,7 +35,7 @@ export function RemittanceSearchBar({
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="Cari bank mitra atau negara..."
+        placeholder={isZh ? '搜索合作银行或国家/地区...' : 'Search partner bank or country...'}
         placeholderTextColor="#94A3B8"
         style={styles.input}
         autoCorrect={false}

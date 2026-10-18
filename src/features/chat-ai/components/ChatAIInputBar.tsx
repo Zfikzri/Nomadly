@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+
 type ChatAIInputBarProps = {
   onSend: (text: string) => void;
   onCameraPress?: () => void;
@@ -22,11 +24,18 @@ export function ChatAIInputBar({
   onSend,
   onCameraPress,
   onMicPress,
-  placeholder = 'Tanyakan budget, kurs, atau rute...',
+  placeholder,
 }: ChatAIInputBarProps) {
+  const { isZh } = useLanguage();
   const [text, setText] = useState('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const insets = useSafeAreaInsets();
+
+  const resolvedPlaceholder =
+    placeholder ??
+    (isZh
+      ? '询问预算、汇率或旅行路线...'
+      : 'Ask about budget, rates, or routes...');
 
   useEffect(() => {
     const showSub = Keyboard.addListener(
@@ -91,7 +100,7 @@ export function ChatAIInputBar({
           <TextInput
             value={text}
             onChangeText={setText}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             placeholderTextColor="#94A3B8"
             style={styles.textInput}
             multiline

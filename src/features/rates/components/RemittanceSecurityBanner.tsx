@@ -1,7 +1,11 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 
+import { useLanguage } from '@/i18n';
+
 export function RemittanceSecurityBanner() {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* 1. Shield Check Icon Badge */}
@@ -19,9 +23,13 @@ export function RemittanceSecurityBanner() {
 
       {/* 2. Text Content */}
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Keamanan Moneter Terjamin</Text>
+        <Text style={styles.title}>
+          {isZh ? '银行级金融安全保障' : 'Bank-Grade Security Guaranteed'}
+        </Text>
         <Text style={styles.description}>
-          Seluruh bank mitra terdaftar dan diawasi oleh otoritas moneter resmi (OJK, MAS, FCA, HKMA) dengan enkripsi data 256-bit standar industri perbankan internasional.
+          {isZh
+            ? '所有合作银行均受官方金融监管机构（MAS、FCA、HKMA 等）严格监督，具备 256 位国际银行级数据加密。'
+            : 'All partner banks are registered and supervised by official monetary authorities (MAS, FCA, HKMA) with 256-bit bank-grade encryption.'}
         </Text>
       </View>
     </View>

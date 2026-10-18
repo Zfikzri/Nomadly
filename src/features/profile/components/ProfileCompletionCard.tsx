@@ -1,5 +1,6 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useLanguage } from '@/i18n';
 
 type ProfileCompletionCardProps = {
   percent: number;
@@ -12,6 +13,7 @@ export function ProfileCompletionCard({
   hint,
   onComplete,
 }: ProfileCompletionCardProps) {
+  const { strings, isZh } = useLanguage();
   const isComplete = percent >= 100;
 
   return (
@@ -20,7 +22,9 @@ export function ProfileCompletionCard({
       <View style={styles.topRow}>
         <View style={styles.labelRow}>
           <View style={[styles.dot, isComplete && styles.dotComplete]} />
-          <Text style={styles.labelText}>Kelengkapan Profil</Text>
+          <Text style={styles.labelText}>
+            {isZh ? '个人档案完整度' : 'Profile Completion'}
+          </Text>
         </View>
         <View style={[styles.percentBadge, isComplete && styles.percentBadgeComplete]}>
           <Text style={[styles.percentText, isComplete && styles.percentTextComplete]}>
@@ -46,7 +50,7 @@ export function ProfileCompletionCard({
           <Text style={styles.hintIcon}>✓</Text>
         </View>
         <Text style={styles.hintText} numberOfLines={2}>
-          {hint}
+          {isZh ? '完善您的档案，即刻解锁精准财务建议与认证游民特权' : hint}
         </Text>
       </View>
 
@@ -55,7 +59,7 @@ export function ProfileCompletionCard({
         <View style={styles.actionFooter}>
           <View style={styles.statusBadge}>
             <View style={styles.statusDot} />
-            <Text style={styles.statusText}>Belum Lengkap</Text>
+            <Text style={styles.statusText}>{isZh ? '待完善' : 'Incomplete'}</Text>
           </View>
 
           <Pressable
@@ -65,13 +69,13 @@ export function ProfileCompletionCard({
             ]}
             onPress={onComplete}
             accessibilityRole="button"
-            accessibilityLabel="Lengkapi profil">
+            accessibilityLabel={strings.profile.completeProfile}>
             <SymbolView
               name={{ ios: 'sparkles', android: 'auto_awesome', web: 'auto_awesome' } as any}
               size={12}
               tintColor="#FFFFFF"
             />
-            <Text style={styles.ctaButtonText}>Lengkapi Profil</Text>
+            <Text style={styles.ctaButtonText}>{strings.profile.completeProfile}</Text>
             <SymbolView
               name={{ ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' } as any}
               size={11}

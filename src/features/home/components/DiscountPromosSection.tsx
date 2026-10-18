@@ -3,6 +3,7 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 import type { DiscountPromo } from '../types';
 
 type DiscountPromosSectionProps = {
@@ -16,6 +17,8 @@ export function DiscountPromosSection({
   onSeeAll,
   onSelectPromo,
 }: DiscountPromosSectionProps) {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -26,10 +29,10 @@ export function DiscountPromosSection({
             size={18}
             tintColor="#0050D6"
           />
-          <Text style={styles.sectionTitle}>Fancy a Discount?</Text>
+          <Text style={styles.sectionTitle}>{strings.home.fancyDiscount}</Text>
         </View>
         <Pressable hitSlop={8} onPress={onSeeAll}>
-          <Text style={styles.seeAllText}>See all &gt;</Text>
+          <Text style={styles.seeAllText}>{strings.home.seeAll}</Text>
         </Pressable>
       </View>
 

@@ -1,23 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 
 type HomeHeroHeaderProps = {
   userName?: string;
 };
 
-export function HomeHeroHeader({ userName = 'Lontong Balap' }: HomeHeroHeaderProps) {
+export function HomeHeroHeader({ userName = 'Alex' }: HomeHeroHeaderProps) {
+  const { strings, t } = useLanguage();
+
   return (
     <View style={styles.container} className="px-6 pt-6 pb-2">
       <Text
         style={styles.title}
         className="text-[30px] font-extrabold text-slate-900 leading-[39px] tracking-tight mb-2.5">
-        Where are your funds heading today?
+        {strings.home.fundsHeading}
       </Text>
       <Text
         style={styles.subtitle}
         className="text-[15px] text-slate-700 font-medium leading-[23px]">
-        Hello, {userName}! Ready for your next journey?
+        {t('home.heroSubtitle', { name: userName })}
       </Text>
     </View>
   );

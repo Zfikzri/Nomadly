@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+import { LanguagePillSwitcher } from '@/components/common/LanguagePillSwitcher';
 import { OnboardingPagination, OnboardingSlideItem } from '../components';
 import { ONBOARDING_SLIDES } from '../services/mockData';
 
@@ -30,6 +32,7 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 });
 
 export function OnboardingScreen() {
+  const { strings } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
 
@@ -62,14 +65,15 @@ export function OnboardingScreen() {
       </View>
 
       <SafeAreaView edges={['top', 'bottom']} style={styles.safeArea}>
-        {/* Top Bar: Skip (Lewati) Action */}
+        {/* Top Bar: Language Switcher + Skip Action */}
         <View style={styles.topBar}>
+          <LanguagePillSwitcher />
           {!isLastSlide ? (
             <Pressable
               hitSlop={10}
               onPress={handleSkipOrFinish}
               style={({ pressed }) => [styles.skipButton, pressed && styles.skipPressed]}>
-              <Text style={styles.skipText}>Lewati</Text>
+              <Text style={styles.skipText}>{strings.onboarding.skip}</Text>
             </Pressable>
           ) : (
             <View style={styles.skipPlaceholder} />
@@ -88,6 +92,8 @@ export function OnboardingScreen() {
             bounces={false}
             onMomentumScrollEnd={handleScroll}
             renderItem={({ item }) => <OnboardingSlideItem slide={item} />}
+            style={styles.flatList}
+            contentContainerStyle={styles.flatListContent}
           />
         </View>
 
@@ -111,7 +117,7 @@ export function OnboardingScreen() {
                   pressed && styles.ctaButtonPressed,
                 ]}
                 onPress={handleSkipOrFinish}>
-                <Text style={styles.ctaButtonText}>Mulai Sekarang / Get Started</Text>
+                <Text style={styles.ctaButtonText}>{strings.onboarding.getStarted}</Text>
                 <SymbolView
                   name={{ ios: 'arrow.right', android: 'arrow_forward', web: 'arrow_forward' }}
                   size={18}
@@ -162,6 +168,12 @@ const styles = StyleSheet.create({
   },
   pagerContainer: {
     flex: 1,
+  },
+  flatList: {
+    flex: 1,
+  },
+  flatListContent: {
+    flexGrow: 1,
   },
   bottomContainer: {
     paddingHorizontal: 28,

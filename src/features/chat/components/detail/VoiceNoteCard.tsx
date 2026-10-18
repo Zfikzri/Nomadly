@@ -3,12 +3,15 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type VoiceNoteCardProps = {
   avatarUrl?: string;
   duration?: string;
   voiceTitle?: string;
   transcription?: string;
   time?: string;
+  onAvatarPress?: () => void;
 };
 
 // Waveform bar heights mimicking audio spectrum
@@ -31,22 +34,27 @@ export function VoiceNoteCard({
   avatarUrl = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
   duration = '0:42',
   voiceTitle = 'Voice Note Tips',
-  transcription = '“Lebih baik pakai Suica atau Pasmo digital di Apple Wallet / Google Wallet Alex. Untuk gate subway di Tokyo, tap IC Card responsnya instan tanpa antre, dan bisa top up langsung pakai kartu kamu.”',
+  transcription = '“It is much better to use a digital Suica or Pasmo on Apple Wallet / Google Wallet, Alex. For Tokyo subway gates, tapping the IC card gives instant access without queues, and you can reload directly with your card.”',
   time = '10:24',
+  onAvatarPress,
 }: VoiceNoteCardProps) {
+  const { isZh } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <View style={styles.outerRow}>
-      {/* Avatar at bottom left */}
-      <View style={styles.avatarCol}>
+      {/* Avatar at bottom left (Clickable for profile popup) */}
+      <Pressable
+        hitSlop={6}
+        onPress={onAvatarPress}
+        style={({ pressed }) => [styles.avatarCol, pressed && styles.avatarPressed]}>
         <Image
           source={{ uri: avatarUrl }}
           style={styles.avatar}
           contentFit="cover"
           transition={200}
         />
-      </View>
+      </Pressable>
 
       <View style={styles.cardCol}>
         {/* Main Card Container */}
@@ -104,7 +112,9 @@ export function VoiceNoteCard({
                 tintColor="#2563EB"
               />
               <Text style={styles.transcriptionTitle}>
-                Transkripsi Otomatis (Bahasa Indonesia)
+                {isZh
+                  ? '语音转写 (简体中文)'
+                  : 'Automatic Transcription (English)'}
               </Text>
             </View>
 
@@ -129,6 +139,10 @@ const styles = StyleSheet.create({
   },
   avatarCol: {
     paddingBottom: 18,
+  },
+  avatarPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.95 }],
   },
   avatar: {
     width: 28,

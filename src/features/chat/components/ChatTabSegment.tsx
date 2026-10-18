@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { ChatTabType } from '../types';
 
 type ChatTabSegmentProps = {
@@ -15,6 +16,7 @@ export function ChatTabSegment({
   personalCount = 2,
   communityCount = 5,
 }: ChatTabSegmentProps) {
+  const { isZh } = useLanguage();
   const isPersonal = activeTab === 'personal';
   const isCommunity = activeTab === 'community';
 
@@ -24,7 +26,7 @@ export function ChatTabSegment({
         onPress={() => onTabChange('personal')}
         style={[styles.tabButton, isPersonal && styles.activeTabButton]}>
         <Text style={[styles.tabLabel, isPersonal && styles.activeTabLabel]}>
-          Personal
+          {isZh ? '个人私信' : 'Personal'}
         </Text>
         <View style={[styles.badge, isPersonal ? styles.activeBadge : styles.inactiveBadge]}>
           <Text style={[styles.badgeText, isPersonal ? styles.activeBadgeText : styles.inactiveBadgeText]}>
@@ -37,7 +39,7 @@ export function ChatTabSegment({
         onPress={() => onTabChange('community')}
         style={[styles.tabButton, isCommunity && styles.activeTabButton]}>
         <Text style={[styles.tabLabel, isCommunity && styles.activeTabLabel]}>
-          Grup Komunitas
+          {isZh ? '社群小组' : 'Community'}
         </Text>
         <View style={[styles.badge, isCommunity ? styles.activeBadge : styles.inactiveBadge]}>
           <Text style={[styles.badgeText, isCommunity ? styles.activeBadgeText : styles.inactiveBadgeText]}>

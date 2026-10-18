@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { WatchlistCardItem } from '../types';
 import { LinearGradientBackground } from './LinearGradientBackground';
 
@@ -12,11 +13,13 @@ export function RatesWatchlistSection({
   items,
   onAddPress,
 }: RatesWatchlistSectionProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* 1. Action & Status Row */}
       <View style={styles.actionRow}>
-        {/* + Tambah Watchlist Button (Enlarged with Linear Gradient 0F5BA3 -> 9BCDF8) */}
+        {/* + Add Watchlist Button */}
         <Pressable
           onPress={onAddPress}
           style={({ pressed }) => [
@@ -24,13 +27,17 @@ export function RatesWatchlistSection({
             pressed && { opacity: 0.88, transform: [{ scale: 0.98 }] },
           ]}>
           <LinearGradientBackground />
-          <Text style={styles.addWatchlistText}>+ Tambah Watchlist</Text>
+          <Text style={styles.addWatchlistText}>
+            {isZh ? '+ 添加关注' : '+ Add Watchlist'}
+          </Text>
         </Pressable>
 
         {/* Live Kurs Update Indicator */}
         <View style={styles.liveIndicator}>
           <Text style={styles.liveRadioIcon}>((•))</Text>
-          <Text style={styles.liveText}>Live Kurs Update</Text>
+          <Text style={styles.liveText}>
+            {isZh ? '实时汇率更新' : 'Live FX Update'}
+          </Text>
         </View>
       </View>
 

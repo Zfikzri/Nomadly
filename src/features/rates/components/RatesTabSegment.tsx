@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { RateTabType } from '../types';
 import { LinearGradientBackground } from './LinearGradientBackground';
 
@@ -10,6 +11,7 @@ type RatesTabSegmentProps = {
 };
 
 export function RatesTabSegment({ activeTab, onTabChange }: RatesTabSegmentProps) {
+  const { isZh } = useLanguage();
   const isExchange = activeTab === 'exchange';
   const isRemittance = activeTab === 'remittance';
 
@@ -32,11 +34,11 @@ export function RatesTabSegment({ activeTab, onTabChange }: RatesTabSegmentProps
           </Text>
         )}
         <Text style={[styles.tabLabel, isExchange && styles.activeTabLabel]}>
-          Exchange Kurs Rate
+          {isZh ? '汇率兑换' : 'Exchange Rate'}
         </Text>
       </Pressable>
 
-      {/* 2. Remittence Tab */}
+      {/* 2. Remittance Tab */}
       <Pressable
         onPress={() => onTabChange('remittance')}
         style={[styles.tabButton, isRemittance && styles.activeTabButton]}>
@@ -53,7 +55,7 @@ export function RatesTabSegment({ activeTab, onTabChange }: RatesTabSegmentProps
           </Text>
         )}
         <Text style={[styles.tabLabel, isRemittance && styles.activeTabLabel]}>
-          Remittence
+          {isZh ? '跨境汇款' : 'Remittance'}
         </Text>
       </Pressable>
     </View>

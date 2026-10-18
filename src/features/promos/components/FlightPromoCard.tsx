@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { FlightPromo } from '../types';
 
 type FlightPromoCardProps = {
@@ -9,6 +10,8 @@ type FlightPromoCardProps = {
 };
 
 export function FlightPromoCard({ item, onPress }: FlightPromoCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <Pressable
       onPress={onPress}
@@ -46,7 +49,9 @@ export function FlightPromoCard({ item, onPress }: FlightPromoCardProps) {
           <Text style={styles.boxValue}>{item.boxDetail}</Text>
         </View>
         <View style={styles.boxRight}>
-          <Text style={styles.boxLabel}>Mulai Dari</Text>
+          <Text style={styles.boxLabel}>
+            {isZh ? '起价' : 'From'}
+          </Text>
           <Text style={styles.priceValue}>{item.price}</Text>
         </View>
       </View>
@@ -67,7 +72,9 @@ export function FlightPromoCard({ item, onPress }: FlightPromoCardProps) {
         </View>
 
         <View style={styles.scheduleButton}>
-          <Text style={styles.scheduleButtonText}>Lihat Jadwal</Text>
+          <Text style={styles.scheduleButtonText}>
+            {isZh ? '查看班次' : 'View Schedule'}
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -137,29 +144,25 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     color: '#64748B',
     fontWeight: '500',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   infoBox: {
     backgroundColor: '#F8FAFC',
     borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    padding: 12,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
   boxLeft: {
     flex: 1,
-    marginRight: 8,
   },
   boxRight: {
     alignItems: 'flex-end',
   },
   boxLabel: {
-    fontSize: 10,
-    color: '#94A3B8',
-    fontWeight: '500',
+    fontSize: 10.5,
+    color: '#64748B',
     marginBottom: 2,
   },
   boxValue: {
@@ -168,9 +171,9 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   priceValue: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#0050D6',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -182,22 +185,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     flex: 1,
-    marginRight: 8,
   },
   amenitiesText: {
-    fontSize: 11,
+    fontSize: 11.5,
     color: '#475569',
-    fontWeight: '500',
   },
   scheduleButton: {
-    backgroundColor: '#0050D6',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
   },
   scheduleButtonText: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#0050D6',
   },
 });

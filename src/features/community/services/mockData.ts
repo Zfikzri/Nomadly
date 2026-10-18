@@ -181,7 +181,7 @@ export const MOCK_COMMUNITY_DETAILS: Record<string, CommunityGroupDetail> = {
   },
   'plan-4': {
     id: 'plan-4',
-    title: 'Workation di Chiang Mai',
+    title: 'Workation in Chiang Mai',
     heroImageUrl:
       'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=80',
     stayingCard: {
@@ -225,18 +225,18 @@ export function getCommunityGroupDetail(id: string): CommunityGroupDetail {
 export const MOCK_CATEGORY_FILTERS: CategoryFilter[] = [
   {
     id: 'all',
-    label: 'Semua Grup',
+    label: 'All Groups',
     iconName: { ios: 'globe.asia.australia.fill', android: 'public', web: 'public' },
   },
   {
     id: 'asia',
-    label: 'Destinasi Asia',
+    label: 'Asia Destinations',
     iconName: { ios: 'airplane.departure', android: 'flight_takeoff', web: 'flight_takeoff' },
     iconColor: '#0284C7',
   },
   {
     id: 'europe',
-    label: 'Eropa & Schengen',
+    label: 'Europe & Schengen',
     iconName: { ios: 'building.columns.fill', android: 'account_balance', web: 'account_balance' },
     iconColor: '#9333EA',
   },
@@ -258,10 +258,10 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     membersCount: 42,
     lastMessage: {
       sender: 'Budi',
-      text: 'Ada yang mau bareng sewa pocket wifi di Haneda?',
+      text: 'Anyone want to split pocket WiFi rental at Haneda Airport?',
     },
     regionTag: {
-      label: 'Jepang',
+      label: 'Japan',
     },
     featureTag: {
       label: 'Itinerary Sync',
@@ -286,10 +286,10 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     locations: ['Berlin', 'Paris', 'Amsterdam'],
     lastMessage: {
       sender: 'Elena',
-      text: 'Tiket kereta Eurail udah confirmed guys!',
+      text: 'Eurail train tickets are confirmed everyone!',
     },
     regionTag: {
-      label: 'Zona Schengen',
+      label: 'Schengen Zone',
     },
     featureTag: {
       label: 'Split Bill',
@@ -314,7 +314,7 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     locations: ['Canggu', 'Uluwatu'],
     lastMessage: {
       sender: 'Marcus',
-      text: 'Coworking space terbaik dekat pantai Berawa ada rekomendasi?',
+      text: 'Any recommendations for the best coworking space near Berawa Beach?',
     },
     regionTag: {
       label: 'Indonesia',
@@ -342,7 +342,7 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
     locations: ['Myeongdong & Hongdae'],
     lastMessage: {
       sender: 'Minji',
-      text: 'Tmoney vs Climate Card mana yang lebih hemat?',
+      text: 'T-money vs Climate Card, which one is more budget-friendly?',
     },
     regionTag: {
       label: 'Korea',
@@ -362,15 +362,15 @@ export const MOCK_COMMUNITY_GROUPS: CommunityGroup[] = [
   },
   {
     id: 'comm-5',
-    title: 'Backpacker Hemat Indochina',
+    title: 'Budget Backpackers Indochina',
     category: 'asia',
     imageUrl:
       'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=400&q=80',
     membersCount: 54,
-    locations: ['Vietnam', 'Kamboja', 'Thailand'],
+    locations: ['Vietnam', 'Cambodia', 'Thailand'],
     lastMessage: {
       sender: 'Rian',
-      text: 'Info perbatasan darat Poipet terbaru: visa on arrival aman.',
+      text: 'Latest Poipet border crossing info: Visa on arrival is smooth.',
     },
     regionTag: {
       label: 'Indochina',

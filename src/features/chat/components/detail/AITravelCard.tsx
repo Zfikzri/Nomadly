@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { AINavigationRecommendation } from '../../types';
 
 type AITravelCardProps = {
@@ -14,6 +15,8 @@ export function AITravelCard({
   onPrimaryAction,
   onSecondaryAction,
 }: AITravelCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.card}>
       {/* Header Row: AI Logo, Name, and Smart Badge */}
@@ -30,7 +33,9 @@ export function AITravelCard({
         </View>
 
         <View style={styles.badgePill}>
-          <Text style={styles.badgeText}>{recommendation.badge}</Text>
+          <Text style={styles.badgeText}>
+            {isZh ? '省钱智选' : recommendation.badge}
+          </Text>
         </View>
       </View>
 
@@ -38,7 +43,9 @@ export function AITravelCard({
       <View style={styles.bodyWrapper}>
         <Text style={styles.bodyText}>
           <Text style={styles.bulbIcon}>💡 </Text>
-          <Text style={styles.boldText}>Saran Navigasi: </Text>
+          <Text style={styles.boldText}>
+            {isZh ? '交通出行建议: ' : 'Transit Advice: '}
+          </Text>
           {recommendation.tipsIntro}
           <Text style={styles.boldText}>{recommendation.jrPassBold}</Text>
           {recommendation.jrPassText}
@@ -54,13 +61,17 @@ export function AITravelCard({
         <Pressable
           onPress={onPrimaryAction}
           style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}>
-          <Text style={styles.primaryButtonText}>{recommendation.primaryActionText}</Text>
+          <Text style={styles.primaryButtonText}>
+            {isZh ? '购买联票' : recommendation.primaryActionText}
+          </Text>
         </Pressable>
 
         <Pressable
           onPress={onSecondaryAction}
           style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}>
-          <Text style={styles.secondaryButtonText}>{recommendation.secondaryActionText}</Text>
+          <Text style={styles.secondaryButtonText}>
+            {isZh ? '查看时刻表' : recommendation.secondaryActionText}
+          </Text>
         </Pressable>
       </View>
     </View>

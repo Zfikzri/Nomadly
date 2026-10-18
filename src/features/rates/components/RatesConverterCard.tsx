@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   convertCurrency,
   findCurrencyByCode,
@@ -20,6 +21,7 @@ import { CurrencyPickerModal } from './CurrencyPickerModal';
 import { LinearGradientBackground } from './LinearGradientBackground';
 
 export function RatesConverterCard() {
+  const { strings } = useLanguage();
   const [fromCode, setFromCode] = useState('IDR');
   const [toCode, setToCode] = useState('JPY');
   const [fromAmountText, setFromAmountText] = useState('10.000.000');
@@ -69,7 +71,7 @@ export function RatesConverterCard() {
       {/* 1. Header: Icon & Title */}
       <View style={styles.headerRow}>
         <Text style={styles.headerIcon}>💱</Text>
-        <Text style={styles.headerTitle}>Kurs Konverter</Text>
+        <Text style={styles.headerTitle}>{strings.rates.converterTitle}</Text>
       </View>
 
       {/* 2. Date Subtitle */}
@@ -145,13 +147,13 @@ export function RatesConverterCard() {
 
       {/* 6. Middle Rate Note */}
       <View style={styles.middleRateContainer}>
-        <Text style={styles.middleRateLabel}>Nilai Tukar Tengah</Text>
+        <Text style={styles.middleRateLabel}>{strings.rates.middleRate}</Text>
         <Text style={styles.middleRateValue}>
           {getMiddleRateString(fromCode, toCode)}
         </Text>
       </View>
 
-      {/* 7. Action Button "Konversi" */}
+      {/* 7. Action Button "Convert" */}
       <Pressable
         onPress={handleConvert}
         style={({ pressed }) => [
@@ -159,7 +161,7 @@ export function RatesConverterCard() {
           pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
         ]}>
         <LinearGradientBackground />
-        <Text style={styles.convertButtonText}>Konversi</Text>
+        <Text style={styles.convertButtonText}>{strings.rates.convert}</Text>
       </Pressable>
 
       {/* Currency Picker Modal */}

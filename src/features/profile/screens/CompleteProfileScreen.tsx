@@ -15,26 +15,28 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import { MOCK_PROFILE_DATA } from '../services/mockData';
 
 const AVAILABLE_COUNTRIES = [
-  'Indonesia',
-  'Singapura',
-  'Malaysia',
-  'Thailand',
-  'Jepang',
-  'Korea Selatan',
+  'United States',
+  'Japan',
+  'Singapore',
+  'United Kingdom',
+  'Germany',
   'Australia',
-  'Amerika Serikat',
-  'Inggris',
+  'South Korea',
+  'Thailand',
+  'Indonesia',
+  'France',
 ];
 
 export function CompleteProfileScreen() {
+  const { strings, isZh } = useLanguage();
   const [name, setName] = useState(MOCK_PROFILE_DATA.name);
   const [email, setEmail] = useState(MOCK_PROFILE_DATA.email);
   const [dateOfBirth, setDateOfBirth] = useState(MOCK_PROFILE_DATA.dateOfBirth);
   const [age, setAge] = useState(MOCK_PROFILE_DATA.age);
-  // Default unselected to display placeholder "Negara Asal" as shown in the design
   const [country, setCountry] = useState<string>('');
 
   const [countryModalVisible, setCountryModalVisible] = useState(false);
@@ -43,24 +45,35 @@ export function CompleteProfileScreen() {
 
   const handleSave = () => {
     if (!name.trim()) {
-      Alert.alert('Data Belum Lengkap', 'Nama lengkap wajib diisi sesuai paspor atau KTP.');
+      Alert.alert(
+        strings.common.notice,
+        isZh ? '请输入您的真实姓名。' : 'Please enter your full name as shown on your passport.'
+      );
       return;
     }
     if (!email.trim() || !email.includes('@')) {
-      Alert.alert('Data Belum Lengkap', 'Harap masukkan alamat email aktif yang valid.');
+      Alert.alert(
+        strings.common.notice,
+        isZh ? '请输入有效的电子邮箱。' : 'Please enter a valid active email address.'
+      );
       return;
     }
     if (!country) {
-      Alert.alert('Data Belum Lengkap', 'Silakan pilih Negara Domisili / Asal Anda.');
+      Alert.alert(
+        strings.common.notice,
+        isZh ? '请选择您的常住国家/地区。' : 'Please select your country of residence.'
+      );
       return;
     }
 
     Alert.alert(
-      'Data Pribadi Berhasil Dilengkapi',
-      'Informasi identitas resmi Anda telah tersinkronisasi dan akun perjalanan global Anda kini aktif.',
+      isZh ? '档案完善成功！' : 'Profile Complete!',
+      isZh
+        ? '您的身份认证已通过，全功能全球游民特权已激活。'
+        : 'Your official identity details have been verified and your global nomad account is now fully active.',
       [
         {
-          text: 'Selesai',
+          text: strings.common.done,
           onPress: () => router.back(),
         },
       ]
@@ -88,14 +101,14 @@ export function CompleteProfileScreen() {
             style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.6 }]}
             onPress={() => router.back()}
             accessibilityRole="button"
-            accessibilityLabel="Kembali">
+            accessibilityLabel={strings.common.back}>
             <SymbolView
               name={{ ios: 'chevron.left', android: 'chevron_left', web: 'chevron_left' } as any}
               size={20}
               tintColor="#0F172A"
             />
           </Pressable>
-          <Text style={styles.headerTitle}>Nomadly User Profile</Text>
+          <Text style={styles.headerTitle}>{strings.profile.completeProfile}</Text>
           <View style={styles.headerPlaceholder} />
         </View>
 
@@ -108,23 +121,29 @@ export function CompleteProfileScreen() {
 
             {/* ── Headline Title & Subtitle ── */}
             <View style={styles.headlineSection}>
-              <Text style={styles.headlineTitle}>Lengkapi Data Pribadi</Text>
+              <Text style={styles.headlineTitle}>
+                {isZh ? '完善个人档案' : 'Complete Your Profile'}
+              </Text>
               <Text style={styles.headlineSubtitle}>
-                Mohon isi informasi identitas resmi Anda sesuai paspor atau kartu identitas untuk verifikasi akun perjalanan global.
+                {isZh
+                  ? '填写官方证件信息，即可解锁认证游民专属财务工具与社群特权。'
+                  : 'Complete your profile to unlock verified nomad perks and personalized financial tools.'}
               </Text>
             </View>
 
             {/* ── White Card Container ── */}
             <View style={styles.card}>
 
-              {/* ── Field 1: Nama Lengkap ── */}
+              {/* ── Field 1: Full Name ── */}
               <View style={styles.fieldBlock}>
                 <View style={styles.fieldHeaderRow}>
                   <View style={styles.labelGroup}>
-                    <Text style={styles.fieldLabel}>Nama Lengkap</Text>
-                    <Text style={styles.fieldLabelSub}> (Sesuai Paspor / KTP)</Text>
+                    <Text style={styles.fieldLabel}>{strings.profile.fullName}</Text>
+                    <Text style={styles.fieldLabelSub}>
+                      {isZh ? ' (需与证件一致)' : ' (Passport / ID)'}
+                    </Text>
                   </View>
-                  <Text style={styles.requiredBadge}>Wajib</Text>
+                  <Text style={styles.requiredBadge}>{isZh ? '必填' : 'Required'}</Text>
                 </View>
 
                 <View style={styles.inputBox}>
@@ -137,10 +156,10 @@ export function CompleteProfileScreen() {
                     style={styles.textInput}
                     value={name}
                     onChangeText={setName}
-                    placeholder="Masukkan nama lengkap"
+                    placeholder={strings.auth.fullNamePlaceholder}
                     placeholderTextColor="#94A3B8"
                     autoCapitalize="words"
-                    accessibilityLabel="Nama Lengkap"
+                    accessibilityLabel={strings.profile.fullName}
                   />
                 </View>
 
@@ -151,22 +170,24 @@ export function CompleteProfileScreen() {
                     tintColor="#64748B"
                   />
                   <Text style={styles.helperText}>
-                    Pastikan nama sesuai dengan dokumen identitas perjalanan resmi.
+                    {isZh
+                      ? '请确保姓名与官方有效国际旅行证件完全一致。'
+                      : 'Ensure name matches official travel documents.'}
                   </Text>
                 </View>
               </View>
 
-              {/* ── Field 2: Alamat Email Aktif ── */}
+              {/* ── Field 2: Primary Email ── */}
               <View style={styles.fieldBlock}>
                 <View style={styles.fieldHeaderRow}>
-                  <Text style={styles.fieldLabel}>Alamat Email Aktif</Text>
+                  <Text style={styles.fieldLabel}>{strings.profile.primaryEmail}</Text>
                   <View style={styles.verifiedBadge}>
                     <SymbolView
                       name={{ ios: 'checkmark.circle.fill', android: 'check_circle', web: 'check_circle' } as any}
                       size={12}
                       tintColor="#16A34A"
                     />
-                    <Text style={styles.verifiedText}>Terverifikasi</Text>
+                    <Text style={styles.verifiedText}>{strings.common.verified}</Text>
                   </View>
                 </View>
 
@@ -180,11 +201,11 @@ export function CompleteProfileScreen() {
                     style={styles.textInput}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="nama@email.com"
+                    placeholder="name@email.com"
                     placeholderTextColor="#94A3B8"
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    accessibilityLabel="Alamat Email Aktif"
+                    accessibilityLabel={strings.profile.primaryEmail}
                   />
                   <SymbolView
                     name={{ ios: 'checkmark.seal.fill', android: 'verified', web: 'verified' } as any}
@@ -200,16 +221,18 @@ export function CompleteProfileScreen() {
                     tintColor="#64748B"
                   />
                   <Text style={styles.helperText}>
-                    Digunakan untuk bukti transaksi tiket dan konfirmasi valuta.
+                    {isZh
+                      ? '用于电子凭证及多币种换汇交易通知。'
+                      : 'Used for booking receipts and currency exchange alerts.'}
                   </Text>
                 </View>
               </View>
 
-              {/* ── Field 3: Tanggal Lahir ── */}
+              {/* ── Field 3: Date of Birth ── */}
               <View style={styles.fieldBlock}>
                 <View style={styles.fieldHeaderRow}>
-                  <Text style={styles.fieldLabel}>Tanggal Lahir</Text>
-                  <Text style={styles.ageBadge}>{age} Tahun</Text>
+                  <Text style={styles.fieldLabel}>{strings.profile.birthDateAndAge}</Text>
+                  <Text style={styles.ageBadge}>{age} {strings.profile.yearsOld}</Text>
                 </View>
 
                 <Pressable
@@ -219,7 +242,7 @@ export function CompleteProfileScreen() {
                     setDateModalVisible(true);
                   }}
                   accessibilityRole="button"
-                  accessibilityLabel="Pilih Tanggal Lahir">
+                  accessibilityLabel={strings.profile.birthDateAndAge}>
                   <SymbolView
                     name={{ ios: 'calendar', android: 'calendar_today', web: 'calendar_today' } as any}
                     size={18}
@@ -237,23 +260,23 @@ export function CompleteProfileScreen() {
                 </Pressable>
               </View>
 
-              {/* ── Field 4: Negara Domisili / Asal (Placeholder: Negara Asal) ── */}
+              {/* ── Field 4: Residence Country ── */}
               <View style={styles.fieldBlock}>
                 <View style={styles.fieldHeaderRow}>
-                  <Text style={styles.fieldLabel}>Negara Domisili / Asal</Text>
+                  <Text style={styles.fieldLabel}>{strings.profile.residenceCountry}</Text>
                 </View>
 
                 <Pressable
                   style={({ pressed }) => [styles.inputBox, pressed && { opacity: 0.85 }]}
                   onPress={() => setCountryModalVisible(true)}
                   accessibilityRole="button"
-                  accessibilityLabel="Pilih Negara Domisili">
+                  accessibilityLabel={strings.profile.residenceCountry}>
                   <Text
                     style={[
                       styles.countryValueText,
                       !country && styles.countryPlaceholderText,
                     ]}>
-                    {country ? country : 'Negara Asal'}
+                    {country ? country : (isZh ? '选择国家/地区' : 'Select Country')}
                   </Text>
                   <SymbolView
                     name={{ ios: 'chevron.down', android: 'expand_more', web: 'expand_more' } as any}
@@ -263,7 +286,7 @@ export function CompleteProfileScreen() {
                 </Pressable>
               </View>
 
-              {/* ── Field 5: Keamanan Privasi Nomadly Card ── */}
+              {/* ── Field 5: Security Box ── */}
               <View style={styles.securityBox}>
                 <View style={styles.shieldIconWrapper}>
                   <SymbolView
@@ -273,9 +296,13 @@ export function CompleteProfileScreen() {
                   />
                 </View>
                 <View style={styles.securityTextGroup}>
-                  <Text style={styles.securityTitle}>Keamanan Privasi Nomadly</Text>
+                  <Text style={styles.securityTitle}>
+                    {isZh ? 'Nomadly 银行级隐私保护' : 'Bank-Grade Security Guaranteed'}
+                  </Text>
                   <Text style={styles.securityDescription}>
-                    Informasi ini akan disinkronkan secara aman dengan Paspor Global & Vault Finansial Anda tanpa dibagikan ke pihak ketiga.
+                    {isZh
+                      ? '所有数据均采用端到端军工级加密保护，绝不会向任何第三方披露。'
+                      : 'All personal and financial data is encrypted and strictly protected 24/7.'}
                   </Text>
                 </View>
               </View>
@@ -283,7 +310,7 @@ export function CompleteProfileScreen() {
 
             {/* ── Action Buttons ── */}
             <View style={styles.actionSection}>
-              {/* Primary Black Button */}
+              {/* Primary Save Button */}
               <Pressable
                 style={({ pressed }) => [
                   styles.saveButton,
@@ -291,8 +318,8 @@ export function CompleteProfileScreen() {
                 ]}
                 onPress={handleSave}
                 accessibilityRole="button"
-                accessibilityLabel="Simpan dan Lanjutkan">
-                <Text style={styles.saveButtonText}>Simpan & Lanjutkan</Text>
+                accessibilityLabel={strings.common.save}>
+                <Text style={styles.saveButtonText}>{strings.common.save}</Text>
                 <SymbolView
                   name={{ ios: 'arrow.right', android: 'arrow_forward', web: 'arrow_forward' } as any}
                   size={16}
@@ -308,8 +335,8 @@ export function CompleteProfileScreen() {
                 ]}
                 onPress={() => router.back()}
                 accessibilityRole="button"
-                accessibilityLabel="Batal atau Kembali">
-                <Text style={styles.cancelButtonText}>Batal / Kembali</Text>
+                accessibilityLabel={strings.common.cancel}>
+                <Text style={styles.cancelButtonText}>{strings.common.cancel}</Text>
               </Pressable>
             </View>
           </ScrollView>
@@ -326,7 +353,7 @@ export function CompleteProfileScreen() {
           style={styles.modalOverlay}
           onPress={() => setCountryModalVisible(false)}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Pilih Negara Domisili</Text>
+            <Text style={styles.modalTitle}>{strings.auth.selectCountry}</Text>
             {AVAILABLE_COUNTRIES.map((item) => (
               <Pressable
                 key={item}
@@ -366,21 +393,20 @@ export function CompleteProfileScreen() {
           style={styles.modalOverlay}
           onPress={() => setDateModalVisible(false)}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Ubah Tanggal Lahir</Text>
-            <Text style={styles.modalSubtitle}>Format contoh: 14 Mei 1996</Text>
-            <View style={styles.modalInputBox}>
+            <Text style={styles.modalTitle}>{strings.auth.selectBirthDate}</Text>
+            <View style={[styles.inputBox, { marginTop: 12 }]}>
               <TextInput
-                style={styles.modalTextInput}
+                style={styles.textInput}
                 value={tempDobInput}
                 onChangeText={setTempDobInput}
-                placeholder="Tanggal Lahir"
+                placeholder="14 May 1996"
                 placeholderTextColor="#94A3B8"
               />
             </View>
             <Pressable
-              style={styles.modalSaveButton}
+              style={[styles.saveButton, { marginTop: 14 }]}
               onPress={handleConfirmDob}>
-              <Text style={styles.modalSaveButtonText}>Terapkan</Text>
+              <Text style={styles.saveButtonText}>{strings.common.confirm}</Text>
             </Pressable>
           </View>
         </Pressable>

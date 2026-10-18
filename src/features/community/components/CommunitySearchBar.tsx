@@ -1,6 +1,8 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type CommunitySearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
@@ -12,11 +14,13 @@ export function CommunitySearchBar({
   onChangeText,
   onClear,
 }: CommunitySearchBarProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Cari grup rute, kota, atau split bill..."
+        placeholder={isZh ? '搜索路线群组、城市或账单分摊...' : 'Search groups, routes, cities, or split bills...'}
         placeholderTextColor="#94A3B8"
         value={value}
         onChangeText={onChangeText}

@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import { REMITTANCE_FILTER_CATEGORIES } from '../services/mockData';
 import type { RemittanceRegionFilter } from '../types';
 
@@ -12,6 +13,25 @@ export function RemittanceFilterChips({
   selectedRegion,
   onSelectRegion,
 }: RemittanceFilterChipsProps) {
+  const { isZh } = useLanguage();
+
+  const getLabel = (id: RemittanceRegionFilter, defaultLabel: string) => {
+    switch (id) {
+      case 'all':
+        return isZh ? '全部' : 'All';
+      case 'asia':
+        return isZh ? '亚洲' : 'Asia';
+      case 'eropa':
+        return isZh ? '欧洲' : 'Europe';
+      case 'amerika':
+        return isZh ? '美洲' : 'Americas';
+      case 'digital':
+        return isZh ? '数字银行' : 'Digital';
+      default:
+        return defaultLabel;
+    }
+  };
+
   return (
     <ScrollView
       horizontal
@@ -34,7 +54,7 @@ export function RemittanceFilterChips({
                 styles.chipText,
                 isSelected ? styles.activeChipText : styles.inactiveChipText,
               ]}>
-              {cat.label}
+              {getLabel(cat.id, cat.label)}
             </Text>
           </Pressable>
         );

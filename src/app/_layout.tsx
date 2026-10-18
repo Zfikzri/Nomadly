@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { LanguageProvider } from '@/i18n';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,27 +16,30 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }} initialRouteName="onboarding">
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="register" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="profile" options={{ headerShown: false }} />
-        <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
-        <Stack.Screen name="complete-profile" options={{ headerShown: false }} />
-        <Stack.Screen name="community-plans" options={{ headerShown: false }} />
-        <Stack.Screen name="community/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
-        <Stack.Screen name="promo/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="local-news" options={{ headerShown: false }} />
-        <Stack.Screen name="news/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="chat-personal" options={{ headerShown: false }} />
-        <Stack.Screen name="chat-group" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }} initialRouteName="onboarding">
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+          <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen name="register" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="profile" options={{ headerShown: false }} />
+          <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
+          <Stack.Screen name="complete-profile" options={{ headerShown: false }} />
+          <Stack.Screen name="community-plans" options={{ headerShown: false }} />
+          <Stack.Screen name="community/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="discount-promos" options={{ headerShown: false }} />
+          <Stack.Screen name="promo/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="local-news" options={{ headerShown: false }} />
+          <Stack.Screen name="news/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="chat-personal" options={{ headerShown: false }} />
+          <Stack.Screen name="chat-group" options={{ headerShown: false }} />
+          <Stack.Screen name="user-profile/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }

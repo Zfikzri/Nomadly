@@ -1,11 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 export function RatesHeader() {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Kurs & Remitansi</Text>
+      <Text style={styles.title}>
+        {isZh ? '汇率与跨境汇款' : 'Rates & Remittance'}
+      </Text>
       <Text style={styles.subtitle}>
-        Pusat pemantauan kurs valas resmi & transfer dana instan lintas batas negara.
+        {isZh
+          ? '实时官方外汇监控与无缝跨境极速汇款中心。'
+          : 'Real-time official FX exchange tracking & instant cross-border remittance.'}
       </Text>
     </View>
   );

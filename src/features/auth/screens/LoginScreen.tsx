@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LanguagePillSwitcher } from '@/components/common/LanguagePillSwitcher';
+import { useLanguage } from '@/i18n';
 import {
   AuthHeader,
   AuthInputField,
@@ -22,6 +24,7 @@ import { validateLoginForm } from '../services/mockAuth';
 import type { LoginFormData } from '../types';
 
 export function LoginScreen() {
+  const { language, strings } = useLanguage();
   const [formData, setFormData] = useState<LoginFormData>({
     email: 'alex@travel.com', // Pre-filled for effortless testing
     password: 'password123',  // Pre-filled for effortless testing
@@ -32,9 +35,9 @@ export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogin = () => {
-    const result = validateLoginForm(formData);
+    const result = validateLoginForm(formData, language);
     if (!result.valid) {
-      Alert.alert('Perhatian', result.error);
+      Alert.alert(strings.common.notice, result.error);
       return;
     }
 
@@ -43,11 +46,11 @@ export function LoginScreen() {
     setTimeout(() => {
       setIsSubmitting(false);
       Alert.alert(
-        'Login Berhasil!',
-        `Selamat datang kembali, ${formData.email}!`,
+        strings.auth.loginSuccess,
+        `${strings.auth.welcomeBack}, ${formData.email}!`,
         [
           {
-            text: 'Mulai Menjelajah',
+            text: strings.auth.startExploring,
             onPress: () => router.replace('/(tabs)'),
           },
         ]
@@ -58,6 +61,12 @@ export function LoginScreen() {
   return (
     <View style={styles.root}>
       <SafeAreaView edges={['top']} style={styles.safeArea}>
+        {/* Top Language Switcher Bar */}
+        <View style={styles.topBar}>
+          <View style={{ flex: 1 }} />
+          <LanguagePillSwitcher variant="light" />
+        </View>
+
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.keyboardView}>
@@ -72,11 +81,11 @@ export function LoginScreen() {
             <View style={styles.whiteSheet}>
               {/* Heading & Switch Link */}
               <View style={styles.headerTitleRow}>
-                <Text style={styles.sheetTitle}>Login</Text>
+                <Text style={styles.sheetTitle}>{strings.auth.loginTitle}</Text>
                 <View style={styles.switchWrapper}>
-                  <Text style={styles.switchPrompt}>Don't Have An Account? </Text>
+                  <Text style={styles.switchPrompt}>{strings.auth.noAccountPrompt}</Text>
                   <Pressable onPress={() => router.push('/register')}>
-                    <Text style={styles.switchAction}>Sign Up</Text>
+                    <Text style={styles.switchAction}>{strings.auth.signUp}</Text>
                   </Pressable>
                 </View>
               </View>
@@ -85,7 +94,7 @@ export function LoginScreen() {
               <AuthInputField
                 iconName={{ ios: 'envelope.fill', android: 'mail', web: 'mail' }}
                 iconColor="#2563EB"
-                placeholder="Alamat Email (cth: alex@travel.com)"
+                placeholder={strings.auth.emailPlaceholder}
                 value={formData.email}
                 onChangeText={(text) => setFormData((prev) => ({ ...prev, email: text }))}
                 keyboardType="email-address"
@@ -96,7 +105,7 @@ export function LoginScreen() {
               <AuthInputField
                 iconName={{ ios: 'lock.fill', android: 'lock', web: 'lock' }}
                 iconColor="#2563EB"
-                placeholder="Password"
+                placeholder={strings.auth.passwordPlaceholder}
                 value={formData.password}
                 onChangeText={(text) => setFormData((prev) => ({ ...prev, password: text }))}
                 isPassword={true}
@@ -124,17 +133,17 @@ export function LoginScreen() {
                       />
                     )}
                   </View>
-                  <Text style={styles.rememberMeText}>Remember Me</Text>
+                  <Text style={styles.rememberMeText}>{strings.auth.rememberMe}</Text>
                 </Pressable>
 
                 <Pressable
                   onPress={() =>
                     Alert.alert(
-                      'Lupa Password',
-                      'Link reset kata sandi telah dikirimkan ke email terdaftar (fitur demo).'
+                      strings.auth.forgotPassword,
+                      strings.auth.forgotPasswordNotice
                     )
                   }>
-                  <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                  <Text style={styles.forgotPasswordText}>{strings.auth.forgotPassword}</Text>
                 </Pressable>
               </View>
 
@@ -148,20 +157,20 @@ export function LoginScreen() {
                 onPress={handleLogin}
                 disabled={isSubmitting}>
                 <Text style={styles.loginButtonText}>
-                  {isSubmitting ? 'Memproses...' : 'Login'}
+                  {isSubmitting ? strings.auth.processing : strings.auth.loginButton}
                 </Text>
               </Pressable>
 
               {/* Social Login Options */}
               <SocialAuthButtons
                 onApplePress={() => {
-                  Alert.alert('Apple Sign In', 'Login cepat via Apple ID berhasil! (Mock)', [
-                    { text: 'Lanjut', onPress: () => router.replace('/(tabs)') },
+                  Alert.alert('Apple Sign In', 'Login via Apple ID (Mock)', [
+                    { text: strings.common.continue, onPress: () => router.replace('/(tabs)') },
                   ]);
                 }}
                 onGooglePress={() => {
-                  Alert.alert('Google Sign In', 'Login cepat via Google Account berhasil! (Mock)', [
-                    { text: 'Lanjut', onPress: () => router.replace('/(tabs)') },
+                  Alert.alert('Google Sign In', 'Login via Google Account (Mock)', [
+                    { text: strings.common.continue, onPress: () => router.replace('/(tabs)') },
                   ]);
                 }}
               />
@@ -180,6 +189,15 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 4,
+    zIndex: 10,
   },
   keyboardView: {
     flex: 1,

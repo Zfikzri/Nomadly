@@ -3,6 +3,9 @@ import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ProfilePopupModal } from '@/features/profile/components';
+import { getOtherUserProfile } from '@/features/profile/services/otherUsersMock';
+import type { OtherUserProfileData } from '@/features/profile/types';
 import {
   ChatFilterChips,
   ChatHeader,
@@ -28,6 +31,33 @@ export function ChatScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<ChatTabType>('personal');
   const [activeFilter, setActiveFilter] = useState<ChatFilterType>('all');
+  const [selectedProfile, setSelectedProfile] = useState<OtherUserProfileData | null>(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  const handleOpenProfilePopup = (userId: string) => {
+    const profile = getOtherUserProfile(userId);
+    setSelectedProfile(profile);
+    setPopupVisible(true);
+  };
+
+  const handleMessageUser = (profile: OtherUserProfileData) => {
+    setPopupVisible(false);
+    router.push({
+      pathname: '/chat-personal',
+      params: {
+        userId: profile.id,
+        userName: profile.name,
+      },
+    } as any);
+  };
+
+  const handleViewUserProfile = (profile: OtherUserProfileData) => {
+    setPopupVisible(false);
+    router.push({
+      pathname: '/user-profile/[id]',
+      params: { id: profile.id },
+    } as any);
+  };
 
   // Filter chat items based on search query, active tab, and filter chips
   const filteredChatItems = useMemo(() => {
@@ -37,7 +67,7 @@ export function ChatScreen() {
         const query = searchQuery.toLowerCase();
         const matchName = item.name.toLowerCase().includes(query);
         const matchMessage = item.lastMessage.toLowerCase().includes(query);
-        const matchMeta = item.metaText.toLowerCase().includes(query);
+        const matchMeta = item.metaText ? item.metaText.toLowerCase().includes(query) : false;
         if (!matchName && !matchMessage && !matchMeta) {
           return false;
         }
@@ -92,7 +122,10 @@ export function ChatScreen() {
           />
 
           {/* 4. Horizontal Online Travelers Section */}
-          <OnlineTravelersSection travelers={MOCK_ONLINE_TRAVELERS} />
+          <OnlineTravelersSection
+            travelers={MOCK_ONLINE_TRAVELERS}
+            onTravelerPress={(traveler) => handleOpenProfilePopup(traveler.id)}
+          />
 
           {/* 5. Filter Chips (Semua, Belum Dibaca, Favorit) */}
           <ChatFilterChips
@@ -110,7 +143,18 @@ export function ChatScreen() {
                   if (item.type === 'community') {
                     router.push('/chat-group');
                   } else {
-                    router.push('/chat-personal');
+                    router.push({
+                      pathname: '/chat-personal',
+                      params: {
+                        userId: item.userId ?? item.id,
+                        userName: item.name,
+                      },
+                    } as any);
+                  }
+                }}
+                onProfilePress={() => {
+                  if (item.type !== 'community') {
+                    handleOpenProfilePopup(item.userId ?? item.id);
                   }
                 }}
               />
@@ -118,6 +162,15 @@ export function ChatScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      {/* ── Traveler Profile Popup Modal ── */}
+      <ProfilePopupModal
+        visible={popupVisible}
+        profile={selectedProfile}
+        onClose={() => setPopupVisible(false)}
+        onMessage={handleMessageUser}
+        onViewProfile={handleViewUserProfile}
+      />
     </View>
   );
 }

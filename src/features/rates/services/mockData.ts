@@ -9,8 +9,8 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
   {
     id: 'jpy-idr',
     pair: 'JPY / IDR',
-    rateFormatted: 'Rp 105,42',
-    rateSubtext: '1 Yen Jepang',
+    rateFormatted: 'Rp 105.42',
+    rateSubtext: '1 Japanese Yen',
     changePercent: '+0.84%',
     isPositive: true,
     isHighlighted: true,
@@ -18,7 +18,7 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
   {
     id: 'usd-idr',
     pair: 'USD / IDR',
-    rateFormatted: 'Rp 15.820',
+    rateFormatted: 'Rp 15,820',
     rateSubtext: '1 US Dollar',
     changePercent: '-0.12%',
     isPositive: false,
@@ -27,8 +27,8 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
   {
     id: 'eur-idr',
     pair: 'EUR / IDR',
-    rateFormatted: 'Rp 17.250',
-    rateSubtext: '1 Euro Uni Eropa',
+    rateFormatted: 'Rp 17,250',
+    rateSubtext: '1 Euro',
     changePercent: '+0.35%',
     isPositive: true,
     isHighlighted: false,
@@ -36,8 +36,8 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
   {
     id: 'sgd-idr',
     pair: 'SGD / IDR',
-    rateFormatted: 'Rp 11.890',
-    rateSubtext: '1 Dolar Singapura',
+    rateFormatted: 'Rp 11,890',
+    rateSubtext: '1 Singapore Dollar',
     changePercent: '+0.18%',
     isPositive: true,
     isHighlighted: false,
@@ -45,8 +45,8 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
   {
     id: 'gbp-idr',
     pair: 'GBP / IDR',
-    rateFormatted: 'Rp 20.150',
-    rateSubtext: '1 Pound Britania',
+    rateFormatted: 'Rp 20,150',
+    rateSubtext: '1 British Pound',
     changePercent: '+0.22%',
     isPositive: true,
     isHighlighted: false,
@@ -56,17 +56,17 @@ export const MOCK_WATCHLIST: WatchlistCardItem[] = [
 export const MOCK_CURRENCIES: CurrencyItem[] = [
   {
     code: 'IDR',
-    name: 'Rupiah Indonesia',
+    name: 'Indonesian Rupiah',
     symbol: 'Rp',
     flag: '🇮🇩',
     rateToIdr: 1,
   },
   {
     code: 'JPY',
-    name: 'Yen Jepang',
+    name: 'Japanese Yen',
     symbol: '¥',
     flag: '🇯🇵',
-    rateToIdr: 113.02, // 1 IDR = 0.008848 JPY match mockup
+    rateToIdr: 113.02,
   },
   {
     code: 'USD',
@@ -77,49 +77,49 @@ export const MOCK_CURRENCIES: CurrencyItem[] = [
   },
   {
     code: 'EUR',
-    name: 'Euro Uni Eropa',
+    name: 'Euro',
     symbol: '€',
     flag: '🇪🇺',
     rateToIdr: 17250,
   },
   {
     code: 'SGD',
-    name: 'Dolar Singapura',
+    name: 'Singapore Dollar',
     symbol: 'S$',
     flag: '🇸🇬',
     rateToIdr: 11890,
   },
   {
     code: 'GBP',
-    name: 'Pound Britania',
+    name: 'British Pound',
     symbol: '£',
     flag: '🇬🇧',
     rateToIdr: 20150,
   },
   {
     code: 'AUD',
-    name: 'Dolar Australia',
+    name: 'Australian Dollar',
     symbol: 'A$',
     flag: '🇦🇺',
     rateToIdr: 10420,
   },
   {
     code: 'MYR',
-    name: 'Ringgit Malaysia',
+    name: 'Malaysian Ringgit',
     symbol: 'RM',
     flag: '🇲🇾',
     rateToIdr: 3550,
   },
   {
     code: 'THB',
-    name: 'Baht Thailand',
+    name: 'Thai Baht',
     symbol: '฿',
     flag: '🇹🇭',
     rateToIdr: 460,
   },
   {
     code: 'KRW',
-    name: 'Won Korea',
+    name: 'South Korean Won',
     symbol: '₩',
     flag: '🇰🇷',
     rateToIdr: 11.5,
@@ -174,14 +174,14 @@ export function getMiddleRateString(fromCode: string, toCode: string): string {
   const rate = fromCurrency.rateToIdr / toCurrency.rateToIdr;
 
   const formattedRate = rate < 0.01 ? rate.toFixed(6) : rate.toFixed(4);
-  return `Rp 1 ${fromCode} = ${formattedRate} ${toCode}`;
+  return `1 ${fromCode} = ${formattedRate} ${toCode}`;
 }
 
 export const REMITTANCE_FILTER_CATEGORIES: { id: RemittanceRegionFilter; label: string }[] = [
-  { id: 'all', label: 'Semua' },
+  { id: 'all', label: 'All' },
   { id: 'asia', label: 'Asia' },
-  { id: 'eropa', label: 'Eropa' },
-  { id: 'amerika', label: 'Amerika' },
+  { id: 'eropa', label: 'Europe' },
+  { id: 'amerika', label: 'Americas' },
   { id: 'digital', label: 'Digital' },
 ];
 
@@ -189,15 +189,15 @@ export const MOCK_REMITTANCE_BANKS: RemittanceBankItem[] = [
   {
     id: 'webank',
     name: 'WeBank (微众银行)',
-    country: 'Tiongkok',
+    country: 'China',
     countryFlag: '🇨🇳',
     categoryType: 'Digital Neobank',
     region: 'asia',
-    statusBadgeText: 'Mitra Resmi Nomadly • Auto-Clear FX',
+    statusBadgeText: 'Nomadly Official Partner • Auto-Clear FX',
     statusBadgeType: 'green',
     description:
-      'Bank digital murni pertama di Tiongkok yang didirikan oleh Tencent. Terkemuka dalam teknologi AI banking, micro-loans instan, dan solusi pembayaran lintas negara tanpa kantor cabang fisik.',
-    featureTags: ['QR WeChat Pay Sync', 'Zero Fee FX', '24/7 Digital'],
+      'Pioneering digital bank founded by Tencent. Global leader in AI-powered banking, instant micro-loans, and seamless cross-border cashless payments without physical branches.',
+    featureTags: ['WeChat Pay QR Sync', 'Zero Fee FX', '24/7 Digital'],
     complianceText: 'Tencent Ecosystem',
     complianceIcon: '🛡️',
     avatarBgColor: '#FFFFFF',
@@ -209,13 +209,13 @@ export const MOCK_REMITTANCE_BANKS: RemittanceBankItem[] = [
     name: 'Bank Central Asia (BCA)',
     country: 'Indonesia',
     countryFlag: '🇮🇩',
-    categoryType: 'Bank Komersial Terbesar',
+    categoryType: 'Premier Commercial Bank',
     region: 'asia',
-    statusBadgeText: 'Dompet Utama IDR • Instant Top-up',
+    statusBadgeText: 'Primary IDR Gateway • Instant Top-up',
     statusBadgeType: 'blue',
     description:
-      'Bank swasta terbesar di Indonesia dengan ekosistem perbankan digital terandal (BCA Mobile & myBCA). Mendukung transfer valas cepat, QRIS cross-border ke berbagai negara Asia Tenggara, dan jaringan ATM terluas.',
-    featureTags: ['myBCA Direct API', 'QRIS Cross-Border', 'Kurs Rendah'],
+      'Largest private bank in Indonesia with trusted digital banking ecosystem (BCA Mobile & myBCA). Supports rapid foreign exchange transfers, cross-border QR payments across Southeast Asia, and nationwide ATM network.',
+    featureTags: ['myBCA Direct API', 'Cross-Border QR', 'Low FX Spread'],
     complianceText: 'BCA OneKlik Enabled',
     complianceIcon: '⚡',
     avatarBgColor: '#FFFFFF',
@@ -225,15 +225,15 @@ export const MOCK_REMITTANCE_BANKS: RemittanceBankItem[] = [
   {
     id: 'revolut',
     name: 'Revolut',
-    country: 'Inggris & Uni Eropa',
+    country: 'UK & European Union',
     countryFlag: '🇬🇧 🇪🇺',
     categoryType: 'Global Superapp',
     region: 'eropa',
     statusBadgeText: 'Multi-Currency Vault',
     statusBadgeType: 'purple',
     description:
-      'Fintech perbankan global asal Inggris yang menyediakan rekening multi-mata uang, kartu debit bebas biaya konversi di lebih dari 150 negara, serta transfer internasional instan.',
-    featureTags: ['Multi-Vault EUR/USD', 'Bebas Biaya Tarik ATM Luar Negeri'],
+      'Global financial technology company providing multi-currency accounts, debit cards with zero foreign exchange fees in 150+ countries, and instant global money transfers.',
+    featureTags: ['Multi-Vault EUR/USD', 'Zero ATM Withdrawal Fee Abroad'],
     complianceText: 'FCA & BoL Regulated',
     complianceIcon: '🔒',
     avatarBgColor: '#0F172A',
@@ -243,15 +243,15 @@ export const MOCK_REMITTANCE_BANKS: RemittanceBankItem[] = [
   {
     id: 'dbs',
     name: 'DBS Bank',
-    country: 'Singapura',
+    country: 'Singapore',
     countryFlag: '🇸🇬',
     categoryType: 'Best Bank in the World',
     region: 'asia',
     statusBadgeText: 'Southeast Asia Hub',
     statusBadgeType: 'cyan',
     description:
-      'Grup perbankan terkemuka di Asia yang berkantor pusat di Singapura. Menawarkan infrastruktur remitansi instan, rekening multicurrency digibank, dan proteksi aset kelas dunia.',
-    featureTags: ['Remit Instan 0 Biaya', 'Digibank Multi-Currency'],
+      'Leading financial services group headquartered in Singapore. Offers zero-fee remittance infrastructure, digibank multi-currency accounts, and world-class asset protection.',
+    featureTags: ['Instant Zero-Fee Remit', 'Digibank Multi-Currency'],
     complianceText: 'MAS Regulated AAA Tier',
     complianceIcon: '🛡️',
     avatarBgColor: '#000000',
@@ -261,22 +261,23 @@ export const MOCK_REMITTANCE_BANKS: RemittanceBankItem[] = [
   {
     id: 'chase',
     name: 'Chase (JPMorgan Chase)',
-    country: 'Amerika Serikat',
+    country: 'United States',
     countryFlag: '🇺🇸',
     categoryType: 'Global Tier-1',
     region: 'amerika',
     statusBadgeText: 'USD Settlement Partner',
     statusBadgeType: 'blue',
     description:
-      'Institusi finansial terkemuka di Amerika Serikat yang menyediakan kliring USD tercepat di dunia, jaringan kartu kredit perjalanan Sapphire terbaik, dan perlindungan penipuan menyeluruh.',
+      'Leading U.S. financial institution providing ultra-fast USD clearing worldwide, premier Sapphire travel credit networks, and comprehensive fraud protection.',
     featureTags: ['FedNow Settlement', 'Global Travel Points'],
-    complianceText: 'FDIC Insured Kliring',
+    complianceText: 'FDIC Insured Clearing',
     complianceIcon: '🛡️',
     avatarBgColor: '#005EA6',
     avatarTextColor: '#FFFFFF',
     avatarText: 'CHASE',
   },
 ];
+
 
 export function filterRemittanceBanks(
   query: string,

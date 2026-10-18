@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { CommunityGroup } from '../types';
 
 type CommunityGroupCardProps = {
@@ -10,6 +11,8 @@ type CommunityGroupCardProps = {
 };
 
 export function CommunityGroupCard({ group, onPress }: CommunityGroupCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <Pressable
       onPress={onPress}
@@ -49,10 +52,10 @@ export function CommunityGroupCard({ group, onPress }: CommunityGroupCardProps) 
                   {group.locations.join(' • ')}
                 </Text>
                 <Text style={styles.dotSeparator}>•</Text>
-                <Text style={styles.membersText}>{group.membersCount} Anggota</Text>
+                <Text style={styles.membersText}>{group.membersCount} {isZh ? '位成员' : 'Members'}</Text>
               </>
             ) : (
-              <Text style={styles.membersText}>• {group.membersCount} Anggota</Text>
+              <Text style={styles.membersText}>• {group.membersCount} {isZh ? '位成员' : 'Members'}</Text>
             )}
           </View>
         </View>

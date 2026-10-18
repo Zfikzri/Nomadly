@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   findCountryByName,
   formatCurrencyValue,
@@ -19,6 +20,7 @@ export function BudgetInputSection({
   destinationCountry,
   onBudgetChange,
 }: BudgetInputSectionProps) {
+  const { strings, isZh } = useLanguage();
   // Reaktif terhadap perubahan negara tujuan!
   const currentCountry = findCountryByName(destinationCountry);
 
@@ -41,7 +43,7 @@ export function BudgetInputSection({
       {/* Title & Real-time Rate Badge */}
       <View style={styles.headerRow} className="flex-row items-center justify-between mb-2">
         <Text style={styles.title} className="text-[14px] font-bold text-slate-800">
-          Modal Anggaran
+          {strings.planner.budgetLabel}
         </Text>
         <View style={styles.rateBadge} className="flex-row items-center gap-1">
           <SymbolView
@@ -50,7 +52,7 @@ export function BudgetInputSection({
             tintColor="#0050D6"
           />
           <Text style={styles.rateText} className="text-xs font-semibold text-[#0050D6]">
-            Kurs Real-time
+            {isZh ? '实时汇率' : 'Live FX'}
           </Text>
         </View>
       </View>
@@ -63,7 +65,7 @@ export function BudgetInputSection({
         <TextInput
           style={styles.input}
           className="flex-1 text-base font-medium text-slate-900"
-          placeholder="Contoh: 10.000.000"
+          placeholder={isZh ? '例如：10,000,000' : 'e.g. 10,000,000'}
           placeholderTextColor="#94A3B8"
           keyboardType="numeric"
           value={nominalBudget}
@@ -82,7 +84,9 @@ export function BudgetInputSection({
         </View>
         <View style={styles.buyingPowerContent} className="flex-1">
           <Text style={styles.buyingPowerLabel} className="text-[12px] font-medium text-slate-600">
-            Estimasi Daya Beli di {currentCountry.name}:
+            {isZh
+              ? `在 ${currentCountry.name} 的预估购买力:`
+              : `Estimated Purchasing Power in ${currentCountry.name}:`}
           </Text>
           <Text style={styles.buyingPowerValue} className="text-[13px] font-bold text-slate-900 mt-0.5">
             {targetCurrencyValue > 0

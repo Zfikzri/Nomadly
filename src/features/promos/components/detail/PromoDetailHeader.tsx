@@ -2,12 +2,16 @@ import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type PromoDetailHeaderProps = {
   title?: string;
 };
 
-export function PromoDetailHeader({ title = 'Promo Tiket' }: PromoDetailHeaderProps) {
+export function PromoDetailHeader({ title }: PromoDetailHeaderProps) {
   const router = useRouter();
+  const { isZh } = useLanguage();
+  const resolvedTitle = title ?? (isZh ? '门票特惠' : 'Promo Deals');
 
   return (
     <View style={styles.headerContainer}>
@@ -29,7 +33,7 @@ export function PromoDetailHeader({ title = 'Promo Tiket' }: PromoDetailHeaderPr
         />
       </Pressable>
       <Text style={styles.headerTitle} numberOfLines={1}>
-        {title}
+        {resolvedTitle}
       </Text>
     </View>
   );

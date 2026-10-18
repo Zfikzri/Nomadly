@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { FreeAdminAtmInfo } from '../types';
 
 type FreeAdminAtmCardProps = {
@@ -8,6 +9,8 @@ type FreeAdminAtmCardProps = {
 };
 
 export function FreeAdminAtmCard({ data }: FreeAdminAtmCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.card}>
       {/* Title */}
@@ -18,8 +21,10 @@ export function FreeAdminAtmCard({ data }: FreeAdminAtmCardProps) {
 
       {/* Description with bold highlights */}
       <Text style={styles.bodyText}>
-        Gunakan <Text style={styles.boldText}>{data.bankName}</Text> {data.description}
-        <Text style={styles.boldText}>{data.networkBold}</Text> tertentu di jam{' '}
+        {isZh ? '建议使用 ' : 'Use '}
+        <Text style={styles.boldText}>{data.bankName}</Text> {data.description}
+        <Text style={styles.boldText}>{data.networkBold}</Text>{' '}
+        {isZh ? '在营业时段 ' : 'during '}
         <Text style={styles.boldBlueText}>{data.hoursBold}</Text>
       </Text>
 

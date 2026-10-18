@@ -1,16 +1,24 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 export function ChatHeader() {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       <View style={styles.titleRow}>
-        <Text style={styles.titleText}>Chat & Komunitas</Text>
+        <Text style={styles.titleText}>
+          {isZh ? '聊天与社群' : 'Chat & Community'}
+        </Text>
         <View style={styles.liveBadge}>
-          <Text style={styles.liveText}>Live</Text>
+          <Text style={styles.liveText}>{isZh ? '活跃' : 'Live'}</Text>
         </View>
       </View>
       <Text style={styles.subtitleText}>
-        Global travel companion & cross-border peers
+        {isZh
+          ? '全球游民伙伴与跨境交流群组'
+          : 'Global travel companion & cross-border peers'}
       </Text>
     </View>
   );

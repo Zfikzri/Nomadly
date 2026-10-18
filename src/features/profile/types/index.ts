@@ -1,5 +1,7 @@
 export type Gender = 'male' | 'female';
 
+export * from './otherUser';
+
 export type UserProfileData = {
   name: string;
   email: string;

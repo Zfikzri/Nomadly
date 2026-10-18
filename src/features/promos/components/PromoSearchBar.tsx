@@ -1,22 +1,31 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type PromoSearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
   onFilterPress?: () => void;
+  placeholder?: string;
 };
 
 export function PromoSearchBar({
   value,
   onChangeText,
   onFilterPress,
+  placeholder,
 }: PromoSearchBarProps) {
+  const { isZh } = useLanguage();
+  const defaultPlaceholder = isZh
+    ? '搜索目的地、航空公司或城市...'
+    : 'Search destination, airline, or city...';
+
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Cari destinasi, maskapai, atau kota..."
+        placeholder={placeholder ?? defaultPlaceholder}
         placeholderTextColor="#94A3B8"
         value={value}
         onChangeText={onChangeText}
