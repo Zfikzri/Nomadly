@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+
 type ChatInputBarProps = {
   onSendMessage?: (text: string) => void;
   onPlusPress?: () => void;
@@ -23,10 +25,14 @@ export function ChatInputBar({
   onPlusPress,
   onCameraPress,
   onMicPress,
-  placeholder = 'Tulis pesan (Dite...',
+  placeholder,
 }: ChatInputBarProps) {
+  const { isZh } = useLanguage();
   const [inputText, setInputText] = useState('');
   const insets = useSafeAreaInsets();
+
+  const resolvedPlaceholder =
+    placeholder ?? (isZh ? '输入消息...' : 'Type a message...');
 
   const handleSend = () => {
     if (inputText.trim().length === 0) return;
@@ -49,7 +55,7 @@ export function ChatInputBar({
           {/* 1. Plus Button */}
           <Pressable
             hitSlop={8}
-            onPress={onPlusPress}
+            onPlusPress={onPlusPress}
             style={({ pressed }) => [styles.iconButton, pressed && styles.buttonPressed]}>
             <SymbolView
               name={{ ios: 'plus.circle', android: 'add_circle', web: 'add_circle' }}
@@ -76,7 +82,7 @@ export function ChatInputBar({
           <View style={styles.inputPill}>
             <TextInput
               style={styles.textInput}
-              placeholder={placeholder}
+              placeholder={resolvedPlaceholder}
               placeholderTextColor="#94A3B8"
               value={inputText}
               onChangeText={setInputText}

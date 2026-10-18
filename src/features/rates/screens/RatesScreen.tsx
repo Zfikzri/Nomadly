@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import {
   RatesConverterCard,
   RatesHeader,
@@ -33,6 +34,7 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 });
 
 export function RatesScreen() {
+  const { isZh } = useLanguage();
   const [activeTab, setActiveTab] = useState<RateTabType>('exchange');
   const [watchlist, setWatchlist] = useState<WatchlistCardItem[]>(MOCK_WATCHLIST);
 
@@ -54,7 +56,7 @@ export function RatesScreen() {
           id: 'aud-idr',
           pair: 'AUD / IDR',
           rateFormatted: 'Rp 10.420',
-          rateSubtext: '1 Dolar Australia',
+          rateSubtext: isZh ? '1 澳大利亚元' : '1 Australian Dollar',
           changePercent: '-0.28%',
           isPositive: false,
         },
@@ -88,7 +90,7 @@ export function RatesScreen() {
           {/* 1. Header (Title & Subtitle) - shared across tabs */}
           <RatesHeader />
 
-          {/* 2. Top Tab Segment (Exchange Kurs Rate vs Remittence) - shared across tabs */}
+          {/* 2. Top Tab Segment (Exchange Kurs Rate vs Remittance) - shared across tabs */}
           <RatesTabSegment
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -97,13 +99,13 @@ export function RatesScreen() {
           {/* 3. Conditional Content based on activeTab */}
           {activeTab === 'exchange' ? (
             <>
-              {/* Watchlist Section (+ Tambah Watchlist, Live status, Horizontal Cards) */}
+              {/* Watchlist Section (+ Add Watchlist, Live status, Horizontal Cards) */}
               <RatesWatchlistSection
                 items={watchlist}
                 onAddPress={handleAddWatchlist}
               />
 
-              {/* Converter Card (Kurs Konverter, Date, Inputs, Swap, Rate, Konversi CTA) */}
+              {/* Converter Card (FX Converter, Date, Inputs, Swap, Rate, Convert CTA) */}
               <RatesConverterCard />
             </>
           ) : (
@@ -132,9 +134,13 @@ export function RatesScreen() {
               ) : (
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyIcon}>🔍</Text>
-                  <Text style={styles.emptyTitle}>Mitra Tidak Ditemukan</Text>
+                  <Text style={styles.emptyTitle}>
+                    {isZh ? '未找到合作机构' : 'No Partners Found'}
+                  </Text>
                   <Text style={styles.emptySubtitle}>
-                    Tidak ada bank mitra yang cocok dengan "{searchQuery}".
+                    {isZh
+                      ? `没有找到与 "${searchQuery}" 匹配的合作银行。`
+                      : `No partner banks match "${searchQuery}".`}
                   </Text>
                 </View>
               )}

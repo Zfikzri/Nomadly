@@ -9,14 +9,26 @@ import {
   View,
 } from 'react-native';
 
-const MONTH_NAMES = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-  'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
+import { useLanguage } from '@/i18n';
+
+const MONTH_NAMES_EN = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
-const MONTH_FULL_NAMES = [
-  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+const MONTH_NAMES_ZH = [
+  '1月', '2月', '3月', '4月', '5月', '6月',
+  '7月', '8月', '9月', '10月', '11月', '12月',
+];
+
+const MONTH_FULL_NAMES_EN = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+const MONTH_FULL_NAMES_ZH = [
+  '1月', '2月', '3月', '4月', '5月', '6月',
+  '7月', '8月', '9月', '10月', '11月', '12月',
 ];
 
 // Generate days 1..31
@@ -37,9 +49,13 @@ export function DatePickerModal({
   onSelectDate,
   onClose,
 }: DatePickerModalProps) {
+  const { isZh } = useLanguage();
   const [selectedDay, setSelectedDay] = useState<number>(15);
-  const [selectedMonth, setSelectedMonth] = useState<number>(9); // 0-indexed, 9 = Oktober
+  const [selectedMonth, setSelectedMonth] = useState<number>(9); // 0-indexed, 9 = October
   const [selectedYear, setSelectedYear] = useState<number>(2002);
+
+  const monthNames = isZh ? MONTH_NAMES_ZH : MONTH_NAMES_EN;
+  const monthFullNames = isZh ? MONTH_FULL_NAMES_ZH : MONTH_FULL_NAMES_EN;
 
   // Calculate live age
   const calculatedAge = useMemo(() => {
@@ -54,7 +70,9 @@ export function DatePickerModal({
   }, [selectedDay, selectedMonth, selectedYear]);
 
   const handleConfirm = () => {
-    const formatted = `${selectedDay} ${MONTH_NAMES[selectedMonth]} ${selectedYear} (${calculatedAge} Tahun)`;
+    const formatted = isZh
+      ? `${selectedYear}年${selectedMonth + 1}月${selectedDay}日 (${calculatedAge}岁)`
+      : `${selectedDay} ${monthNames[selectedMonth]} ${selectedYear} (${calculatedAge} y/o)`;
     onSelectDate(formatted, calculatedAge);
     onClose();
   };
@@ -70,9 +88,11 @@ export function DatePickerModal({
           {/* Header */}
           <View style={styles.modalHeader}>
             <View>
-              <Text style={styles.modalTitle}>Pilih Tanggal Lahir</Text>
+              <Text style={styles.modalTitle}>
+                {isZh ? '选择出生日期' : 'Select Date of Birth'}
+              </Text>
               <Text style={styles.modalSubtitle}>
-                Umur Anda akan dihitung otomatis
+                {isZh ? '系统将根据所选日期自动核算年龄' : 'Your age will be calculated automatically'}
               </Text>
             </View>
             <Pressable hitSlop={8} style={styles.closeButton} onPress={onClose}>
@@ -92,16 +112,20 @@ export function DatePickerModal({
               tintColor="#2563EB"
             />
             <Text style={styles.ageBadgeText}>
-              {selectedDay} {MONTH_FULL_NAMES[selectedMonth]} {selectedYear} •{' '}
-              <Text style={styles.ageBadgeHighlight}>{calculatedAge} Tahun</Text>
+              {isZh
+                ? `${selectedYear}年${selectedMonth + 1}月${selectedDay}日 • `
+                : `${selectedDay} ${monthFullNames[selectedMonth]} ${selectedYear} • `}
+              <Text style={styles.ageBadgeHighlight}>
+                {calculatedAge} {isZh ? '岁' : 'years old'}
+              </Text>
             </Text>
           </View>
 
-          {/* 3 Selector Columns: Tanggal | Bulan | Tahun */}
+          {/* 3 Selector Columns */}
           <View style={styles.columnsContainer}>
-            {/* Column 1: Hari (Day) */}
+            {/* Column 1: Day */}
             <View style={styles.columnWrapper}>
-              <Text style={styles.columnHeader}>Tanggal</Text>
+              <Text style={styles.columnHeader}>{isZh ? '日' : 'Day'}</Text>
               <FlatList
                 data={DAYS}
                 keyExtractor={(item) => `day-${item}`}
@@ -126,11 +150,11 @@ export function DatePickerModal({
               />
             </View>
 
-            {/* Column 2: Bulan (Month) */}
+            {/* Column 2: Month */}
             <View style={styles.columnWrapperWide}>
-              <Text style={styles.columnHeader}>Bulan</Text>
+              <Text style={styles.columnHeader}>{isZh ? '月' : 'Month'}</Text>
               <FlatList
-                data={MONTH_NAMES}
+                data={monthNames}
                 keyExtractor={(_, i) => `month-${i}`}
                 showsVerticalScrollIndicator={false}
                 style={styles.columnList}
@@ -153,9 +177,9 @@ export function DatePickerModal({
               />
             </View>
 
-            {/* Column 3: Tahun (Year) */}
+            {/* Column 3: Year */}
             <View style={styles.columnWrapper}>
-              <Text style={styles.columnHeader}>Tahun</Text>
+              <Text style={styles.columnHeader}>{isZh ? '年' : 'Year'}</Text>
               <FlatList
                 data={YEARS}
                 keyExtractor={(item) => `year-${item}`}
@@ -185,7 +209,7 @@ export function DatePickerModal({
           <Pressable
             style={({ pressed }) => [styles.confirmButton, pressed && styles.confirmPressed]}
             onPress={handleConfirm}>
-            <Text style={styles.confirmText}>Gunakan Tanggal Ini</Text>
+            <Text style={styles.confirmText}>{isZh ? '确认选择' : 'Confirm Date'}</Text>
           </Pressable>
         </View>
       </View>

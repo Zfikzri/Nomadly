@@ -44,7 +44,7 @@ export function HomeScreen() {
           contentContainerStyle={styles.scrollContent}
           className="pt-2">
           {/* Header Title & Subtitle di area langit */}
-          <HomeHeroHeader userName="Lontong Balap" />
+          <HomeHeroHeader userName={MOCK_USER_PROFILE.name} />
 
           {/* Floating User Profile Card yang overlap ke sheet putih */}
           <View style={styles.profileSection} className="z-20 mt-2 -mb-11">

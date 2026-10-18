@@ -2,15 +2,20 @@ import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type AICompanionBannerProps = {
   title?: string;
   isPro?: boolean;
 };
 
 export function AICompanionBanner({
-  title = 'Noname AI Companion',
+  title,
   isPro = true,
 }: AICompanionBannerProps) {
+  const { isZh } = useLanguage();
+  const resolvedTitle = title ?? (isZh ? 'Nomadly AI 游民助手' : 'Nomadly AI Companion');
+
   return (
     <View style={styles.card}>
       {/* 1. Left: AI Logo with Green Online Dot */}
@@ -27,12 +32,12 @@ export function AICompanionBanner({
       {/* 2. Middle: Name & Status */}
       <View style={styles.infoCol}>
         <Text style={styles.titleText} numberOfLines={1}>
-          {title}
+          {resolvedTitle}
         </Text>
         <View style={styles.statusRow}>
           <View style={styles.miniGreenDot} />
           <Text style={styles.statusText} numberOfLines={1}>
-            Multilingual Auto-Detect • Online
+            {isZh ? '多语言智能识别 • 在线' : 'Multilingual Auto-Detect • Online'}
           </Text>
         </View>
       </View>

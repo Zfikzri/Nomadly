@@ -2,6 +2,8 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
+
 type ChooseRoomBottomBarProps = {
   buttonText?: string;
   isJoined?: boolean;
@@ -14,6 +16,7 @@ export function ChooseRoomBottomBar({
   onPress,
 }: ChooseRoomBottomBarProps) {
   const insets = useSafeAreaInsets();
+  const { isZh } = useLanguage();
 
   return (
     <View
@@ -31,7 +34,9 @@ export function ChooseRoomBottomBar({
         accessibilityRole="button"
         accessibilityLabel={isJoined ? 'Joined community' : buttonText}>
         <Text style={styles.actionButtonText}>
-          {isJoined ? 'Joined Community' : buttonText}
+          {isJoined
+            ? isZh ? '已加入社群' : 'Joined Community'
+            : isZh ? '选择房间' : buttonText}
         </Text>
         <SymbolView
           name={

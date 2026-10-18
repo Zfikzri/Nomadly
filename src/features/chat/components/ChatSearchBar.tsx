@@ -1,6 +1,8 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type ChatSearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
@@ -12,6 +14,8 @@ export function ChatSearchBar({
   onChangeText,
   onClear,
 }: ChatSearchBarProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.container}>
       <SymbolView
@@ -22,7 +26,11 @@ export function ChatSearchBar({
       />
       <TextInput
         style={styles.input}
-        placeholder="Cari teman jalan, grup, atau riwayat split"
+        placeholder={
+          isZh
+            ? '搜索游民伙伴、小组或分账记录'
+            : 'Search travel buddies, groups, or split records'
+        }
         placeholderTextColor="#94A3B8"
         value={value}
         onChangeText={onChangeText}

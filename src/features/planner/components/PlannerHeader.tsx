@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 export function PlannerHeader() {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container} className="items-center px-4 pt-2 pb-1">
       {/* Small top indicator handle */}
@@ -8,14 +12,14 @@ export function PlannerHeader() {
 
       {/* Main Title */}
       <Text style={styles.title} className="text-[25px] font-extrabold text-slate-900 text-center tracking-tight">
-        AI Travel Budget Planner
+        {strings.planner.headerTitle}
       </Text>
 
       {/* Subtitle */}
       <Text
         style={styles.subtitle}
         className="text-[13px] text-slate-500 text-center mt-2 px-6 leading-5 font-normal">
-        Simulasikan anggaran liburan & maksimalkan daya beli mata uang tujuan secara instan.
+        {strings.planner.headerSubtitle}
       </Text>
     </View>
   );

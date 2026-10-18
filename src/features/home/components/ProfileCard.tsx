@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 import type { UserProfile } from '../types';
 
 type ProfileCardProps = {
@@ -10,6 +11,12 @@ type ProfileCardProps = {
 };
 
 export function ProfileCard({ profile, onOpen }: ProfileCardProps) {
+  const { strings, isZh } = useLanguage();
+
+  const displayRole = profile.role === 'Mahasiswa'
+    ? (isZh ? '学生' : 'Student Traveler')
+    : profile.role;
+
   return (
     <View
       style={styles.card}
@@ -47,7 +54,7 @@ export function ProfileCard({ profile, onOpen }: ProfileCardProps) {
           {profile.country}
         </Text>
         <Text style={styles.metaText} className="text-xs text-slate-500 font-medium leading-[18px]">
-          {profile.role}
+          {displayRole}
         </Text>
       </View>
 
@@ -57,7 +64,7 @@ export function ProfileCard({ profile, onOpen }: ProfileCardProps) {
         className="bg-indigo-50 rounded-full px-4 py-2 items-center justify-center"
         onPress={onOpen}>
         <Text style={styles.openText} className="text-indigo-800 text-[13px] font-bold">
-          Open →
+          {strings.home.open}
         </Text>
       </Pressable>
     </View>

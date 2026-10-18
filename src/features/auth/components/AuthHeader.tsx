@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useLanguage } from '@/i18n';
 
 const SKY_SLICE_COUNT = 16;
 const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => {
@@ -10,10 +11,17 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 });
 
 type AuthHeaderProps = {
+  title?: string;
   subtitle?: string;
 };
 
-export function AuthHeader({ subtitle }: AuthHeaderProps) {
+export function AuthHeader({ title, subtitle }: AuthHeaderProps) {
+  const { isZh } = useLanguage();
+
+  const defaultTitle = isZh
+    ? `全球旅居与游学\n从此无忧出行`
+    : `Create Your Account\nand Simplify Your\nJourney`;
+
   return (
     <View style={styles.headerContainer} className="relative w-full overflow-hidden">
       {/* Sky Gradient Background */}
@@ -35,7 +43,7 @@ export function AuthHeader({ subtitle }: AuthHeaderProps) {
       {/* Title & Subtitle */}
       <View style={styles.textWrapper}>
         <Text style={styles.title} className="text-slate-900 font-extrabold tracking-tight">
-          Create Your Account{'\n'}and Simplify Your{'\n'}Journey
+          {title || defaultTitle}
         </Text>
         {subtitle ? (
           <Text style={styles.subtitle} className="text-slate-700 font-medium">

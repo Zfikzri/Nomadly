@@ -2,7 +2,8 @@ import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { STARTER_PROMPTS } from '../services/mockData';
+import { useLanguage } from '@/i18n';
+import { getStarterPrompts } from '../services/mockData';
 import type { StarterPrompt } from '../types';
 
 type ChatAIEmptyStateProps = {
@@ -14,6 +15,9 @@ export function ChatAIEmptyState({
   userName = 'Alex',
   onSelectPrompt,
 }: ChatAIEmptyStateProps) {
+  const { isZh } = useLanguage();
+  const prompts = getStarterPrompts(isZh);
+
   return (
     <View style={styles.container}>
       {/* 1. Large Glowing Center AI Logo */}
@@ -28,18 +32,25 @@ export function ChatAIEmptyState({
       </View>
 
       {/* 2. Welcome Title & Description */}
-      <Text style={styles.welcomeTitle}>Halo {userName}! Noma AI siap bantu ✈️</Text>
+      <Text style={styles.welcomeTitle}>
+        {isZh
+          ? `你好 ${userName}！Noma AI 随时为您服务 ✈️`
+          : `Hello ${userName}! Noma AI is ready to help ✈️`}
+      </Text>
       <Text style={styles.welcomeSubtitle}>
-        Tanyakan apapun seputar estimasi biaya, rekomendasi konbini, ATM tanpa biaya admin,
-        kurs mata uang, hingga tips keliling Tokyo & Jepang.
+        {isZh
+          ? '询问关于预算估算、便利店推荐、免手续费 ATM、实时汇率以及日本东京出游贴士的任何问题。'
+          : 'Ask anything about budget estimates, convenience stores, zero-fee ATMs, currency exchange, or travel tips across Tokyo & Japan.'}
       </Text>
 
       {/* 3. Starter Prompt Cards */}
       <View style={styles.promptsSection}>
-        <Text style={styles.promptsHeaderTitle}>COBA TANYAKAN INI</Text>
+        <Text style={styles.promptsHeaderTitle}>
+          {isZh ? '试试询问这些' : 'TRY ASKING THESE'}
+        </Text>
 
         <View style={styles.promptList}>
-          {STARTER_PROMPTS.map((prompt: StarterPrompt) => (
+          {prompts.map((prompt: StarterPrompt) => (
             <Pressable
               key={prompt.id}
               onPress={() => onSelectPrompt(prompt.queryText)}

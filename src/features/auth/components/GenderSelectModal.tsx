@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import { GENDER_OPTIONS } from '../services/mockAuth';
 
 type GenderSelectModalProps = {
@@ -16,6 +17,8 @@ export function GenderSelectModal({
   onSelectGender,
   onClose,
 }: GenderSelectModalProps) {
+  const { isZh } = useLanguage();
+
   return (
     <Modal
       visible={visible}
@@ -26,7 +29,7 @@ export function GenderSelectModal({
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>Pilih Jenis Kelamin</Text>
+            <Text style={styles.title}>{isZh ? '选择性别' : 'Select Gender'}</Text>
             <Pressable hitSlop={8} style={styles.closeBtn} onPress={onClose}>
               <SymbolView
                 name={{ ios: 'xmark', android: 'close', web: 'close' }}
@@ -39,7 +42,8 @@ export function GenderSelectModal({
           {/* Options */}
           <View style={styles.optionsList}>
             {GENDER_OPTIONS.map((option) => {
-              const isSelected = selectedGender === option.label;
+              const displayLabel = isZh ? (option.labelZh ?? option.label) : option.label;
+              const isSelected = selectedGender === displayLabel || selectedGender === option.label;
 
               return (
                 <Pressable
@@ -50,13 +54,13 @@ export function GenderSelectModal({
                     pressed && styles.optionItemPressed,
                   ]}
                   onPress={() => {
-                    onSelectGender(option.label);
+                    onSelectGender(displayLabel);
                     onClose();
                   }}>
                   <View style={styles.optionLeft}>
                     <Text style={styles.optionIcon}>{option.icon}</Text>
                     <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
-                      {option.label}
+                      {displayLabel}
                     </Text>
                   </View>
 

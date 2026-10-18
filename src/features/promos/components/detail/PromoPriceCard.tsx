@@ -1,6 +1,8 @@
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type PromoPriceCardProps = {
   currentPrice: string;
   strikePrice: string;
@@ -18,11 +20,15 @@ export function PromoPriceCard({
   savingsAmount,
   savingsBadge,
 }: PromoPriceCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.cardContainer}>
       {/* Top Row: Label & Discount Pill */}
       <View style={styles.topRow}>
-        <Text style={styles.labelHeader}>HARGA SPESIAL PROMO</Text>
+        <Text style={styles.labelHeader}>
+          {isZh ? '特惠专属价格' : 'SPECIAL PROMO PRICE'}
+        </Text>
         <View style={styles.discountPill}>
           <Text style={styles.discountPillText}>{discountPill}</Text>
         </View>
@@ -63,7 +69,9 @@ export function PromoPriceCard({
             />
           </View>
           <View style={styles.savingsTextColumn}>
-            <Text style={styles.savingsTitle}>Total Penghematan</Text>
+            <Text style={styles.savingsTitle}>
+              {isZh ? '累计为您节省' : 'Total Savings'}
+            </Text>
             <Text style={styles.savingsValue}>{savingsAmount}</Text>
           </View>
         </View>
@@ -89,39 +97,39 @@ const styles = StyleSheet.create({
   },
   topRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    alignItems: 'center',
+    marginBottom: 10,
   },
   labelHeader: {
     fontSize: 11,
     fontWeight: '800',
     color: '#64748B',
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   discountPill: {
-    backgroundColor: '#DCFCE7',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    backgroundColor: '#FFE4E6',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
   },
   discountPillText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
-    color: '#15803D',
+    color: '#E11D48',
   },
   mainPriceText: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
-    color: '#0F172A',
-    lineHeight: 36,
+    color: '#0050D6',
+    letterSpacing: -0.5,
   },
   strikePriceText: {
     fontSize: 14,
     color: '#94A3B8',
     textDecorationLine: 'line-through',
     marginTop: 2,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   currencyRow: {
     flexDirection: 'row',
@@ -130,23 +138,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   currencyText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#16A34A',
+    color: '#0284C7',
   },
   savingsBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#F1F5FD',
+    backgroundColor: '#F0FDF4',
+    borderWidth: 1,
+    borderColor: '#DCFCE7',
     borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    padding: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   savingsLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   savingsIconWrapper: {
     width: 36,
@@ -160,24 +169,26 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   savingsTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: 11,
+    color: '#15803D',
+    fontWeight: '600',
   },
   savingsValue: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: '#475569',
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#166534',
   },
   multiCurrencyPill: {
-    backgroundColor: '#E2E8F8',
-    borderRadius: 999,
-    paddingHorizontal: 10,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+    paddingHorizontal: 8,
     paddingVertical: 4,
+    borderRadius: 10,
   },
   multiCurrencyText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#1E40AF',
+    color: '#16A34A',
   },
 });

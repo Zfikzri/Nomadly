@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LanguagePillSwitcher } from '@/components/common/LanguagePillSwitcher';
+import { useLanguage } from '@/i18n';
 import {
   AuthHeader,
   AuthInputField,
@@ -29,12 +31,13 @@ import type { CountryOption } from '../services/mockAuth';
 import type { RegisterFormData } from '../types';
 
 export function RegisterScreen() {
+  const { language, strings, isZh } = useLanguage();
   const [formData, setFormData] = useState<RegisterFormData>({
     fullName: 'Alex Rogers',               // Pre-filled for effortless testing
     email: 'alex@travel.com',              // Pre-filled for effortless testing
-    age: '15 Okt 2002 (24 Tahun)',         // Pre-filled by birth date
-    country: 'Indonesia',                  // Pre-filled for effortless testing
-    gender: 'Laki-laki (Male)',           // Pre-filled for effortless testing
+    age: '15 Oct 2002 (24 y/o)',           // Pre-filled by birth date
+    country: 'United States',              // Pre-filled for effortless testing
+    gender: 'Male',                       // Pre-filled for effortless testing
     password: 'password123',               // Pre-filled for effortless testing
     confirmPassword: 'password123',        // Pre-filled for effortless testing
     agreeTerms: true,                      // Pre-filled for effortless testing
@@ -51,9 +54,9 @@ export function RegisterScreen() {
   const selectedCountryData: CountryOption = findCountryByName(formData.country);
 
   const handleRegister = () => {
-    const result = validateRegisterForm(formData);
+    const result = validateRegisterForm(formData, language);
     if (!result.valid) {
-      Alert.alert('Perhatian', result.error);
+      Alert.alert(strings.common.notice, result.error);
       return;
     }
 
@@ -62,11 +65,13 @@ export function RegisterScreen() {
     setTimeout(() => {
       setIsSubmitting(false);
       Alert.alert(
-        'Pendaftaran Berhasil!',
-        `Selamat bergabung di Nomadly, ${formData.fullName}! Akun Anda siap digunakan.`,
+        strings.auth.registerSuccess,
+        isZh
+          ? `欢迎加入 Nomadly，${formData.fullName}！您的账户已就绪。`
+          : `Welcome to Nomadly, ${formData.fullName}! Your account is ready to use.`,
         [
           {
-            text: 'Masuk ke Beranda',
+            text: strings.auth.startExploring,
             onPress: () => router.replace('/(tabs)'),
           },
         ]
@@ -77,6 +82,12 @@ export function RegisterScreen() {
   return (
     <View style={styles.root}>
       <SafeAreaView edges={['top']} style={styles.safeArea}>
+        {/* Top Language Switcher Bar */}
+        <View style={styles.topBar}>
+          <View style={{ flex: 1 }} />
+          <LanguagePillSwitcher variant="light" />
+        </View>
+
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.keyboardView}>
@@ -92,11 +103,11 @@ export function RegisterScreen() {
             <View style={styles.whiteSheet}>
               {/* Heading & Switch Link */}
               <View style={styles.headerTitleRow}>
-                <Text style={styles.sheetTitle}>Sign up</Text>
+                <Text style={styles.sheetTitle}>{strings.auth.registerTitle}</Text>
                 <View style={styles.switchWrapper}>
-                  <Text style={styles.switchPrompt}>Already Have An Account? </Text>
+                  <Text style={styles.switchPrompt}>{strings.auth.haveAccountPrompt}</Text>
                   <Pressable onPress={() => router.push('/login')}>
-                    <Text style={styles.switchAction}>Log In</Text>
+                    <Text style={styles.switchAction}>{strings.auth.signIn}</Text>
                   </Pressable>
                 </View>
               </View>
@@ -104,7 +115,7 @@ export function RegisterScreen() {
               {/* 1. Nama Lengkap */}
               <AuthInputField
                 iconName={{ ios: 'person', android: 'person', web: 'person' }}
-                placeholder="Nama Lengkap (cth: Alex Rogers)"
+                placeholder={strings.auth.fullNamePlaceholder}
                 value={formData.fullName}
                 onChangeText={(text) => setFormData((prev) => ({ ...prev, fullName: text }))}
                 autoCapitalize="words"
@@ -113,7 +124,7 @@ export function RegisterScreen() {
               {/* 2. Alamat Email */}
               <AuthInputField
                 iconName={{ ios: 'envelope', android: 'mail', web: 'mail' }}
-                placeholder="Alamat Email (cth: alex@travel.com)"
+                placeholder={strings.auth.emailPlaceholder}
                 value={formData.email}
                 onChangeText={(text) => setFormData((prev) => ({ ...prev, email: text }))}
                 keyboardType="email-address"
@@ -123,7 +134,7 @@ export function RegisterScreen() {
               {/* 3. Umur (Dipilih by Tanggal Lahir) */}
               <AuthInputField
                 iconName={{ ios: 'calendar', android: 'calendar_today', web: 'calendar_today' }}
-                placeholder="Pilih Tanggal Lahir (cth: 15 Okt 2002)"
+                placeholder={strings.auth.selectBirthDate}
                 value={formData.age}
                 onPress={() => setIsDatePickerVisible(true)}
               />
@@ -131,7 +142,7 @@ export function RegisterScreen() {
               {/* 4. Pilih Negara Asal (Search Modal, Tanpa Kurs/Mata Uang) */}
               <AuthInputField
                 iconName={{ ios: 'globe', android: 'public', web: 'public' }}
-                placeholder="Pilih Negara Asal (cth: Indonesia)"
+                placeholder={strings.auth.selectCountry}
                 value={
                   selectedCountryData
                     ? `${selectedCountryData.flag} ${selectedCountryData.name}`
@@ -147,7 +158,7 @@ export function RegisterScreen() {
                   android: 'group',
                   web: 'group',
                 }}
-                placeholder="Pilih Jenis Kelamin (Gender)"
+                placeholder={strings.auth.selectGender}
                 value={formData.gender}
                 onPress={() => setIsGenderModalVisible(true)}
               />
@@ -155,7 +166,7 @@ export function RegisterScreen() {
               {/* 6. Kata Sandi */}
               <AuthInputField
                 iconName={{ ios: 'lock', android: 'lock', web: 'lock' }}
-                placeholder="Kata Sandi"
+                placeholder={strings.auth.passwordPlaceholder}
                 value={formData.password}
                 onChangeText={(text) => setFormData((prev) => ({ ...prev, password: text }))}
                 isPassword={true}
@@ -166,7 +177,7 @@ export function RegisterScreen() {
               {/* 7. Konfirmasi Kata Sandi */}
               <AuthInputField
                 iconName={{ ios: 'lock.shield', android: 'verified_user', web: 'verified_user' }}
-                placeholder="Konfirmasi Kata Sandi"
+                placeholder={strings.auth.confirmPasswordPlaceholder}
                 value={formData.confirmPassword}
                 onChangeText={(text) =>
                   setFormData((prev) => ({ ...prev, confirmPassword: text }))
@@ -196,33 +207,24 @@ export function RegisterScreen() {
                   )}
                 </View>
                 <Text style={styles.agreementText}>
-                  Saya menyetujui{' '}
+                  {strings.auth.termsAgreeText}
                   <Text
                     style={styles.linkText}
                     onPress={() =>
                       Alert.alert(
-                        'Syarat & Ketentuan',
-                        'Semua syarat & ketentuan penggunaan Nomadly berlaku sesuai hukum yang berlaku (fitur demo).'
+                        isZh ? '服务条款' : 'Terms & Conditions',
+                        isZh
+                          ? 'Nomadly 服务条款与隐私政策详情（演示模式）。'
+                          : 'Nomadly terms of service and conditions (demo feature).'
                       )
                     }>
-                    syarat & ketentuan
+                    {strings.auth.termsHighlight}
                   </Text>
-                  {' '}serta{' '}
-                  <Text
-                    style={styles.linkText}
-                    onPress={() =>
-                      Alert.alert(
-                        'Kebijakan Privasi',
-                        'Data pribadi Anda terlindungi dan dienkripsi secara aman di Nomadly (fitur demo).'
-                      )
-                    }>
-                    kebijakan privasi
-                  </Text>
-                  {' '}Nomadly.
+                  .
                 </Text>
               </Pressable>
 
-              {/* Primary Action Button: Daftar Akun / Sign Up */}
+              {/* Primary Action Button: Sign Up */}
               <Pressable
                 style={({ pressed }) => [
                   styles.registerButton,
@@ -232,20 +234,20 @@ export function RegisterScreen() {
                 onPress={handleRegister}
                 disabled={isSubmitting}>
                 <Text style={styles.registerButtonText}>
-                  {isSubmitting ? 'Memproses...' : 'Daftar Akun / Sign Up'}
+                  {isSubmitting ? strings.auth.processing : strings.auth.registerButton}
                 </Text>
               </Pressable>
 
               {/* Social Login Options */}
               <SocialAuthButtons
                 onApplePress={() => {
-                  Alert.alert('Apple Sign Up', 'Pendaftaran cepat via Apple ID berhasil! (Mock)', [
-                    { text: 'Lanjut', onPress: () => router.replace('/(tabs)') },
+                  Alert.alert('Apple Sign Up', 'Sign up via Apple ID (Mock)', [
+                    { text: strings.common.continue, onPress: () => router.replace('/(tabs)') },
                   ]);
                 }}
                 onGooglePress={() => {
-                  Alert.alert('Google Sign Up', 'Pendaftaran cepat via Google Account berhasil! (Mock)', [
-                    { text: 'Lanjut', onPress: () => router.replace('/(tabs)') },
+                  Alert.alert('Google Sign Up', 'Sign up via Google Account (Mock)', [
+                    { text: strings.common.continue, onPress: () => router.replace('/(tabs)') },
                   ]);
                 }}
               />
@@ -293,6 +295,15 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 4,
+    zIndex: 10,
   },
   keyboardView: {
     flex: 1,

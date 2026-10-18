@@ -1,6 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { AIEstimateResult, BudgetItem } from '../types';
 import { formatCurrencyValue } from '../services/mockData';
 import { AITipsCard } from './AITipsCard';
@@ -10,16 +11,20 @@ type BudgetDistributionCardProps = {
 };
 
 export function BudgetDistributionCard({ result }: BudgetDistributionCardProps) {
+  const { strings, isZh } = useLanguage();
+
   return (
     <View style={styles.card} className="bg-white rounded-[28px] p-5 shadow-sm border border-slate-100">
       {/* Header Row: Title & 100% Circle Badge */}
       <View style={styles.headerRow} className="flex-row items-center justify-between mb-2">
         <View style={styles.titleCol} className="flex-1 pr-3">
           <Text style={styles.title} className="text-[17px] font-extrabold text-slate-900 tracking-tight">
-            Distribusi Anggaran AI
+            {strings.planner.budgetDistributionTitle}
           </Text>
           <Text style={styles.subtitle} className="text-xs text-slate-500 mt-0.5">
-            Rasionalisasi harian per {result.durationDays} hari kunjungan
+            {isZh
+              ? `基于 ${result.durationDays} 天行程的每日理性开支拆解`
+              : `Daily breakdown for ${result.durationDays}-day stay`}
           </Text>
         </View>
 

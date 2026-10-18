@@ -7,9 +7,10 @@ import type { ChatMessageItem } from '../types';
 type ChatItemCardProps = {
   item: ChatMessageItem;
   onPress?: () => void;
+  onProfilePress?: () => void;
 };
 
-export function ChatItemCard({ item, onPress }: ChatItemCardProps) {
+export function ChatItemCard({ item, onPress, onProfilePress }: ChatItemCardProps) {
   const isCommunity = item.type === 'community';
   const hasUnread = (item.unreadCount ?? 0) > 0;
 
@@ -18,7 +19,20 @@ export function ChatItemCard({ item, onPress }: ChatItemCardProps) {
       onPress={onPress}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}>
       {/* 1. Left Avatar Column */}
-      <View style={styles.avatarContainer}>
+      <Pressable
+        hitSlop={6}
+        onPress={(e) => {
+          if (!isCommunity && onProfilePress) {
+            e.stopPropagation?.();
+            onProfilePress();
+          } else {
+            onPress?.();
+          }
+        }}
+        style={({ pressed }) => [
+          styles.avatarContainer,
+          pressed && !isCommunity && styles.avatarPressed,
+        ]}>
         <Image
           source={{ uri: item.avatarUrl }}
           style={styles.avatar}
@@ -49,7 +63,7 @@ export function ChatItemCard({ item, onPress }: ChatItemCardProps) {
             <Text style={styles.paxText}>{item.membersCount} pax</Text>
           </View>
         )}
-      </View>
+      </Pressable>
 
       {/* 2. Right Content Column */}
       <View style={styles.contentCol}>
@@ -84,7 +98,7 @@ export function ChatItemCard({ item, onPress }: ChatItemCardProps) {
 
         {/* Row 3: Meta Tag / Subtitle and Status (Unread badge / Checkmarks) */}
         <View style={styles.footerRow}>
-          {/* Meta left */}
+          {/* Meta left: Category pill for community chats */}
           <View style={styles.metaLeft}>
             {item.categoryTag && (
               <View
@@ -101,49 +115,6 @@ export function ChatItemCard({ item, onPress }: ChatItemCardProps) {
                 </Text>
               </View>
             )}
-
-            {item.metaIconType === 'location' && (
-              <SymbolView
-                name={{
-                  ios: 'mappin.and.ellipse',
-                  android: 'location_on',
-                  web: 'location_on',
-                }}
-                size={12}
-                tintColor="#0284C7"
-              />
-            )}
-            {item.metaIconType === 'flight' && (
-              <SymbolView
-                name={{
-                  ios: 'airplane',
-                  android: 'flight',
-                  web: 'flight',
-                }}
-                size={12}
-                tintColor="#64748B"
-              />
-            )}
-            {item.metaIconType === 'backpack' && (
-              <SymbolView
-                name={{
-                  ios: 'bag.fill',
-                  android: 'backpack',
-                  web: 'backpack',
-                }}
-                size={12}
-                tintColor="#64748B"
-              />
-            )}
-
-            <Text
-              style={[
-                styles.metaText,
-                item.metaIconType === 'location' && styles.metaLocationColor,
-              ]}
-              numberOfLines={1}>
-              {item.metaText}
-            </Text>
           </View>
 
           {/* Status right: Unread circle badge OR double checkmark */}
@@ -196,6 +167,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: 52,
     height: 52,
+  },
+  avatarPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.96 }],
   },
   avatar: {
     width: 52,

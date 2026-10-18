@@ -1,22 +1,31 @@
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type NewsSearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
   onFilterPress?: () => void;
+  placeholder?: string;
 };
 
 export function NewsSearchBar({
   value,
   onChangeText,
   onFilterPress,
+  placeholder,
 }: NewsSearchBarProps) {
+  const { isZh } = useLanguage();
+  const defaultPlaceholder = isZh
+    ? '搜索签证法规、国家汇率或税收政策...'
+    : 'Search visa regulations, exchange rates, or tax rules...';
+
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Cari regulasi visa, kurs negara, atau pajak..."
+        placeholder={placeholder ?? defaultPlaceholder}
         placeholderTextColor="#94A3B8"
         value={value}
         onChangeText={onChangeText}

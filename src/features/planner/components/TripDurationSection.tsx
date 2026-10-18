@@ -2,6 +2,8 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
+
 type TripDurationSectionProps = {
   durationDays: number;
   dateRangeText?: string;
@@ -10,18 +12,19 @@ type TripDurationSectionProps = {
 
 type PresetHoliday = {
   id: string;
-  label: string;
+  labelEn: string;
+  labelZh: string;
   days: number;
   dateRange: string;
 };
 
 const PRESET_HOLIDAYS: PresetHoliday[] = [
-  { id: 'weekend', label: 'Long Weekend', days: 4, dateRange: '06 Nov - 10 Nov 2026' },
-  { id: '1week', label: 'Seminggu Liburan', days: 7, dateRange: '10 Nov - 17 Nov 2026' },
-  { id: 'golden', label: 'Golden Holiday', days: 9, dateRange: '15 Nov - 24 Nov 2026' },
-  { id: '2weeks', label: 'Dua Minggu Santai', days: 14, dateRange: '01 Des - 15 Des 2026' },
-  { id: '3weeks', label: 'Eksplorasi 3 Minggu', days: 21, dateRange: '05 Des - 26 Des 2026' },
-  { id: 'month', label: 'Backpacking 1 Bulan', days: 30, dateRange: '01 Jan - 31 Jan 2027' },
+  { id: 'weekend', labelEn: 'Long Weekend', labelZh: '长周末假期', days: 4, dateRange: '06 Nov - 10 Nov 2026' },
+  { id: '1week', labelEn: '1-Week Vacation', labelZh: '一周深度度假', days: 7, dateRange: '10 Nov - 17 Nov 2026' },
+  { id: 'golden', labelEn: 'Golden Holiday', labelZh: '九天黄金假期', days: 9, dateRange: '15 Nov - 24 Nov 2026' },
+  { id: '2weeks', labelEn: '2-Week Getaway', labelZh: '两周悠闲旅居', days: 14, dateRange: '01 Dec - 15 Dec 2026' },
+  { id: '3weeks', labelEn: '3-Week Exploration', labelZh: '三周环游探索', days: 21, dateRange: '05 Dec - 26 Dec 2026' },
+  { id: 'month', labelEn: '1-Month Nomad Trip', labelZh: '一个月游民旅居', days: 30, dateRange: '01 Jan - 31 Jan 2027' },
 ];
 
 export function TripDurationSection({
@@ -29,6 +32,7 @@ export function TripDurationSection({
   dateRangeText = '15 Nov - 24 Nov 2026',
   onDurationChange,
 }: TripDurationSectionProps) {
+  const { strings, isZh } = useLanguage();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPresetId, setSelectedPresetId] = useState<string>('golden');
 
@@ -42,7 +46,7 @@ export function TripDurationSection({
     <View style={styles.container} className="mb-3">
       {/* Label */}
       <Text style={styles.sectionTitle} className="text-[14px] font-bold text-slate-800 mb-2.5">
-        Durasi Perjalanan
+        {strings.planner.durationLabel}
       </Text>
 
       {/* Selector Card */}
@@ -61,10 +65,10 @@ export function TripDurationSection({
           </View>
           <View style={styles.textCol} className="flex-1">
             <Text style={styles.title} className="text-[13px] font-bold text-slate-800">
-              {dateRangeText || 'Pilih tanggal keberangkatan'}
+              {dateRangeText || (isZh ? '选择行程日期' : 'Select Departure Dates')}
             </Text>
             <Text style={styles.subtitle} className="text-xs text-slate-400 mt-0.5">
-              Tentukan rentang durasi liburan
+              {isZh ? '选择本次旅行预计天数' : 'Select travel duration range'}
             </Text>
           </View>
         </View>
@@ -72,7 +76,7 @@ export function TripDurationSection({
         {/* Right: Duration Pill */}
         <View style={styles.durationPill} className="bg-white/90 px-3 py-1.5 rounded-full border border-slate-200">
           <Text style={styles.durationText} className="text-xs font-bold text-slate-700">
-            {durationDays > 0 ? `${durationDays} Hari` : '— Hari'}
+            {durationDays > 0 ? `${durationDays} ${strings.planner.days}` : `— ${strings.planner.days}`}
           </Text>
         </View>
       </Pressable>
@@ -88,9 +92,11 @@ export function TripDurationSection({
             {/* Header */}
             <View style={styles.modalHeader}>
               <View>
-                <Text style={styles.modalTitle}>Pilih Tanggal & Durasi Liburan</Text>
+                <Text style={styles.modalTitle}>
+                  {isZh ? '选择行程日期与天数' : 'Select Trip Dates & Duration'}
+                </Text>
                 <Text style={styles.modalSubtitle}>
-                  Pilih rentang hari untuk estimasi biaya harian AI
+                  {isZh ? '选择天数范围，以便 AI 精确计算每日预算' : 'Choose date range for AI daily budget estimation'}
                 </Text>
               </View>
               <Pressable
@@ -128,12 +134,14 @@ export function TripDurationSection({
                         {isSelected && <View style={styles.radioDot} />}
                       </View>
                       <View>
-                        <Text style={styles.presetLabel}>{preset.label}</Text>
+                        <Text style={styles.presetLabel}>
+                          {isZh ? preset.labelZh : preset.labelEn}
+                        </Text>
                         <Text style={styles.presetDates}>{preset.dateRange}</Text>
                       </View>
                     </View>
                     <View style={styles.presetDaysBadge}>
-                      <Text style={styles.presetDaysText}>{preset.days} Hari</Text>
+                      <Text style={styles.presetDaysText}>{preset.days} {strings.planner.days}</Text>
                     </View>
                   </Pressable>
                 );

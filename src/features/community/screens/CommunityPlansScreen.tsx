@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   CommunityFilterChips,
   CommunityGroupCard,
@@ -16,6 +17,7 @@ import type { FilterCategoryId } from '../types';
 
 export function CommunityPlansScreen() {
   const router = useRouter();
+  const { isZh } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<FilterCategoryId>('all');
 
@@ -77,9 +79,13 @@ export function CommunityPlansScreen() {
           ))
         ) : (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>Tidak ada grup ditemukan</Text>
+            <Text style={styles.emptyTitle}>
+              {isZh ? '未找到相关社群' : 'No Groups Found'}
+            </Text>
             <Text style={styles.emptySubtitle}>
-              Coba gunakan kata kunci pencarian lain atau pilih kategori Semua Grup.
+              {isZh
+                ? '请尝试搜索其他关键词或选择全部社群。'
+                : 'Try searching for other keywords or select All Groups.'}
             </Text>
           </View>
         )}

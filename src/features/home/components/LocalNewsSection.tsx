@@ -2,6 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 import type { NewsSnippet } from '../types';
 
 type LocalNewsSectionProps = {
@@ -17,6 +18,8 @@ export function LocalNewsSection({
   onSelectNews,
   onAiAdvicePress,
 }: LocalNewsSectionProps) {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -27,13 +30,13 @@ export function LocalNewsSection({
             size={18}
             tintColor="#0050D6"
           />
-          <Text style={styles.sectionTitle}>Local News Snippet</Text>
+          <Text style={styles.sectionTitle}>{strings.home.localNewsSnippet}</Text>
         </View>
         <View style={styles.headerRight}>
-          <Text style={styles.autoTranslatedText}>Auto-translated</Text>
+          <Text style={styles.autoTranslatedText}>{strings.home.autoTranslated}</Text>
           {onSeeAll && (
             <Pressable hitSlop={8} onPress={onSeeAll}>
-              <Text style={styles.seeAllText}>See all &gt;</Text>
+              <Text style={styles.seeAllText}>{strings.home.seeAll}</Text>
             </Pressable>
           )}
         </View>

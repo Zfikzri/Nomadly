@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   ALL_COUNTRIES,
   findCountryByName,
@@ -37,6 +38,7 @@ export function DestinationSelector({
   onRegionChange,
   onSwapCountries,
 }: DestinationSelectorProps) {
+  const { isZh } = useLanguage();
   // Modal state for country search picker
   const [pickerTarget, setPickerTarget] = useState<'origin' | 'destination' | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,7 +68,7 @@ export function DestinationSelector({
     <View style={styles.container} className="mb-4">
       {/* Section Header */}
       <Text style={styles.sectionTitle} className="text-[14px] font-bold text-slate-800 mb-2.5">
-        Destinasi & Mata Uang
+        {isZh ? '目的地与币种' : 'Destination & Currency'}
       </Text>
 
       {/* Row: Negara Asal <-> Negara Tujuan */}
@@ -82,7 +84,7 @@ export function DestinationSelector({
             numberOfLines={1}>
             {originCountryData
               ? `${originCountryData.flag} ${originCountryData.name}`
-              : 'Negara Asal'}
+              : isZh ? '出发国家' : 'Origin Country'}
           </Text>
         </Pressable>
 
@@ -109,7 +111,7 @@ export function DestinationSelector({
             numberOfLines={1}>
             {destCountryData
               ? `${destCountryData.flag} ${destCountryData.name}`
-              : 'Negara Tujuan'}
+              : isZh ? '目的国家' : 'Destination Country'}
           </Text>
         </Pressable>
       </View>
@@ -119,7 +121,7 @@ export function DestinationSelector({
         <TextInput
           style={styles.manualRegionInput}
           className="flex-1 text-[13px] font-medium text-slate-800 text-center"
-          placeholder="Provinsi / Daerah Tujuan (Ketik manual)"
+          placeholder={isZh ? '目的城市 / 地区 (选填)' : 'City / Province (e.g. Tokyo)'}
           placeholderTextColor="#94A3B8"
           value={destinationRegion}
           onChangeText={onRegionChange}
@@ -138,10 +140,12 @@ export function DestinationSelector({
             <View style={styles.modalHeader}>
               <View>
                 <Text style={styles.modalTitle}>
-                  {pickerTarget === 'origin' ? 'Pilih Negara Asal' : 'Pilih Negara Tujuan'}
+                  {pickerTarget === 'origin'
+                    ? isZh ? '选择出发国家' : 'Select Origin Country'
+                    : isZh ? '选择目的国家' : 'Select Destination Country'}
                 </Text>
                 <Text style={styles.modalSubtitle}>
-                  Cari negara untuk melihat kurs mata uang real-time
+                  {isZh ? '搜索国家即时查看实时官方汇率' : 'Search country to view real-time foreign exchange rate'}
                 </Text>
               </View>
               <Pressable
@@ -164,7 +168,7 @@ export function DestinationSelector({
               />
               <TextInput
                 style={styles.searchInput}
-                placeholder="Ketik nama negara (misal: I, Jepang, Irlandia)..."
+                placeholder={isZh ? '搜索国家名称或货币代码...' : 'Search country or currency code...'}
                 placeholderTextColor="#94A3B8"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
@@ -215,7 +219,7 @@ export function DestinationSelector({
 
                     {/* Kurs Info */}
                     <View style={styles.kursBadge}>
-                      <Text style={styles.kursLabel}>KURS REAL-TIME</Text>
+                      <Text style={styles.kursLabel}>{isZh ? '实时汇率' : 'LIVE FX'}</Text>
                       <Text style={styles.kursValue}>
                         1 {item.currency} ≈ Rp {formatRupiah(item.exchangeRateToIdr)}
                       </Text>

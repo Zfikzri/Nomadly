@@ -1,14 +1,17 @@
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { PersonalDetailMessage } from '../../types';
 
 type PersonalMessageBubbleProps = {
   message: PersonalDetailMessage;
+  onAvatarPress?: () => void;
 };
 
-export function PersonalMessageBubble({ message }: PersonalMessageBubbleProps) {
+export function PersonalMessageBubble({ message, onAvatarPress }: PersonalMessageBubbleProps) {
+  const { isZh } = useLanguage();
   const isMe = message.sender === 'me';
 
   if (isMe) {
@@ -35,18 +38,23 @@ export function PersonalMessageBubble({ message }: PersonalMessageBubbleProps) {
     );
   }
 
+  const translateLabel = isZh ? 'Auto 中文' : message.autoTranslateLabel;
+
   // Incoming Message
   return (
     <View style={styles.incomingRow}>
-      {/* Avatar at bottom left */}
-      <View style={styles.avatarWrapper}>
+      {/* Avatar at bottom left (Clickable for profile popup) */}
+      <Pressable
+        hitSlop={6}
+        onPress={onAvatarPress}
+        style={({ pressed }) => [styles.avatarWrapper, pressed && styles.avatarPressed]}>
         <Image
           source={{ uri: message.avatarUrl }}
           style={styles.avatar}
           contentFit="cover"
           transition={200}
         />
-      </View>
+      </Pressable>
 
       <View style={styles.incomingCol}>
         {/* White Bubble */}
@@ -54,17 +62,17 @@ export function PersonalMessageBubble({ message }: PersonalMessageBubbleProps) {
           <Text style={styles.incomingText}>{message.text}</Text>
         </View>
 
-        {/* Timestamp & Auto ID translation badge */}
+        {/* Timestamp & Translation badge */}
         <View style={styles.incomingMetaRow}>
           <Text style={styles.incomingTimeText}>{message.time}</Text>
-          {message.autoTranslateLabel && (
+          {translateLabel && (
             <View style={styles.autoTranslateBadge}>
               <SymbolView
                 name={{ ios: 'character.bubble', android: 'translate', web: 'translate' }}
                 size={11}
                 tintColor="#2563EB"
               />
-              <Text style={styles.autoTranslateText}>{message.autoTranslateLabel}</Text>
+              <Text style={styles.autoTranslateText}>{translateLabel}</Text>
             </View>
           )}
         </View>
@@ -118,6 +126,10 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     paddingBottom: 18,
+  },
+  avatarPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.95 }],
   },
   avatar: {
     width: 28,

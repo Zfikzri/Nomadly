@@ -3,15 +3,22 @@ import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 
 export default function NotFoundScreen() {
+  const { isZh } = useLanguage();
+
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: isZh ? '抱歉！' : 'Oops!' }} />
       <View style={styles.container}>
-        <ThemedText type="title">Screen Not Found</ThemedText>
+        <ThemedText type="title">
+          {isZh ? '页面未找到' : 'Screen Not Found'}
+        </ThemedText>
         <Link href="/" style={styles.link}>
-          <ThemedText type="linkPrimary">Go back to Home</ThemedText>
+          <ThemedText type="linkPrimary">
+            {isZh ? '返回首页' : 'Go back to Home'}
+          </ThemedText>
         </Link>
       </View>
     </>

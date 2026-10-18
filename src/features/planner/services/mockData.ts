@@ -12,7 +12,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'ie',
-    name: 'Irlandia',
+    name: 'Ireland',
     code: 'IE',
     currency: 'EUR',
     currencySymbol: '€',
@@ -21,7 +21,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'it',
-    name: 'Italia',
+    name: 'Italy',
     code: 'IT',
     currency: 'EUR',
     currencySymbol: '€',
@@ -30,7 +30,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'is',
-    name: 'Islandia',
+    name: 'Iceland',
     code: 'IS',
     currency: 'ISK',
     currencySymbol: 'kr',
@@ -48,7 +48,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'gb',
-    name: 'Inggris (UK)',
+    name: 'United Kingdom (UK)',
     code: 'GB',
     currency: 'GBP',
     currencySymbol: '£',
@@ -57,7 +57,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'jp',
-    name: 'Jepang',
+    name: 'Japan',
     code: 'JP',
     currency: 'JPY',
     currencySymbol: '¥',
@@ -66,7 +66,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'de',
-    name: 'Jerman',
+    name: 'Germany',
     code: 'DE',
     currency: 'EUR',
     currencySymbol: '€',
@@ -75,7 +75,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'kr',
-    name: 'Korea Selatan',
+    name: 'South Korea',
     code: 'KR',
     currency: 'KRW',
     currencySymbol: '₩',
@@ -93,7 +93,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'sg',
-    name: 'Singapura',
+    name: 'Singapore',
     code: 'SG',
     currency: 'SGD',
     currencySymbol: 'S$',
@@ -120,7 +120,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'us',
-    name: 'Amerika Serikat',
+    name: 'United States',
     code: 'US',
     currency: 'USD',
     currencySymbol: '$',
@@ -129,7 +129,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'ch',
-    name: 'Swiss',
+    name: 'Switzerland',
     code: 'CH',
     currency: 'CHF',
     currencySymbol: 'CHF',
@@ -138,7 +138,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'fr',
-    name: 'Prancis',
+    name: 'France',
     code: 'FR',
     currency: 'EUR',
     currencySymbol: '€',
@@ -147,7 +147,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'tr',
-    name: 'Turki',
+    name: 'Turkey',
     code: 'TR',
     currency: 'TRY',
     currencySymbol: '₺',
@@ -156,7 +156,7 @@ export const ALL_COUNTRIES: CountryOption[] = [
   },
   {
     id: 'sa',
-    name: 'Arab Saudi',
+    name: 'Saudi Arabia',
     code: 'SA',
     currency: 'SAR',
     currencySymbol: 'SR',
@@ -213,7 +213,10 @@ export function formatCurrencyValue(amount: number, symbol: string): string {
   return `${symbol}${Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 }
 
-export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult {
+export function calculateAIEstimate(
+  formData: PlannerFormData,
+  isZh: boolean = false
+): AIEstimateResult {
   const budgetIdr = parseRupiahNumber(formData.nominalBudget) || 10000000;
   const destCountry = findCountryByName(formData.destinationCountry) || ALL_COUNTRIES.find((c) => c.code === 'JP')!;
 
@@ -231,8 +234,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
       items: [
         {
           id: 'acc',
-          category: 'Tempat Tinggal (Akomodasi)',
-          subCategory: `Hostel / Hotel di ${formData.destinationRegion || destCountry.name}`,
+          category: isZh ? '住宿与酒店' : 'Accommodation',
+          subCategory: isZh
+            ? `${formData.destinationRegion || destCountry.name} 青年旅舍/酒店`
+            : `Hostel / Hotel in ${formData.destinationRegion || destCountry.name}`,
           percentage: 35,
           amountTargetCurrency: Math.round(totalTarget * 0.35),
           amountIdr: Math.round(budgetIdr * 0.35),
@@ -241,8 +246,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
         },
         {
           id: 'food',
-          category: 'Makanan & Kuliner',
-          subCategory: 'Kuliner Lokal, Cafe & Street Food',
+          category: isZh ? '美食与餐饮' : 'Food & Dining',
+          subCategory: isZh
+            ? '当地特色美食、咖啡馆与街头小吃'
+            : 'Local Cuisine, Cafes & Street Food',
           percentage: 25,
           amountTargetCurrency: Math.round(totalTarget * 0.25),
           amountIdr: Math.round(budgetIdr * 0.25),
@@ -251,8 +258,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
         },
         {
           id: 'transport',
-          category: 'Transportasi',
-          subCategory: 'Transit Pass & Tiket Kereta / Bus',
+          category: isZh ? '交通出行' : 'Transportation',
+          subCategory: isZh
+            ? '交通卡与地铁/巴士车票'
+            : 'Transit Pass & Train / Bus Tickets',
           percentage: 20,
           amountTargetCurrency: Math.round(totalTarget * 0.2),
           amountIdr: Math.round(budgetIdr * 0.2),
@@ -261,8 +270,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
         },
         {
           id: 'lifestyle',
-          category: 'Lifestyle & Oleh-oleh',
-          subCategory: 'Souvenir, Belanja & Tiket Wisata',
+          category: isZh ? '休闲娱乐' : 'Lifestyle & Souvenirs',
+          subCategory: isZh
+            ? '纪念品、购物与景点门票'
+            : 'Souvenirs, Shopping & Attraction Tickets',
           percentage: 20,
           amountTargetCurrency: Math.round(totalTarget * 0.2),
           amountIdr: Math.round(budgetIdr * 0.2),
@@ -270,9 +281,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
           iconName: { ios: 'bag.fill', android: 'shopping_bag', web: 'shopping_bag' },
         },
       ],
-      aiTipTitle: 'TIPS AI PENGHEMATAN',
-      aiTipDescription:
-        `Rekomendasi terbaik di ${destCountry.name}: gunakan kartu transportasi terintegrasi dan manfaatkan pass wisata harian untuk memangkas hingga 20% biaya perjalanan.`,
+      aiTipTitle: isZh ? 'AI 预算省钱建议' : 'AI SAVINGS ADVICE',
+      aiTipDescription: isZh
+        ? `${destCountry.name} 最佳建议：使用当地交通一卡通并购买一日观光通票，最高可节省 20% 旅行开支。`
+        : `Top recommendation for ${destCountry.name}: Use an integrated transit card and tourist day passes to save up to 20% on travel expenses.`,
     };
   }
 
@@ -292,8 +304,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
     items: [
       {
         id: 'acc',
-        category: 'Tempat Tinggal (Akomodasi)',
-        subCategory: `Budget Hotel / Guesthouse di ${formData.destinationRegion || destCountry.name}`,
+        category: isZh ? '住宿与酒店' : 'Accommodation',
+        subCategory: isZh
+          ? `${formData.destinationRegion || destCountry.name} 经济型酒店/民宿`
+          : `Budget Hotel / Guesthouse in ${formData.destinationRegion || destCountry.name}`,
         percentage: accPct,
         amountTargetCurrency: Math.round(totalTarget * (accPct / 100)),
         amountIdr: Math.round(budgetIdr * (accPct / 100)),
@@ -302,8 +316,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
       },
       {
         id: 'food',
-        category: 'Makanan & Kuliner',
-        subCategory: 'Makanan Lokal & Restoran Ekonomis',
+        category: isZh ? '美食与餐饮' : 'Food & Dining',
+        subCategory: isZh
+          ? '当地特色经济美食'
+          : 'Local Food & Budget Restaurants',
         percentage: foodPct,
         amountTargetCurrency: Math.round(totalTarget * (foodPct / 100)),
         amountIdr: Math.round(budgetIdr * (foodPct / 100)),
@@ -312,8 +328,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
       },
       {
         id: 'transport',
-        category: 'Transportasi',
-        subCategory: 'Subway & Transportasi Umum',
+        category: isZh ? '交通出行' : 'Transportation',
+        subCategory: isZh
+          ? '地铁与公共交通出行'
+          : 'Subway & Public Transit',
         percentage: transportPct,
         amountTargetCurrency: Math.round(totalTarget * (transportPct / 100)),
         amountIdr: Math.round(budgetIdr * (transportPct / 100)),
@@ -322,8 +340,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
       },
       {
         id: 'lifestyle',
-        category: 'Lifestyle & Oleh-oleh',
-        subCategory: 'Suvenir & Tiket Masuk Tempat Wisata',
+        category: isZh ? '休闲娱乐' : 'Lifestyle & Souvenirs',
+        subCategory: isZh
+          ? '伴手礼与景点门票'
+          : 'Souvenirs & Attraction Tickets',
         percentage: lifestylePct,
         amountTargetCurrency: Math.round(totalTarget * (lifestylePct / 100)),
         amountIdr: Math.round(budgetIdr * (lifestylePct / 100)),
@@ -332,8 +352,10 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
       },
       {
         id: 'savings',
-        category: 'Sisa Tabungan (Dana Darurat)',
-        subCategory: 'Rekomendasi AI agar liburan tetap aman',
+        category: isZh ? '应急储备金' : 'Emergency Buffer',
+        subCategory: isZh
+          ? 'AI 建议的旅行应急预算'
+          : 'AI-recommended safety reserve',
         percentage: savingsPct,
         amountTargetCurrency: Math.round(totalTarget * (savingsPct / 100)),
         amountIdr: Math.round(budgetIdr * (savingsPct / 100)),
@@ -341,8 +363,9 @@ export function calculateAIEstimate(formData: PlannerFormData): AIEstimateResult
         iconName: { ios: 'shield.fill', android: 'shield', web: 'shield' },
       },
     ],
-    aiTipTitle: 'TIPS AI SISA ANGGARAN',
-    aiTipDescription:
-      `AI menyisihkan ${savingsPct}% (${destCountry.currencySymbol}${Math.round(totalTarget * (savingsPct / 100)).toLocaleString()}) sebagai dana cadangan darurat jika terjadi delay atau kebutuhan medis mendadak.`,
+    aiTipTitle: isZh ? 'AI 预算安全储备' : 'AI BUDGET SAFETY BUFFER',
+    aiTipDescription: isZh
+      ? `AI 预留了 ${savingsPct}% (${destCountry.currencySymbol}${Math.round(totalTarget * (savingsPct / 100)).toLocaleString()}) 作为应急备用金，以应对突发行程延误或医疗需求。`
+      : `AI reserved ${savingsPct}% (${destCountry.currencySymbol}${Math.round(totalTarget * (savingsPct / 100)).toLocaleString()}) as emergency reserve for unexpected delays or sudden medical needs.`,
   };
 }

@@ -1,23 +1,29 @@
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { GroupDetailMessage } from '../../types';
 
 type GroupMessageBubbleProps = {
   message: GroupDetailMessage;
+  onAvatarPress?: (message: GroupDetailMessage) => void;
 };
 
-export function GroupMessageBubble({ message }: GroupMessageBubbleProps) {
+export function GroupMessageBubble({ message, onAvatarPress }: GroupMessageBubbleProps) {
+  const { isZh } = useLanguage();
   const isMe = message.senderType === 'me';
 
   if (isMe) {
+    const defaultSender = isZh ? '你' : 'You';
+    const defaultReceipt = isZh ? '已发送' : 'Sent';
+
     return (
       <View style={styles.outgoingContainer}>
-        {/* Outgoing Header: 10:25 Kamu */}
+        {/* Outgoing Header: 10:25 You */}
         <View style={styles.outgoingHeader}>
           <Text style={styles.timeText}>{message.time} </Text>
-          <Text style={styles.outgoingSenderName}>{message.senderName ?? 'Kamu'}</Text>
+          <Text style={styles.outgoingSenderName}>{message.senderName ?? defaultSender}</Text>
         </View>
 
         {/* Outgoing Bubble */}
@@ -25,9 +31,9 @@ export function GroupMessageBubble({ message }: GroupMessageBubbleProps) {
           <Text style={styles.outgoingText}>{message.text}</Text>
         </View>
 
-        {/* Status Receipt: Terkirim ✓✓ */}
+        {/* Status Receipt: Sent ✓✓ */}
         <View style={styles.receiptRow}>
-          <Text style={styles.receiptText}>{message.statusReceipt ?? 'Terkirim'}</Text>
+          <Text style={styles.receiptText}>{message.statusReceipt ?? defaultReceipt}</Text>
           <SymbolView
             name={{ ios: 'checkmark', android: 'done_all', web: 'done_all' }}
             size={12}
@@ -43,8 +49,11 @@ export function GroupMessageBubble({ message }: GroupMessageBubbleProps) {
   return (
     <View style={styles.incomingContainer}>
       <View style={styles.incomingRow}>
-        {/* Avatar with Country Code badge */}
-        <View style={styles.avatarWrapper}>
+        {/* Avatar with Country Code badge (Clickable for profile popup) */}
+        <Pressable
+          hitSlop={6}
+          onPress={() => onAvatarPress?.(message)}
+          style={({ pressed }) => [styles.avatarWrapper, pressed && styles.avatarPressed]}>
           <Image
             source={{ uri: message.avatarUrl }}
             style={styles.avatar}
@@ -56,7 +65,7 @@ export function GroupMessageBubble({ message }: GroupMessageBubbleProps) {
               <Text style={styles.countryCodeText}>[{message.countryCode}]</Text>
             </View>
           )}
-        </View>
+        </Pressable>
 
         <View style={styles.incomingCol}>
           {/* Header Row: Sender name, Role badge, and Time */}
@@ -152,6 +161,10 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     alignItems: 'center',
     width: 38,
+  },
+  avatarPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.95 }],
   },
   avatar: {
     width: 36,

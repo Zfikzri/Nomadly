@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import {
   NewsCustomsCard,
   NewsEtiasCard,
@@ -12,20 +13,23 @@ import {
   NewsSearchBar,
   NewsTouristTaxCard,
 } from '../components';
-import {
-  MOCK_CUSTOMS_CASH_NEWS,
-  MOCK_ETIAS_NEWS,
-  MOCK_FX_ALERT_NEWS,
-  MOCK_NEWS_CATEGORIES,
-  MOCK_PRE_CLEARANCE_NEWS,
-  MOCK_TOURIST_FEE_NEWS,
-} from '../services/mockData';
+import { getLocalizedNewsCatalog } from '../services/mockData';
 import type { NewsCategoryId } from '../types';
 
 export function LocalNewsScreen() {
   const router = useRouter();
+  const { isZh } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<NewsCategoryId>('all');
+
+  const {
+    categories,
+    fxAlertNews,
+    preClearanceNews,
+    etiasNews,
+    customsCashNews,
+    touristFeeNews,
+  } = getLocalizedNewsCatalog(isZh);
 
   // ponytail: client-side filter mockup for news & regulations. Ceiling: static in-memory catalog. Upgrade path: connect to live geopolitical and foreign exchange API.
   const q = searchQuery.toLowerCase().trim();
@@ -34,55 +38,55 @@ export function LocalNewsScreen() {
     if (activeCategory !== 'all' && activeCategory !== 'japan') return false;
     if (!q) return true;
     return (
-      MOCK_FX_ALERT_NEWS.title.toLowerCase().includes(q) ||
-      MOCK_FX_ALERT_NEWS.summary.toLowerCase().includes(q) ||
-      MOCK_FX_ALERT_NEWS.categoryTag.toLowerCase().includes(q)
+      fxAlertNews.title.toLowerCase().includes(q) ||
+      fxAlertNews.summary.toLowerCase().includes(q) ||
+      fxAlertNews.categoryTag.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, fxAlertNews]);
 
   const showPreClearance = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'japan') return false;
     if (!q) return true;
     return (
-      MOCK_PRE_CLEARANCE_NEWS.title.toLowerCase().includes(q) ||
-      MOCK_PRE_CLEARANCE_NEWS.summary.toLowerCase().includes(q) ||
-      MOCK_PRE_CLEARANCE_NEWS.regionTag.toLowerCase().includes(q) ||
-      MOCK_PRE_CLEARANCE_NEWS.categoryTag.toLowerCase().includes(q)
+      preClearanceNews.title.toLowerCase().includes(q) ||
+      preClearanceNews.summary.toLowerCase().includes(q) ||
+      preClearanceNews.regionTag.toLowerCase().includes(q) ||
+      preClearanceNews.categoryTag.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, preClearanceNews]);
 
   const showEtias = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'europe') return false;
     if (!q) return true;
     return (
-      MOCK_ETIAS_NEWS.title.toLowerCase().includes(q) ||
-      MOCK_ETIAS_NEWS.summary.toLowerCase().includes(q) ||
-      MOCK_ETIAS_NEWS.regionTag.toLowerCase().includes(q) ||
-      MOCK_ETIAS_NEWS.categoryTag.toLowerCase().includes(q)
+      etiasNews.title.toLowerCase().includes(q) ||
+      etiasNews.summary.toLowerCase().includes(q) ||
+      etiasNews.regionTag.toLowerCase().includes(q) ||
+      etiasNews.categoryTag.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, etiasNews]);
 
   const showCustomsCash = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'singapore') return false;
     if (!q) return true;
     return (
-      MOCK_CUSTOMS_CASH_NEWS.title.toLowerCase().includes(q) ||
-      MOCK_CUSTOMS_CASH_NEWS.summary.toLowerCase().includes(q) ||
-      MOCK_CUSTOMS_CASH_NEWS.regionTag.toLowerCase().includes(q) ||
-      MOCK_CUSTOMS_CASH_NEWS.categoryTag.toLowerCase().includes(q)
+      customsCashNews.title.toLowerCase().includes(q) ||
+      customsCashNews.summary.toLowerCase().includes(q) ||
+      customsCashNews.regionTag.toLowerCase().includes(q) ||
+      customsCashNews.categoryTag.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, customsCashNews]);
 
   const showTouristFee = useMemo(() => {
     if (activeCategory !== 'all' && activeCategory !== 'thailand') return false;
     if (!q) return true;
     return (
-      MOCK_TOURIST_FEE_NEWS.title.toLowerCase().includes(q) ||
-      MOCK_TOURIST_FEE_NEWS.summary.toLowerCase().includes(q) ||
-      MOCK_TOURIST_FEE_NEWS.regionTag.toLowerCase().includes(q) ||
-      MOCK_TOURIST_FEE_NEWS.categoryTag.toLowerCase().includes(q)
+      touristFeeNews.title.toLowerCase().includes(q) ||
+      touristFeeNews.summary.toLowerCase().includes(q) ||
+      touristFeeNews.regionTag.toLowerCase().includes(q) ||
+      touristFeeNews.categoryTag.toLowerCase().includes(q)
     );
-  }, [activeCategory, q]);
+  }, [activeCategory, q, touristFeeNews]);
 
   const hasAnyResults =
     showFxAlert ||
@@ -103,8 +107,9 @@ export function LocalNewsScreen() {
         {/* 2. Subtitle Description */}
         <View style={styles.subtitleWrapper}>
           <Text style={styles.subtitleText}>
-            Info terkurasi seputar kebijakan visa, kurs, pajak turis &amp; aturan
-            keuangan global
+            {isZh
+              ? '精选全球签证政策、实时汇率、旅游规费与跨境支付法规指南'
+              : 'Curated updates on visa policies, exchange rates, tourist fees & global financial regulations'}
           </Text>
         </View>
 
@@ -117,7 +122,7 @@ export function LocalNewsScreen() {
 
         {/* 4. Horizontal Category Filter Chips */}
         <NewsFilterChips
-          categories={MOCK_NEWS_CATEGORIES}
+          categories={categories}
           activeCategoryId={activeCategory}
           onSelectCategory={setActiveCategory}
         />
@@ -125,7 +130,7 @@ export function LocalNewsScreen() {
         {/* 5. News Cards */}
         {showFxAlert && (
           <NewsFxCard
-            item={MOCK_FX_ALERT_NEWS}
+            item={fxAlertNews}
             onPress={() =>
               router.push({
                 pathname: '/news/[id]',
@@ -143,7 +148,7 @@ export function LocalNewsScreen() {
 
         {showPreClearance && (
           <NewsPhotoCard
-            item={MOCK_PRE_CLEARANCE_NEWS}
+            item={preClearanceNews}
             onPress={() =>
               router.push({
                 pathname: '/news/[id]',
@@ -155,7 +160,7 @@ export function LocalNewsScreen() {
 
         {showEtias && (
           <NewsEtiasCard
-            item={MOCK_ETIAS_NEWS}
+            item={etiasNews}
             onPress={() =>
               router.push({
                 pathname: '/news/[id]',
@@ -173,7 +178,7 @@ export function LocalNewsScreen() {
 
         {showCustomsCash && (
           <NewsCustomsCard
-            item={MOCK_CUSTOMS_CASH_NEWS}
+            item={customsCashNews}
             onPress={() =>
               router.push({
                 pathname: '/news/[id]',
@@ -185,7 +190,7 @@ export function LocalNewsScreen() {
 
         {showTouristFee && (
           <NewsTouristTaxCard
-            item={MOCK_TOURIST_FEE_NEWS}
+            item={touristFeeNews}
             onPress={() =>
               router.push({
                 pathname: '/news/[id]',
@@ -198,9 +203,13 @@ export function LocalNewsScreen() {
         {/* Empty State */}
         {!hasAnyResults && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>Tidak ada regulasi atau berita ditemukan</Text>
+            <Text style={styles.emptyTitle}>
+              {isZh ? '未找到相关法规或新闻' : 'No regulations or news found'}
+            </Text>
             <Text style={styles.emptySubtitle}>
-              Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.
+              {isZh
+                ? '请尝试更换搜索关键词或选择“全部”分类。'
+                : 'Try searching with different keywords or switch to the "All" category.'}
             </Text>
           </View>
         )}
@@ -243,7 +252,7 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 13,
-    color: '#475569',
+    color: '#64748B',
     textAlign: 'center',
     lineHeight: 18,
   },

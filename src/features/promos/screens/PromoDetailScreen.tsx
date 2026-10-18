@@ -1,6 +1,7 @@
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import {
   PromoDetailHeader,
   PromoHeroCard,
@@ -18,13 +19,19 @@ type PromoDetailScreenProps = {
 };
 
 export function PromoDetailScreen({ id = 'promo-1' }: PromoDetailScreenProps) {
-  const detail = getPromoDetail(id);
+  const { isZh } = useLanguage();
+  const detail = getPromoDetail(id, isZh);
 
   const handleSelectPartner = (partner: ReservationPartner) => {
     Alert.alert(
-      'Kanal Reservasi',
-      `Mengarahkan ke ${partner.name.replace('\n', ' ')} dengan promo cashback ${partner.cashbackText}.`,
-      [{ text: 'Lanjut' }, { text: 'Batal', style: 'cancel' }]
+      isZh ? '预约渠道' : 'Booking Channel',
+      isZh
+        ? `正在前往 ${partner.name.replace('\n', ' ')}，专享返现 ${partner.cashbackText}。`
+        : `Redirecting to ${partner.name.replace('\n', ' ')} with promo cashback ${partner.cashbackText}.`,
+      [
+        { text: isZh ? '继续' : 'Continue' },
+        { text: isZh ? '取消' : 'Cancel', style: 'cancel' },
+      ]
     );
   };
 
@@ -32,7 +39,7 @@ export function PromoDetailScreen({ id = 'promo-1' }: PromoDetailScreenProps) {
     <View style={styles.root}>
       {/* Top Safe Area & White Header */}
       <SafeAreaView edges={['top']} style={styles.safeArea}>
-        <PromoDetailHeader title="Promo Tiket" />
+        <PromoDetailHeader title={isZh ? '特惠详情' : 'Promo Details'} />
 
         {/* Scrollable Sky Canvas Content */}
         <ScrollView

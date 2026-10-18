@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useLanguage } from '@/i18n';
 
 type SocialAuthButtonsProps = {
   onApplePress?: () => void;
@@ -11,12 +12,14 @@ export function SocialAuthButtons({
   onApplePress,
   onGooglePress,
 }: SocialAuthButtonsProps) {
+  const { strings } = useLanguage();
+
   return (
     <View style={styles.container}>
       {/* Divider */}
       <View style={styles.dividerRow}>
         <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>Or Continue With</Text>
+        <Text style={styles.dividerText}>{strings.auth.orContinueWith}</Text>
         <View style={styles.dividerLine} />
       </View>
 

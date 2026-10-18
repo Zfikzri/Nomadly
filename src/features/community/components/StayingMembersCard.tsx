@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { MemberAvatar } from '../types';
 
@@ -8,6 +8,7 @@ type StayingMembersCardProps = {
   subtitle: string;
   members: MemberAvatar[];
   remainingCountText: string;
+  onMemberPress?: (member: MemberAvatar) => void;
 };
 
 export function StayingMembersCard({
@@ -15,6 +16,7 @@ export function StayingMembersCard({
   subtitle,
   members,
   remainingCountText,
+  onMemberPress,
 }: StayingMembersCardProps) {
   return (
     <View style={styles.cardContainer}>
@@ -24,12 +26,14 @@ export function StayingMembersCard({
       {/* Overlapping Avatars Row */}
       <View style={styles.avatarsRow}>
         {members.map((member, index) => (
-          <View
+          <Pressable
             key={member.id}
-            style={[
+            style={({ pressed }) => [
               styles.avatarWrapper,
               { zIndex: members.length - index },
-            ]}>
+              pressed && { opacity: 0.8, transform: [{ scale: 0.95 }] },
+            ]}
+            onPress={() => onMemberPress?.(member)}>
             <Image
               source={{ uri: member.avatarUrl }}
               style={styles.avatarImage}
@@ -42,7 +46,7 @@ export function StayingMembersCard({
               <View style={styles.flagRed} />
               <View style={styles.flagWhite} />
             </View>
-          </View>
+          </Pressable>
         ))}
 
         {/* Counter Badge (+13) */}

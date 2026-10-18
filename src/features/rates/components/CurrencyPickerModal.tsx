@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import { searchCurrencies } from '../services/mockData';
 import type { CurrencyItem } from '../types';
 
@@ -25,6 +26,7 @@ export function CurrencyPickerModal({
   onSelectCurrency,
   onClose,
 }: CurrencyPickerModalProps) {
+  const { isZh } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCurrencies = useMemo(() => {
@@ -52,7 +54,9 @@ export function CurrencyPickerModal({
         <View style={styles.sheet}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>Pilih Mata Uang</Text>
+            <Text style={styles.title}>
+              {isZh ? '选择货币' : 'Select Currency'}
+            </Text>
             <Pressable onPress={handleClose} hitSlop={12} style={styles.closeButton}>
               <Text style={styles.closeText}>✕</Text>
             </Pressable>
@@ -64,7 +68,9 @@ export function CurrencyPickerModal({
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
-              placeholder="Cari mata uang atau negara..."
+              placeholder={
+                isZh ? '搜索货币代码或国家/地区...' : 'Search currency code or country...'
+              }
               placeholderTextColor="#94A3B8"
               style={styles.searchInput}
               autoCapitalize="none"
@@ -137,34 +143,34 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   closeText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
     color: '#64748B',
+    fontWeight: '700',
   },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F1F5F9',
-    borderRadius: 16,
+    borderRadius: 14,
     marginHorizontal: 20,
     paddingHorizontal: 12,
+    marginBottom: 14,
     height: 44,
-    marginBottom: 12,
-    gap: 8,
   },
   searchIcon: {
     fontSize: 14,
+    marginRight: 8,
   },
   searchInput: {
     flex: 1,
     fontSize: 14,
     color: '#0F172A',
-    fontWeight: '500',
+    paddingVertical: 0,
   },
   clearText: {
     fontSize: 14,
     color: '#94A3B8',
-    fontWeight: '700',
+    padding: 4,
   },
   listContent: {
     paddingHorizontal: 20,
@@ -174,8 +180,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    borderRadius: 14,
     marginBottom: 4,
   },
   selectedItemRow: {
@@ -183,24 +189,25 @@ const styles = StyleSheet.create({
   },
   itemFlag: {
     fontSize: 24,
-    marginRight: 12,
+    marginRight: 14,
   },
   itemInfo: {
     flex: 1,
   },
   itemCode: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#0F172A',
+    marginBottom: 2,
   },
   itemName: {
     fontSize: 12,
     color: '#64748B',
-    marginTop: 2,
+    fontWeight: '500',
   },
   itemSymbol: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#0050D6',
   },
 });

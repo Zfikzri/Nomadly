@@ -1,5 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { LanguagePillSwitcher } from '@/components/common/LanguagePillSwitcher';
+import { useLanguage } from '@/i18n';
 import type { Gender, UserProfileData } from '../types';
 
 // ── Reusable info field row ───────────────────────────────────────────────────
@@ -85,11 +87,13 @@ type GenderSelectorProps = {
 };
 
 function GenderSelector({ value, onChange }: GenderSelectorProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={genderStyles.wrapper}>
-      <Text style={genderStyles.label}>Jenis Kelamin</Text>
+      <Text style={genderStyles.label}>{isZh ? '性别' : 'Gender'}</Text>
       <View style={genderStyles.row}>
-        {/* Laki-laki */}
+        {/* Male */}
         <Pressable
           style={({ pressed }) => [
             genderStyles.option,
@@ -97,16 +101,16 @@ function GenderSelector({ value, onChange }: GenderSelectorProps) {
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onChange?.('male')}
-          accessibilityLabel="Laki-laki">
+          accessibilityLabel="Male">
           <View style={[genderStyles.radio, value === 'male' && genderStyles.radioActive]}>
             {value === 'male' && <View style={genderStyles.radioInner} />}
           </View>
           <Text style={[genderStyles.optionText, value === 'male' && genderStyles.optionTextActive]}>
-            Laki-laki
+            {isZh ? '男士 (Male)' : 'Male'}
           </Text>
         </Pressable>
 
-        {/* Perempuan */}
+        {/* Female */}
         <Pressable
           style={({ pressed }) => [
             genderStyles.option,
@@ -114,12 +118,12 @@ function GenderSelector({ value, onChange }: GenderSelectorProps) {
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onChange?.('female')}
-          accessibilityLabel="Perempuan">
+          accessibilityLabel="Female">
           <View style={[genderStyles.radio, value === 'female' && genderStyles.radioActive]}>
             {value === 'female' && <View style={genderStyles.radioInner} />}
           </View>
           <Text style={[genderStyles.optionText, value === 'female' && genderStyles.optionTextActive]}>
-            Perempuan
+            {isZh ? '女士 (Female)' : 'Female'}
           </Text>
         </Pressable>
       </View>
@@ -191,6 +195,8 @@ const genderStyles = StyleSheet.create({
 
 // ── Verified badge ────────────────────────────────────────────────────────────
 function VerifiedBadge() {
+  const { strings } = useLanguage();
+
   return (
     <View style={verifiedStyles.badge}>
       <SymbolView
@@ -198,7 +204,7 @@ function VerifiedBadge() {
         size={13}
         tintColor="#22C55E"
       />
-      <Text style={verifiedStyles.text}>Terverifikasi</Text>
+      <Text style={verifiedStyles.text}>{strings.common.verified}</Text>
     </View>
   );
 }
@@ -225,29 +231,74 @@ type ProfileInfoSectionProps = {
 };
 
 export function ProfileInfoSection({ profile }: ProfileInfoSectionProps) {
+  const { language, setLanguage, strings, isZh } = useLanguage();
+
+  const handleLanguageRowPress = () => {
+    Alert.alert(
+      strings.profile.changeLanguageTitle,
+      strings.profile.changeLanguageDesc,
+      [
+        {
+          text: strings.profile.englishOption,
+          onPress: () => setLanguage('en'),
+          style: language === 'en' ? 'destructive' : 'default',
+        },
+        {
+          text: strings.profile.chineseOption,
+          onPress: () => setLanguage('zh'),
+          style: language === 'zh' ? 'destructive' : 'default',
+        },
+        {
+          text: strings.common.cancel,
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {/* Section header */}
+      {/* ── App Preferences / Language Setting ── */}
+      <View style={styles.sectionHeader}>
+        <SymbolView
+          name={{ ios: 'gearshape.fill', android: 'settings', web: 'settings' } as any}
+          size={18}
+          tintColor="#2563EB"
+        />
+        <Text style={styles.sectionTitle}>{strings.profile.appPreferences}</Text>
+      </View>
+
+      <FieldRow
+        label={strings.profile.appLanguage}
+        value={language === 'zh' ? '中文 (Simplified Chinese)' : 'English (Default)'}
+        iconName={{ ios: 'globe', android: 'language', web: 'language' }}
+        rightBadge={<LanguagePillSwitcher variant="white" />}
+        onPress={handleLanguageRowPress}
+      />
+
+      <View style={styles.divider} />
+
+      {/* ── Personal Info Section Header ── */}
       <View style={styles.sectionHeader}>
         <SymbolView
           name={{ ios: 'person.text.rectangle.fill', android: 'badge', web: 'badge' } as any}
-          size={20}
+          size={18}
           tintColor="#2563EB"
         />
-        <Text style={styles.sectionTitle}>Informasi Pribadi</Text>
+        <Text style={styles.sectionTitle}>{strings.profile.personalInfoTitle}</Text>
       </View>
 
-      {/* Nama Lengkap */}
+      {/* Full Name */}
       <FieldRow
-        label="Nama Lengkap"
+        label={strings.profile.fullName}
         value={profile.name}
         iconName={{ ios: 'person.fill', android: 'person', web: 'person' }}
       />
 
-      {/* Email Utama */}
+      {/* Primary Email */}
       <View style={fieldStyles.wrapper}>
         <View style={styles.emailLabelRow}>
-          <Text style={fieldStyles.label}>Email Utama</Text>
+          <Text style={fieldStyles.label}>{strings.profile.primaryEmail}</Text>
           {profile.isEmailVerified && <VerifiedBadge />}
         </View>
         <View style={[fieldStyles.fieldBox, { flexDirection: 'row', gap: 10, alignItems: 'center' }]}>
@@ -262,25 +313,28 @@ export function ProfileInfoSection({ profile }: ProfileInfoSectionProps) {
         </View>
       </View>
 
-      {/* Tanggal Lahir & Usia */}
+      {/* Date of Birth & Age */}
       <FieldRow
-        label="Tanggal Lahir & Usia"
-        value={`${profile.dateOfBirth} (${profile.age} Tahun)`}
+        label={strings.profile.birthDateAndAge}
+        value={`${profile.dateOfBirth} (${profile.age} ${strings.profile.yearsOld})`}
         iconName={{ ios: 'calendar', android: 'calendar_today', web: 'calendar_today' }}
         hasChevron
         onPress={() =>
-          Alert.alert('Tanggal Lahir', 'Edit tanggal lahir (fitur coming soon)')
+          Alert.alert(
+            strings.profile.birthDateAndAge,
+            isZh ? '编辑出生日期（演示功能）。' : 'Edit birth date (demo feature).'
+          )
         }
       />
 
-      {/* Negara Domisili */}
+      {/* Residence Country */}
       <FieldRow
-        label="Negara Domisili / Asal"
+        label={strings.profile.residenceCountry}
         value={`${profile.country} (${profile.countryCode})`}
         iconName={{ ios: 'globe', android: 'language', web: 'language' }}
       />
 
-      {/* Jenis Kelamin */}
+      {/* Gender */}
       <GenderSelector value={profile.gender} />
     </View>
   );
@@ -289,14 +343,14 @@ export function ProfileInfoSection({ profile }: ProfileInfoSectionProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingTop: 12,
     paddingBottom: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 16,
@@ -309,4 +363,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 7,
   },
+  divider: {
+    height: 1,
+    backgroundColor: '#E2E8F0',
+    marginVertical: 18,
+  },
 });
+

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import {
   BudgetDistributionCard,
   BudgetInputSection,
@@ -25,12 +26,13 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 });
 
 export function PlannerScreen() {
+  const { isZh } = useLanguage();
   const scrollViewRef = useRef<ScrollView>(null);
 
   // Form State with sensible defaults matching UI Mockup
   const [formData, setFormData] = useState<PlannerFormData>({
     originCountry: 'Indonesia',
-    destinationCountry: 'Jepang',
+    destinationCountry: 'Japan',
     destinationRegion: 'Tokyo, Kanto',
     nominalBudget: '10.000.000',
     durationDays: 9,
@@ -50,7 +52,7 @@ export function PlannerScreen() {
         destinationCountry: prev.originCountry,
       };
       if (estimateResult) {
-        setEstimateResult(calculateAIEstimate(updated));
+        setEstimateResult(calculateAIEstimate(updated, isZh));
       }
       return updated;
     });
@@ -61,7 +63,7 @@ export function PlannerScreen() {
     setFormData(nextFormData);
     // Jika hasil estimasi sudah pernah dibuat, update reaktif
     if (estimateResult) {
-      setEstimateResult(calculateAIEstimate(nextFormData));
+      setEstimateResult(calculateAIEstimate(nextFormData, isZh));
     }
   };
 
@@ -70,7 +72,7 @@ export function PlannerScreen() {
 
     // Simulasi proses AI menganalisis rincian budget
     setTimeout(() => {
-      const result = calculateAIEstimate(formData);
+      const result = calculateAIEstimate(formData, isZh);
       setEstimateResult(result);
       setIsLoading(false);
 
@@ -109,12 +111,12 @@ export function PlannerScreen() {
               onOriginChange={(val) => {
                 const next = { ...formData, originCountry: val };
                 setFormData(next);
-                if (estimateResult) setEstimateResult(calculateAIEstimate(next));
+                if (estimateResult) setEstimateResult(calculateAIEstimate(next, isZh));
               }}
               onDestinationChange={(val) => {
                 const next = { ...formData, destinationCountry: val };
                 setFormData(next);
-                if (estimateResult) setEstimateResult(calculateAIEstimate(next));
+                if (estimateResult) setEstimateResult(calculateAIEstimate(next, isZh));
               }}
               onRegionChange={(val) => setFormData((prev) => ({ ...prev, destinationRegion: val }))}
               onSwapCountries={handleSwapCountries}
@@ -127,7 +129,7 @@ export function PlannerScreen() {
               onBudgetChange={(val) => {
                 const next = { ...formData, nominalBudget: val };
                 setFormData(next);
-                if (estimateResult) setEstimateResult(calculateAIEstimate(next));
+                if (estimateResult) setEstimateResult(calculateAIEstimate(next, isZh));
               }}
             />
 
@@ -138,7 +140,7 @@ export function PlannerScreen() {
               onDurationChange={(days, dateText) => {
                 const next = { ...formData, durationDays: days, dateRangeText: dateText };
                 setFormData(next);
-                if (estimateResult) setEstimateResult(calculateAIEstimate(next));
+                if (estimateResult) setEstimateResult(calculateAIEstimate(next, isZh));
               }}
             />
 

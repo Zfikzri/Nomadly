@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import type { DailyFoodEstimate } from '../types';
 
 type DailyFoodCardProps = {
@@ -7,6 +8,8 @@ type DailyFoodCardProps = {
 };
 
 export function DailyFoodCard({ data }: DailyFoodCardProps) {
+  const { isZh } = useLanguage();
+
   return (
     <View style={styles.card}>
       {/* Title */}
@@ -17,8 +20,9 @@ export function DailyFoodCard({ data }: DailyFoodCardProps) {
 
       {/* Description with highlights */}
       <Text style={styles.bodyText}>
-        Sekitar <Text style={styles.boldYen}>{data.yenRange}</Text> (
-        <Text style={styles.highlightRupiah}>{data.rupiahRange}</Text>) {data.description}
+        {isZh ? '预估 ' : 'Around '}
+        <Text style={styles.boldYen}>{data.yenRange}</Text> (
+        <Text style={styles.highlightEquivalent}>{data.rupiahRange}</Text>) {data.description}
       </Text>
 
       {/* Pill Tags Row */}
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#0F172A',
   },
-  highlightRupiah: {
+  highlightEquivalent: {
     fontWeight: '700',
     color: '#0284C7',
   },

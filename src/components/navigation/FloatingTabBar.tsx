@@ -4,39 +4,26 @@ import { SymbolView } from 'expo-symbols';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-type TabConfig = {
-  label: string;
-  symbol: {
-    ios: string;
-    android: string;
-    web: string;
-  };
+import { useLanguage } from '@/i18n';
+
+type TabSymbol = {
+  ios: string;
+  android: string;
+  web: string;
 };
 
-const TAB_CONFIGS: Record<string, TabConfig> = {
-  index: {
-    label: 'Home',
-    symbol: { ios: 'house', android: 'home', web: 'home' },
-  },
-  planner: {
-    label: 'Planner',
-    symbol: { ios: 'wallet.pass', android: 'credit_card', web: 'credit_card' },
-  },
+const TAB_SYMBOLS: Record<string, TabSymbol> = {
+  index: { ios: 'house', android: 'home', web: 'home' },
+  planner: { ios: 'wallet.pass', android: 'credit_card', web: 'credit_card' },
   rates: {
-    label: 'Rates',
-    symbol: {
-      ios: 'dollarsign.arrow.circlepath',
-      android: 'currency_exchange',
-      web: 'currency_exchange',
-    },
+    ios: 'dollarsign.arrow.circlepath',
+    android: 'currency_exchange',
+    web: 'currency_exchange',
   },
   chat: {
-    label: 'Chat',
-    symbol: {
-      ios: 'bubble.left.and.bubble.right',
-      android: 'chat',
-      web: 'chat',
-    },
+    ios: 'bubble.left.and.bubble.right',
+    android: 'chat',
+    web: 'chat',
   },
 };
 
@@ -46,6 +33,24 @@ export function FloatingTabBar({
   navigation,
 }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const { strings } = useLanguage();
+
+  const getTabLabel = (routeName: string): string => {
+    switch (routeName) {
+      case 'index':
+        return strings.tabs.home;
+      case 'planner':
+        return strings.tabs.planner;
+      case 'nomadly-ai':
+        return strings.tabs.nomaAi;
+      case 'rates':
+        return strings.tabs.rates;
+      case 'chat':
+        return strings.tabs.chat;
+      default:
+        return routeName;
+    }
+  };
 
   // Filter out hidden routes (e.g. orb-ai, explore)
   const visibleRoutes = state.routes.filter((route) => {
@@ -68,6 +73,7 @@ export function FloatingTabBar({
         {visibleRoutes.map((route) => {
           const isFocused = state.routes[state.index]?.key === route.key;
           const isCenterAi = route.name === 'nomadly-ai';
+          const label = getTabLabel(route.name);
 
           const onPress = () => {
             const event = navigation.emit({
@@ -94,7 +100,7 @@ export function FloatingTabBar({
                 key={route.key}
                 accessibilityRole="button"
                 accessibilityState={isFocused ? { selected: true } : {}}
-                accessibilityLabel="Noma AI"
+                accessibilityLabel={label}
                 onPress={onPress}
                 onLongPress={onLongPress}
                 style={({ pressed }) => [
@@ -110,13 +116,13 @@ export function FloatingTabBar({
                     priority="high"
                   />
                 </View>
-                <Text style={styles.centerLabel}>Noma AI</Text>
+                <Text style={styles.centerLabel}>{label}</Text>
               </Pressable>
             );
           }
 
-          const config = TAB_CONFIGS[route.name];
-          if (!config) return null;
+          const symbol = TAB_SYMBOLS[route.name];
+          if (!symbol) return null;
 
           const activeColor = '#0050D6';
           const inactiveColor = '#334155';
@@ -127,7 +133,7 @@ export function FloatingTabBar({
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={config.label}
+              accessibilityLabel={label}
               onPress={onPress}
               onLongPress={onLongPress}
               style={({ pressed }) => [
@@ -135,7 +141,7 @@ export function FloatingTabBar({
                 pressed && styles.tabItemPressed,
               ]}>
               <SymbolView
-                name={config.symbol}
+                name={symbol}
                 size={22}
                 tintColor={color}
                 weight={isFocused ? 'bold' : 'medium'}
@@ -145,7 +151,7 @@ export function FloatingTabBar({
                   styles.tabLabel,
                   { color, fontWeight: isFocused ? '700' : '600' },
                 ]}>
-                {config.label}
+                {label}
               </Text>
             </Pressable>
           );

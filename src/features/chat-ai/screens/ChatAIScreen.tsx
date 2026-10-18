@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import {
   AICompanionBanner,
   AIResponseCard,
@@ -11,8 +12,8 @@ import {
   UserChatBubble,
 } from '../components';
 import {
-  MOCK_SHINJUKU_AI_RESPONSE,
-  SUGGESTED_QUESTIONS,
+  getMockShinjukuAIResponse,
+  getSuggestedQuestions,
 } from '../services/mockData';
 import type { ChatMessage, SuggestedQuestion } from '../types';
 
@@ -27,6 +28,7 @@ const SKY_BACKGROUND_SLICES = Array.from({ length: SKY_SLICE_COUNT }, (_, i) => 
 });
 
 export function ChatAIScreen() {
+  const { isZh } = useLanguage();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
@@ -47,7 +49,7 @@ export function ChatAIScreen() {
       id: `msg-ai-${Date.now() + 1}`,
       sender: 'ai',
       time: '10:42 AM',
-      aiResponse: MOCK_SHINJUKU_AI_RESPONSE,
+      aiResponse: getMockShinjukuAIResponse(isZh),
     };
 
     setMessages((prev) => [...prev, userMessage, aiMessage]);
@@ -115,7 +117,7 @@ export function ChatAIScreen() {
 
             {/* Horizontal Suggested Questions */}
             <SuggestedQuestionsBar
-              questions={SUGGESTED_QUESTIONS}
+              questions={getSuggestedQuestions(isZh)}
               onSelectQuestion={handleSelectSuggestedQuestion}
             />
           </View>

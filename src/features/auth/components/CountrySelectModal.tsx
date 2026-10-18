@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 
+import { useLanguage } from '@/i18n';
 import { searchCountries } from '../services/mockAuth';
 import type { CountryOption } from '../services/mockAuth';
 
@@ -26,6 +27,7 @@ export function CountrySelectModal({
   onSelectCountry,
   onClose,
 }: CountrySelectModalProps) {
+  const { isZh } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCountries = useMemo(() => {
@@ -54,9 +56,11 @@ export function CountrySelectModal({
           {/* Header */}
           <View style={styles.modalHeader}>
             <View>
-              <Text style={styles.modalTitle}>Pilih Negara Asal</Text>
+              <Text style={styles.modalTitle}>
+                {isZh ? '选择国家/地区' : 'Select Country'}
+              </Text>
               <Text style={styles.modalSubtitle}>
-                Cari dan pilih negara asal Anda
+                {isZh ? '搜索并选择您的常住国家/地区' : 'Search and select your country of residence'}
               </Text>
             </View>
             <Pressable hitSlop={8} style={styles.closeButton} onPress={handleClose}>
@@ -77,7 +81,7 @@ export function CountrySelectModal({
             />
             <TextInput
               style={styles.searchInput}
-              placeholder="Cari negara (misal: Indonesia, Jepang, dll)..."
+              placeholder={isZh ? '搜索国家或地区（例如：日本、美国）...' : 'Search country (e.g. Japan, United States)...'}
               placeholderTextColor="#94A3B8"
               value={searchQuery}
               onChangeText={setSearchQuery}

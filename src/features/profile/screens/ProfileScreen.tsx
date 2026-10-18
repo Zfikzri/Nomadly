@@ -4,6 +4,7 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Spacing } from '@/constants/theme';
+import { useLanguage } from '@/i18n';
 import { MOCK_PROFILE_DATA } from '../services/mockData';
 import {
   ProfileAvatarSection,
@@ -12,6 +13,7 @@ import {
 } from '../components';
 
 export function ProfileScreen() {
+  const { strings, isZh } = useLanguage();
   const profile = MOCK_PROFILE_DATA;
 
   const handleCompleteProfile = () => {
@@ -23,7 +25,10 @@ export function ProfileScreen() {
   };
 
   const handleCameraPress = () => {
-    Alert.alert('Ganti Foto', 'Pilih foto dari galeri atau kamera. (Coming soon)');
+    Alert.alert(
+      isZh ? '更换头像' : 'Change Avatar',
+      isZh ? '从相册选择或拍照上传（即将推出）。' : 'Choose a photo from gallery or camera. (Coming soon)'
+    );
   };
 
   return (
@@ -34,14 +39,14 @@ export function ProfileScreen() {
           <Pressable
             style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.6 }]}
             onPress={() => router.back()}
-            accessibilityLabel="Kembali ke Home">
+            accessibilityLabel={strings.common.back}>
             <SymbolView
               name={{ ios: 'chevron.left', android: 'chevron_left', web: 'chevron_left' } as any}
               size={18}
               tintColor="#0F172A"
             />
           </Pressable>
-          <Text style={styles.headerTitle}>Home</Text>
+          <Text style={styles.headerTitle}>{strings.common.back}</Text>
         </View>
 
         <ScrollView

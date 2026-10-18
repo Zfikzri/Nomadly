@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useLanguage } from '@/i18n';
 import {
   NewsAiKeyPointsCard,
   NewsArticleBody,
@@ -17,7 +18,8 @@ type NewsDetailScreenProps = {
 
 export function NewsDetailScreen({ id = 'news-1' }: NewsDetailScreenProps) {
   const insets = useSafeAreaInsets();
-  const news = getNewsDetail(id);
+  const { isZh } = useLanguage();
+  const news = getNewsDetail(id, isZh);
 
   return (
     <View style={styles.root}>
