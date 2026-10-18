@@ -1,5 +1,12 @@
-import { useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useLanguage } from '@/i18n';
@@ -32,6 +39,18 @@ export function ChatAIScreen() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+    );
+    return () => showSub.remove();
+  }, []);
 
   const handleSendMessage = (queryText: string) => {
     const trimmed = queryText.trim();
@@ -72,60 +91,66 @@ export function ChatAIScreen() {
         ))}
       </View>
 
-      {/* Top AI Companion Card Banner with Safe Area Inset */}
-      <View style={{ paddingTop: insets.top + 6 }}>
-        <AICompanionBanner />
-      </View>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}>
+        {/* Top AI Companion Card Banner with Safe Area Inset */}
+        <View style={{ paddingTop: insets.top + 6 }}>
+          <AICompanionBanner />
+        </View>
 
-      {/* Main Content Area */}
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.scrollArea}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled">
-        {messages.length === 0 ? (
-          /* Empty state: welcome & starter prompts */
-          <ChatAIEmptyState
-            userName="Alex"
-            onSelectPrompt={handleSendMessage}
-          />
-        ) : (
-          /* Active conversation view */
-          <View style={styles.chatList}>
-            {messages.map((msg) => {
-              if (msg.sender === 'user' && msg.text) {
-                return (
-                  <UserChatBubble
-                    key={msg.id}
-                    text={msg.text}
-                    time={msg.time}
-                    isRead={msg.isReadReceipt}
-                  />
-                );
-              }
-              if (msg.sender === 'ai' && msg.aiResponse) {
-                return (
-                  <AIResponseCard
-                    key={msg.id}
-                    data={msg.aiResponse}
-                  />
-                );
-              }
-              return null;
-            })}
-
-            {/* Horizontal Suggested Questions */}
-            <SuggestedQuestionsBar
-              questions={getSuggestedQuestions(isZh)}
-              onSelectQuestion={handleSelectSuggestedQuestion}
+        {/* Main Content Area */}
+        <ScrollView
+          ref={scrollViewRef}
+          style={styles.scrollArea}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled">
+          {messages.length === 0 ? (
+            /* Empty state: welcome & starter prompts */
+            <ChatAIEmptyState
+              userName="Alex"
+              onSelectPrompt={handleSendMessage}
             />
-          </View>
-        )}
-      </ScrollView>
+          ) : (
+            /* Active conversation view */
+            <View style={styles.chatList}>
+              {messages.map((msg) => {
+                if (msg.sender === 'user' && msg.text) {
+                  return (
+                    <UserChatBubble
+                      key={msg.id}
+                      text={msg.text}
+                      time={msg.time}
+                      isRead={msg.isReadReceipt}
+                    />
+                  );
+                }
+                if (msg.sender === 'ai' && msg.aiResponse) {
+                  return (
+                    <AIResponseCard
+                      key={msg.id}
+                      data={msg.aiResponse}
+                    />
+                  );
+                }
+                return null;
+              })}
 
-      {/* Floating Bottom Input Bar */}
-      <ChatAIInputBar onSend={handleSendMessage} />
+              {/* Horizontal Suggested Questions */}
+              <SuggestedQuestionsBar
+                questions={getSuggestedQuestions(isZh)}
+                onSelectQuestion={handleSelectSuggestedQuestion}
+              />
+            </View>
+          )}
+        </ScrollView>
+
+        {/* Floating Bottom Input Bar */}
+        <ChatAIInputBar onSend={handleSendMessage} />
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -135,6 +160,9 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     backgroundColor: '#D8EEFF',
+  },
+  keyboardView: {
+    flex: 1,
   },
   gradientContainer: {
     ...StyleSheet.absoluteFill,

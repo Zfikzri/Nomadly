@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -47,21 +48,7 @@ export function RatesScreen() {
   }, [searchQuery, selectedRegion]);
 
   const handleAddWatchlist = () => {
-    // Add additional mock currency pair if not exists
-    const audExists = watchlist.some((item) => item.id === 'aud-idr');
-    if (!audExists) {
-      setWatchlist((prev) => [
-        ...prev,
-        {
-          id: 'aud-idr',
-          pair: 'AUD / IDR',
-          rateFormatted: 'Rp 10.420',
-          rateSubtext: isZh ? '1 澳大利亚元' : '1 Australian Dollar',
-          changePercent: '-0.28%',
-          isPositive: false,
-        },
-      ]);
-    }
+    router.push('/add-watchlist');
   };
 
   return (

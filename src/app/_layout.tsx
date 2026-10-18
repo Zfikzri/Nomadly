@@ -36,6 +36,7 @@ export default function RootLayout() {
           <Stack.Screen name="chat-personal" options={{ headerShown: false }} />
           <Stack.Screen name="chat-group" options={{ headerShown: false }} />
           <Stack.Screen name="user-profile/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="add-watchlist" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
         </Stack>
         <StatusBar style="auto" />
