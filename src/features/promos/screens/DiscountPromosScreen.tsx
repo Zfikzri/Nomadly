@@ -5,8 +5,6 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '@/i18n';
 import {
-  AttractionPromoCard,
-  FlightPromoCard,
   HighlightPromoCard,
   PromoFilterChips,
   PromoHeader,
@@ -26,15 +24,18 @@ export function DiscountPromosScreen() {
     categories,
     highlightPromo,
     transitPasses,
-    flightPromos,
-    attractionPromos,
   } = getLocalizedPromoCatalog(isZh);
+
+  const availableCategories = useMemo(
+    () => categories.filter((c) => c.id === 'all' || c.id === 'trains'),
+    [categories]
+  );
 
   // ponytail: client-side filter mockup for promos. Ceiling: static in-memory catalog. Upgrade path: connect to live promotional API with personalized sorting.
   const q = searchQuery.toLowerCase().trim();
 
   const showHighlight = useMemo(() => {
-    if (activeCategory !== 'all' && activeCategory !== 'flights') return false;
+    if (activeCategory !== 'all') return false;
     if (!q) return true;
     return (
       highlightPromo.title.toLowerCase().includes(q) ||
@@ -53,32 +54,7 @@ export function DiscountPromosScreen() {
     );
   }, [activeCategory, q, transitPasses]);
 
-  const filteredFlights = useMemo(() => {
-    if (activeCategory !== 'all' && activeCategory !== 'flights') return [];
-    if (!q) return flightPromos;
-    return flightPromos.filter(
-      (item) =>
-        item.airline.toLowerCase().includes(q) ||
-        item.route.toLowerCase().includes(q) ||
-        item.boxDetail.toLowerCase().includes(q)
-    );
-  }, [activeCategory, q, flightPromos]);
-
-  const filteredAttractions = useMemo(() => {
-    if (activeCategory !== 'all' && activeCategory !== 'attractions') return [];
-    if (!q) return attractionPromos;
-    return attractionPromos.filter(
-      (item) =>
-        item.title.toLowerCase().includes(q) ||
-        item.subtitle.toLowerCase().includes(q)
-    );
-  }, [activeCategory, q, attractionPromos]);
-
-  const hasAnyResults =
-    showHighlight ||
-    filteredTransitPasses.length > 0 ||
-    filteredFlights.length > 0 ||
-    filteredAttractions.length > 0;
+  const hasAnyResults = showHighlight || filteredTransitPasses.length > 0;
 
   return (
     <View style={styles.root}>
@@ -110,7 +86,7 @@ export function DiscountPromosScreen() {
 
         {/* 4. Horizontal Category Filter Chips */}
         <PromoFilterChips
-          categories={categories}
+          categories={availableCategories}
           activeCategoryId={activeCategory}
           onSelectCategory={setActiveCategory}
         />
@@ -150,65 +126,6 @@ export function DiscountPromosScreen() {
                 key={pass.id}
                 item={pass}
                 onPress={() => console.log('Selected transit pass:', pass.id)}
-              />
-            ))}
-          </View>
-        )}
-
-        {/* 7. Section 3: Flights Promos */}
-        {filteredFlights.length > 0 && (
-          <View style={styles.sectionWrapper}>
-            <View style={styles.sectionHeaderRow}>
-              <View style={styles.sectionHeaderLeft}>
-                <SymbolView
-                  name={{ ios: 'airplane', android: 'flight', web: 'flight' }}
-                  size={16}
-                  tintColor="#0284C7"
-                />
-                <Text style={styles.sectionHeading}>Flight Specials</Text>
-              </View>
-              <Text style={styles.sectionSubLink}>
-                {isZh ? '精选往返' : 'Featured Return'}
-              </Text>
-            </View>
-
-            {filteredFlights.map((flight) => (
-              <FlightPromoCard
-                key={flight.id}
-                item={flight}
-                onPress={() =>
-                  router.push({
-                    pathname: '/promo/[id]',
-                    params: { id: 'promo-1' },
-                  } as any)
-                }
-              />
-            ))}
-          </View>
-        )}
-
-        {/* 8. Section 4: Attractions & eSIM */}
-        {filteredAttractions.length > 0 && (
-          <View style={styles.sectionWrapper}>
-            <View style={styles.sectionHeaderRow}>
-              <View style={styles.sectionHeaderLeft}>
-                <SymbolView
-                  name={{ ios: 'ticket.fill', android: 'confirmation_number', web: 'confirmation_number' }}
-                  size={16}
-                  tintColor="#16A34A"
-                />
-                <Text style={styles.sectionHeading}>Passes &amp; eSIM</Text>
-              </View>
-              <Text style={styles.sectionLink}>
-                {isZh ? '查看全部' : 'View All'}
-              </Text>
-            </View>
-
-            {filteredAttractions.map((attr) => (
-              <AttractionPromoCard
-                key={attr.id}
-                item={attr}
-                onPress={() => console.log('Selected attraction:', attr.id)}
               />
             ))}
           </View>
@@ -282,11 +199,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#0050D6',
-  },
-  sectionSubLink: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#64748B',
   },
   emptyContainer: {
     paddingHorizontal: 32,

@@ -65,7 +65,7 @@ export const MOCK_HIGHLIGHT_PROMO: HighlightPromo = {
   title: 'Special Route Barcelona (BCN)',
   subtitle: 'Comfortable flights from major Asian hubs',
   imageUrl:
-    'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1000&q=80',
   couponCode: 'FLYCATALUNYA',
   reschedulePolicy: '1x Free Reschedule',
   minTransaction: 'Min. Spend $500',
@@ -78,7 +78,7 @@ export const MOCK_HIGHLIGHT_PROMO_ZH: HighlightPromo = {
   title: '巴塞罗那 (BCN) 特惠航线',
   subtitle: '从亚洲主要枢纽直飞或无缝中转',
   imageUrl:
-    'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1000&q=80',
   couponCode: 'FLYCATALUNYA',
   reschedulePolicy: '免费改签1次',
   minTransaction: '起用门槛 3,500 元',

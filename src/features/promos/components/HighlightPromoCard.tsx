@@ -55,9 +55,10 @@ export function HighlightPromoCard({ promo, onClaim }: HighlightPromoCardProps) 
             source={{ uri: promo.imageUrl }}
             style={styles.image}
             contentFit="cover"
-            transition={200}
+            priority="high"
+            cachePolicy="memory-disk"
           />
-          <View style={styles.imageOverlay} />
+          <View style={styles.imageOverlay} pointerEvents="none" />
 
           {/* Top Badges Row over image */}
           <View style={styles.topBadgesRow}>
@@ -219,12 +220,26 @@ const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'space-between',
     padding: 12,
+    backgroundColor: '#0F172A',
+    overflow: 'hidden',
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
   },
   imageOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgba(15, 23, 42, 0.45)',
   },
   topBadgesRow: {
