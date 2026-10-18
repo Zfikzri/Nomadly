@@ -1,7 +1,8 @@
 import { Image } from 'expo-image';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Keyboard, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useLanguage } from '@/i18n';
@@ -34,6 +35,26 @@ export function FloatingTabBar({
 }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const { strings } = useLanguage();
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => setIsKeyboardVisible(true)
+    );
+    const hideSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setIsKeyboardVisible(false)
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  if (isKeyboardVisible) {
+    return null;
+  }
 
   const getTabLabel = (routeName: string): string => {
     switch (routeName) {

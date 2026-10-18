@@ -2,7 +2,6 @@ import { SymbolView } from 'expo-symbols';
 import { useEffect, useState } from 'react';
 import {
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   Pressable,
   StyleSheet,
@@ -63,70 +62,68 @@ export function ChatAIInputBar({
     ios: insets.bottom > 0 ? insets.bottom + 6 : 18,
     default: 18,
   });
-  // Generous gap of 24px above FloatingTabBar to avoid cramped layout
-  const bottomClearance = isKeyboardVisible ? 12 : tabBarBottom + 68 + 24;
+  // When keyboard is visible, tab bar is hidden, so input sits just above keyboard with safe padding
+  const bottomClearance = isKeyboardVisible
+    ? (Platform.OS === 'ios' ? 8 : 12)
+    : tabBarBottom + 68 + 16;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}>
-      <View style={[styles.outerContainer, { paddingBottom: bottomClearance }]}>
-        <View style={styles.pillContainer}>
-          {/* Camera Button */}
-          <Pressable
-            hitSlop={8}
-            onPress={onCameraPress}
-            style={({ pressed }) => [styles.iconBtn, pressed && styles.btnPressed]}>
-            <SymbolView
-              name={{ ios: 'camera.fill', android: 'photo_camera', web: 'photo_camera' }}
-              size={18}
-              tintColor="#64748B"
-            />
-          </Pressable>
-
-          {/* Mic Button */}
-          <Pressable
-            hitSlop={8}
-            onPress={onMicPress}
-            style={({ pressed }) => [styles.iconBtn, pressed && styles.btnPressed]}>
-            <SymbolView
-              name={{ ios: 'mic.fill', android: 'mic', web: 'mic' }}
-              size={18}
-              tintColor="#64748B"
-            />
-          </Pressable>
-
-          {/* Multiline Text Input with Auto-wrap and Max Height */}
-          <TextInput
-            value={text}
-            onChangeText={setText}
-            placeholder={resolvedPlaceholder}
-            placeholderTextColor="#94A3B8"
-            style={styles.textInput}
-            multiline
-            maxHeight={110}
-            textAlignVertical="center"
+    <View style={[styles.outerContainer, { paddingBottom: bottomClearance }]}>
+      <View style={styles.pillContainer}>
+        {/* Camera Button */}
+        <Pressable
+          hitSlop={8}
+          onPress={onCameraPress}
+          style={({ pressed }) => [styles.iconBtn, pressed && styles.btnPressed]}>
+          <SymbolView
+            name={{ ios: 'camera.fill', android: 'photo_camera', web: 'photo_camera' }}
+            size={18}
+            tintColor="#64748B"
           />
+        </Pressable>
 
-          {/* Blue Circular Send Button with Up Arrow */}
-          <Pressable
-            hitSlop={6}
-            onPress={handleSend}
-            style={({ pressed }) => [
-              styles.sendButton,
-              pressed && styles.sendButtonPressed,
-              !text.trim() && styles.sendButtonDisabled,
-            ]}>
-            <SymbolView
-              name={{ ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' }}
-              size={16}
-              tintColor="#FFFFFF"
-              weight="bold"
-            />
-          </Pressable>
-        </View>
+        {/* Mic Button */}
+        <Pressable
+          hitSlop={8}
+          onPress={onMicPress}
+          style={({ pressed }) => [styles.iconBtn, pressed && styles.btnPressed]}>
+          <SymbolView
+            name={{ ios: 'mic.fill', android: 'mic', web: 'mic' }}
+            size={18}
+            tintColor="#64748B"
+          />
+        </Pressable>
+
+        {/* Multiline Text Input with Auto-wrap and Max Height */}
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          placeholder={resolvedPlaceholder}
+          placeholderTextColor="#94A3B8"
+          style={styles.textInput}
+          multiline
+          maxHeight={110}
+          textAlignVertical="center"
+        />
+
+        {/* Blue Circular Send Button with Up Arrow */}
+        <Pressable
+          hitSlop={6}
+          onPress={handleSend}
+          style={({ pressed }) => [
+            styles.sendButton,
+            pressed && styles.sendButtonPressed,
+            !text.trim() && styles.sendButtonDisabled,
+          ]}>
+          <SymbolView
+            name={{ ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' }}
+            size={16}
+            tintColor="#FFFFFF"
+            weight="bold"
+          />
+        </Pressable>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

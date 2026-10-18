@@ -33,7 +33,6 @@ export function LocalNewsSection({
           <Text style={styles.sectionTitle}>{strings.home.localNewsSnippet}</Text>
         </View>
         <View style={styles.headerRight}>
-          <Text style={styles.autoTranslatedText}>{strings.home.autoTranslated}</Text>
           {onSeeAll && (
             <Pressable hitSlop={8} onPress={onSeeAll}>
               <Text style={styles.seeAllText}>{strings.home.seeAll}</Text>
